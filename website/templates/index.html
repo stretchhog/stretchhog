@@ -1,10 +1,53 @@
 <!DOCTYPE html>
-<html lang="en">
+<html ng-app="App" ng-controller="ApplicationCtrl">
 <head>
-	<meta charset="UTF-8">
-	<title></title>
+	<meta charset="utf-8"/>
+	<title>Blog</title>
+
+	<link rel="stylesheet" type="text/css"
+			href="{{ url_for('static', filename='bower_components/bootstrap/dist/css/bootstrap.css') }}">
 </head>
 <body>
+
+<div class="blog-masthead">
+	<div class="container">
+		<nav class="blog-nav">
+			<a class="blog-nav-item" href="#" ng-class="{active: isActive('/')}">Home</a>
+			<a class="blog-nav-item" href="#/comics" ng-class="{active: isActive('/comics')}">Comics</a>
+
+			<a class="blog-nav-item" href="#/sessions/create" ng-hide="isLoggedIn"
+					ng-class="{active: isActive('/sessions/create')}">Login</a>
+			<a class="blog-nav-item" href="#/sessions/destroy" ng-show="isLoggedIn">Logout</a>
+		</nav>
+	</div>
+</div>
+
+<div class="container main-view">
+
+	<div ng-view></div>
+
+</div>
+<!-- /.container -->
+
+<div class="blog-footer">
+	<p>Blog built by <a href="https://twitter.com/johnkevinmbasco">@johnkevinmbasco</a> using Flask and AngularJS.</p>
+
+	<p>
+		<a href="#">Back to top</a>
+	</p>
+</div>
+
+<script type="text/javascript" src="{{ url_for('static', filename='bower_components/angularjs/angular.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='bower_components/angular-route/angular-route.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='bower_components/lodash/lodash.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='bower_components/restangular/dist/restangular.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='bower_components/angular-local-storage/angular-local-storage.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/main.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/controllers/application-controller.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/controllers/comics-controller.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/controllers/session-controller.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/factories/session.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/services/auth-service.js') }}"></script>
 
 </body>
 </html>
