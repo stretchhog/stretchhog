@@ -1,53 +1,58 @@
 <!DOCTYPE html>
-<html ng-app="App" ng-controller="ApplicationCtrl">
+<html>
 <head>
 	<meta charset="utf-8"/>
 	<title>Blog</title>
 
-	<link rel="stylesheet" type="text/css"
-			href="{{ url_for('static', filename='bower_components/bootstrap/dist/css/bootstrap.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.css') }}">
 </head>
 <body>
+<nav class="navbar navbar-default">
+	<div class="container-fluid">
+		<!-- Brand and toggle get grouped for better mobile display -->
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="#">Brand</a>
+		</div>
 
-<div class="blog-masthead">
-	<div class="container">
-		<nav class="blog-nav">
-			<a class="blog-nav-item" href="#" ng-class="{active: isActive('/')}">Home</a>
-			<a class="blog-nav-item" href="#/comics" ng-class="{active: isActive('/comics')}">Comics</a>
+		<!-- Collect the nav links, forms, and other content for toggling -->
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			<ul class="nav navbar-nav">
+				<li class="active"><a href="#">Home <span class="sr-only">(current)</span></a></li>
+				<li><a href="#">About</a></li>
+				<li class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Comics<span class="caret"></span></a>
+					<ul class="dropdown-menu">
+						<li><a href="#">Suske en Wiske</a></li>
+						<li><a href="#">Kiekeboe</a></li>
+						<li role="separator" class="divider"></li>
+						<li><a href="#">DC Comics</a></li>
+						<li role="separator" class="divider"></li>
+						<li><a href="#">Marvel</a></li>
+						<li role="separator" class="divider"></li>
+						<li><a href="#">Grim Fairy Tales</a></li>
+					</ul>
+				</li>
+			</ul>
+			<form class="navbar-form navbar-left" role="search">
+				<div class="form-group">
+					<input type="text" class="form-control" placeholder="Search">
+				</div>
+				<button type="submit" class="btn btn-default">Submit</button>
+			</form>
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href="#">Login</a></li>
+			</ul>
+		</div><!-- /.navbar-collapse -->
+	</div><!-- /.container-fluid -->
+</nav>
 
-			<a class="blog-nav-item" href="#/sessions/create" ng-hide="isLoggedIn"
-					ng-class="{active: isActive('/sessions/create')}">Login</a>
-			<a class="blog-nav-item" href="#/sessions/destroy" ng-show="isLoggedIn">Logout</a>
-		</nav>
-	</div>
-</div>
-
-<div class="container main-view">
-
-	<div ng-view></div>
-
-</div>
-<!-- /.container -->
-
-<div class="blog-footer">
-	<p>Blog built by <a href="https://twitter.com/johnkevinmbasco">@johnkevinmbasco</a> using Flask and AngularJS.</p>
-
-	<p>
-		<a href="#">Back to top</a>
-	</p>
-</div>
-
-<script type="text/javascript" src="{{ url_for('static', filename='bower_components/angularjs/angular.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='bower_components/angular-route/angular-route.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='bower_components/lodash/lodash.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='bower_components/restangular/dist/restangular.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='bower_components/angular-local-storage/angular-local-storage.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='js/main.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='js/controllers/application-controller.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='js/controllers/comics-controller.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='js/controllers/session-controller.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='js/factories/session.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='js/services/auth-service.js') }}"></script>
-
+<script src="{{ url_for('static', filename='js/jquery-2.1.4.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
 </body>
 </html>
