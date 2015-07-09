@@ -7,7 +7,7 @@ from flask import Flask, render_template, send_file, make_response, jsonify
 base_dir = os.path.abspath(os.path.dirname(__file__))
 
 app = Flask(__name__)
-app.config.from_object('config')
+app.config['DEBUG'] = True
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(base_dir, 'server.db')
 db = SQLAlchemy(app)
@@ -24,6 +24,11 @@ def index():
 @app.route("/comics")
 def paintings():
 	return make_response(jsonify({'1': "number 1", '2': 'number 2'}))
+
+
+@app.route("/test")
+def test():
+	return render_template("bla.html", name="bla")
 
 
 @app.errorhandler(404)
