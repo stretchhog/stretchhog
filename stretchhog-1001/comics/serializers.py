@@ -1,5 +1,3 @@
-__author__ = 'Stretchhog'
-
 from marshmallow import Serializer, fields
 
 

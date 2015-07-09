@@ -1,23 +1,12 @@
-from website.server import db
+from google.appengine.ext import ndb
 
 
-class Base(db.Model):
-	__abstract__ = True
+class Comic(ndb.Model):
+	number = ndb.IntegerProperty()
+	title = ndb.StringProperty()
+	notes = ndb.StringProperty()
+	date_added = ndb.DateTimeProperty(auto_now_add=True)
 
-	id = db.Column(db.Integer, primary_key=True)
-	date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
-	date_modified = db.Column(db.DateTime, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp())
-
-
-class Comic(Base):
-	number = db.Column(db.Numeric(), nullable=False)
-	title = db.Column(db.String(120), nullable=False)
-	notes = db.Column(db.Text, nullable=False)
-
-	def __init__(self, number, title, notes):
-		self.number = number
-		self.title = title
-		self.notes = notes
-
-	def __repr__(self):
-		return '<Comic %r>' % self.title
+	@classmethod
+	def query_comic(cls, ancestor_key):
+		return cls.query(ancestor=ancestor_key).order(cls.number)

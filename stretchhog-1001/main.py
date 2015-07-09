@@ -10,7 +10,6 @@ app = Flask(__name__)
 app.config['DEBUG'] = True
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(base_dir, 'server.db')
-db = SQLAlchemy(app)
 
 auth = HTTPBasicAuth()
 api = Api(app)
@@ -26,9 +25,9 @@ def paintings():
 	return make_response(jsonify({'1': "number 1", '2': 'number 2'}))
 
 
-@app.route("/test")
-def test():
-	return render_template("bla.html", name="bla")
+@app.route("/daan")
+def daan():
+	return render_template("daan.html", name="DAANTJE BANAANTJE")
 
 
 @app.errorhandler(404)
