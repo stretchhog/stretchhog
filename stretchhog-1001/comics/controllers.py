@@ -1,8 +1,16 @@
+from flask import request, render_template
 from flask.ext.restful import Resource
+from main import api
 
-class ComicListView(Resource):
+
+class ComicCreate(Resource):
 	def get(self):
-		comics = Comic.query.all()
-		return ComicSerializer(comics, many=True).data
+		return render_template("comics/create.html")
 
-api.add_resource(ComicListView, '/comics')
+	def post(self):
+		print request.form['number']
+		print request.form['title']
+		print request.form['notes']
+
+
+api.add_resource(ComicCreate, '/comic/create')
