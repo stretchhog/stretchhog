@@ -1,9 +1,8 @@
 {% extends "index.html" %}
 {% block body %}
-<form action="www.google.com" method="post">
-    <div><textfield name="number" cols="60"></textfield></div>
-    <div><textfield name="title" cols="60"></textfield></div>
-    <div><textarea name="notes" rows="3" cols="60"></textarea></div>
+<form action="" method="post" name="create_comic">
+    {{ form.hidden_tag() }}
+    <div> {{ form.number }}</div>
     <div><input type="submit" value="Add comic"></div>
 </form>
 <hr>

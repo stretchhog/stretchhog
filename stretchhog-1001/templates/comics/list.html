@@ -1,0 +1,6 @@
+{% extends "index.html" %}
+{% block body %}
+{% for comic in comics %}
+<a href="{{url_for('ComicDetail', comic_number=comic.number)}}">{{ comic.number }} - {{ comic.title }}</a> <br>
+{% endfor%}
+{% endblock %}

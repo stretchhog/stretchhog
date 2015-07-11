@@ -24,3 +24,5 @@ marshmallow==0.7.0
 pytz==2014.4
 six==1.7.3
 validators==0.6.0
+BeautifulSoup4
+requests
