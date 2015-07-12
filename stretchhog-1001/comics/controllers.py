@@ -11,11 +11,8 @@ comics = {}
 
 
 class ComicDelete(Resource):
-	def post(self):
-		form = ComicDeleteForm(data=request.get_json())
-		number = form.number.data
-		print "number: " + str(number)
-		Comic.query(Comic.number == number).fetch(1)[0].delete()
+	def get(self, comic_number):
+		Comic.query(Comic.number == comic_number).fetch(1)[0].delete()
 		return redirect(api.url_for(ComicList), 301)
 
 
@@ -51,6 +48,6 @@ class ComicList(Resource):
 		return redirect(api.url_for(ComicList), 301)
 
 
-api.add_resource(ComicDelete, '/comics/delete', endpoint='delete_comic')
+api.add_resource(ComicDelete, '/comics/delete<int:comic_number>', endpoint='comic_delete')
 api.add_resource(ComicDetail, '/comics/<int:comic_number>', endpoint='comic_detail')
 api.add_resource(ComicList, '/comics/list', endpoint='comic_list')

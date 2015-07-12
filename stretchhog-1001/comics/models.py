@@ -9,3 +9,4 @@ class Comic(ndb.Model):
 	date_added = ndb.DateTimeProperty(auto_now_add=True)
 
 class User(ndb.Model):
+	pass

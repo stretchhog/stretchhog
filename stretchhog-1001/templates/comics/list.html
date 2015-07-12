@@ -11,6 +11,7 @@
 <div class="panel panel-default">
 	<div class="panel-heading">
 		<a href="{{url_for('comic_detail', comic_number=comic.number)}}">{{ comic.number }} - {{ comic.title }}</a>
+		<a href="{{url_for('comic_delete', comic_number=comic.number)}}" class="btn btn-danger">Delete</a>
 	</div>
 	<div class="panel-body">
 		<div class="col-xs-5">
