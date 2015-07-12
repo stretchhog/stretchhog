@@ -1,18 +1,29 @@
-from google.appengine.api import images
+import io
 from comics import crawler
-from comics.forms import ComicCreateForm
+from comics.forms import ComicCreateForm, ComicDeleteForm
 from comics.models import Comic
-from flask import request, render_template, make_response, url_for, redirect, send_file
+from flask import request, render_template, make_response, redirect, send_file
 from flask.ext.restful import Resource, abort
 from main import api
+from base64 import b64encode
 
 comics = {}
 
 
+class ComicDelete(Resource):
+	def post(self):
+		form = ComicDeleteForm(data=request.get_json())
+		number = form.number.data
+		print "number: " + str(number)
+		Comic.query(Comic.number == number).fetch(1)[0].delete()
+		return redirect(api.url_for(ComicList), 301)
+
+
 class ComicDetail(Resource):
 	def get(self, comic_number):
-		comic = Comic.query(Comic.number == comic_number).order()
-		return send_file(comic.fetch(1)[0].image, mimetype='image/gif')
+		qry = Comic.query(Comic.number == comic_number)
+		comic = qry.fetch(1)[0]
+		return make_response(render_template('comics/detail.html', comic=comic))
 
 	def put(self, comic_id):
 		pass
@@ -23,13 +34,9 @@ class ComicDetail(Resource):
 
 class ComicList(Resource):
 	def get(self):
-		all = Comic.query().order(Comic.number)
-		return make_response(render_template("comics/list.html", title="Comics", comics=all))
-
-
-class ComicCreate(Resource):
-	def get(self):
-		return make_response(render_template("comics/create.html", title='Add a comic', form=ComicCreateForm()))
+		all = Comic.query().order(Comic.number).fetch()
+		return make_response(
+			render_template("comics/list.html", title="Comics", comics=all, form=ComicCreateForm()))
 
 	def post(self):
 		form = ComicCreateForm(data=request.get_json())
@@ -37,17 +44,19 @@ class ComicCreate(Resource):
 			pass
 		else:
 			abort(400)
+		qry = Comic.query(Comic.number == form.number.data)
+		if len(qry.fetch(1)) > 0:
+			return make_response(render_template("409.html"))
+
 		comic = Comic()
 		comic.number = form.number.data
 		comic.title = crawler.findTitle(comic.number)
-		image = crawler.findImage(comic.number)
-		comic.image = image
-		#comic.thumb = images.resize(image, 32, 32)
+		image = crawler.findImage(comic.number, comic.title)
+		comic.image = b64encode(image) if image is not None else image
+		# comic.thumb = images.resize(image, 32, 32)
 		comic.put()
+		return redirect(api.url_for(ComicList), 301)
 
-		return redirect(url_for('/comics/list'))
-
-
-api.add_resource(ComicDetail, '/comics/<int:comic_number>')
-api.add_resource(ComicCreate, '/comics/create')
-api.add_resource(ComicList, '/comics/list')
+api.add_resource(ComicDelete, '/comics/delete', endpoint='delete_comic')
+api.add_resource(ComicDetail, '/comics/<int:comic_number>', endpoint='comic_detail')
+api.add_resource(ComicList, '/comics/list', endpoint='comic_list')

@@ -1,6 +1,25 @@
 {% extends "index.html" %}
 {% block body %}
+<form action="" method="post" name="create_comic">
+	{{ form.hidden_tag() }}
+	<div> {{ form.number }}</div>
+	<div><input type="submit" value="Add comic"></div>
+</form>
+<hr>
+
 {% for comic in comics %}
-<a href="{{url_for('ComicDetail', comic_number=comic.number)}}">{{ comic.number }} - {{ comic.title }}</a> <br>
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<a href="{{url_for('comic_detail', comic_number=comic.number)}}">{{ comic.number }} - {{ comic.title }}</a>
+	</div>
+	<div class="panel-body">
+		<div class="col-xs-5">
+			<img src="data:;base64,{{comic.image}}" class="img-responsive"/>
+		</div>
+		<div class="col-xs-7" align="left">
+			<p>{{ comic.notes }}</p>
+		</div>
+	</div>
+</div>
 {% endfor%}
 {% endblock %}
