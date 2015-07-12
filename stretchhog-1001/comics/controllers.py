@@ -25,12 +25,6 @@ class ComicDetail(Resource):
 		comic = qry.fetch(1)[0]
 		return make_response(render_template('comics/detail.html', comic=comic))
 
-	def put(self, comic_id):
-		pass
-
-	def delete(self, comic_id):
-		pass
-
 
 class ComicList(Resource):
 	def get(self):
@@ -53,9 +47,9 @@ class ComicList(Resource):
 		comic.title = crawler.findTitle(comic.number)
 		image = crawler.findImage(comic.number, comic.title)
 		comic.image = b64encode(image) if image is not None else image
-		# comic.thumb = images.resize(image, 32, 32)
 		comic.put()
 		return redirect(api.url_for(ComicList), 301)
+
 
 api.add_resource(ComicDelete, '/comics/delete', endpoint='delete_comic')
 api.add_resource(ComicDetail, '/comics/<int:comic_number>', endpoint='comic_detail')
