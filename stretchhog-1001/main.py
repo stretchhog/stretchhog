@@ -1,32 +1,44 @@
 import os
-from flask_httpauth import HTTPBasicAuth
-from flask_restful import Api
-from flask import Flask, render_template, make_response, jsonify
+
+from google.appengine.api import users
+
+from flask import Flask, session, render_template, make_response
+from flask.ext.restful import Api, Resource
+
 
 base_dir = os.path.abspath(os.path.dirname(__file__))
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
-app.config['WTF_CSRF_ENABLED'] = True
+app.config['WTF_CSRF_ENABLED'] = False
 app.config['SECRET_KEY'] = 'you-will-never-guess'
 
-auth = HTTPBasicAuth()
 api = Api(app)
 
 
-@app.route("/")
-def index():
-	return render_template("index.html")
+@app.before_request
+def before_request():
+	user = users.get_current_user()
+	if user:
+		session['logged_in'] = True
+		session['user_email'] = user.email()
+	# session['user_admin'] = users.is_current_user_admin()
+	else:
+		session['logged_in'] = False
 
 
-@app.errorhandler(404)
-def not_found(error):
-	return make_response(render_template("404.html"))
+class Intro(Resource):
+	def get(self):
+		return make_response(render_template("intro.html"))
 
 
-@app.errorhandler(409)
-def not_found(error):
-	return make_response(render_template("409.html"))
+class Main(Resource):
+	def get(self):
+		return make_response(render_template("index.html"))
+
+
+api.add_resource(Main, '/', endpoint='home')
+api.add_resource(Intro, '/intro', endpoint='intro')
 
 
 @app.after_request
@@ -35,6 +47,3 @@ def after_request(response):
 	response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
 	response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
 	return response
-
-# import routes
-from comics import controllers

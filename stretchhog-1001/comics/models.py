@@ -7,6 +7,3 @@ class Comic(ndb.Model):
 	notes = ndb.StringProperty()
 	image = ndb.BlobProperty()
 	date_added = ndb.DateTimeProperty(auto_now_add=True)
-
-class User(ndb.Model):
-	pass

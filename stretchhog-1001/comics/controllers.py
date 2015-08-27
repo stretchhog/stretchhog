@@ -11,15 +11,14 @@ comics = {}
 
 
 class ComicDelete(Resource):
-	def get(self, comic_number):
-		Comic.query(Comic.number == comic_number).fetch(1)[0].delete()
+	def get(self, id):
+		Comic.get_by_id(id).key.delete()
 		return redirect(api.url_for(ComicList), 301)
 
 
 class ComicDetail(Resource):
-	def get(self, comic_number):
-		qry = Comic.query(Comic.number == comic_number)
-		comic = qry.fetch(1)[0]
+	def get(self, id):
+		comic = Comic.get_by_id(id)
 		return make_response(render_template('comics/detail.html', comic=comic))
 
 
@@ -42,12 +41,12 @@ class ComicList(Resource):
 		comic = Comic()
 		comic.number = form.number.data
 		comic.title = crawler.findTitle(comic.number)
-		image = crawler.findImage(comic.number, comic.title)
+		image = crawler.findImage(comic.number)
 		comic.image = b64encode(image) if image is not None else image
 		comic.put()
 		return redirect(api.url_for(ComicList), 301)
 
 
-api.add_resource(ComicDelete, '/comics/delete<int:comic_number>', endpoint='comic_delete')
-api.add_resource(ComicDetail, '/comics/<int:comic_number>', endpoint='comic_detail')
+api.add_resource(ComicDelete, '/comics/delete/<int:id>', endpoint='comic_delete')
+api.add_resource(ComicDetail, '/comics/<int:id>', endpoint='comic_detail')
 api.add_resource(ComicList, '/comics/list', endpoint='comic_list')

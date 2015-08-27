@@ -3,9 +3,11 @@
 
 build/
 lib/
+.idea
 *.egg-info/
 *.egg
 
 # Translations
 *.mo
 *.pot
+
