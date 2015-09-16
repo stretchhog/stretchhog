@@ -4,7 +4,10 @@ from google.appengine.api import users
 
 from flask import Flask, session, render_template, make_response
 from flask.ext.restful import Api, Resource
+import wtforms_json
 
+
+wtforms_json.init()
 
 base_dir = os.path.abspath(os.path.dirname(__file__))
 
@@ -22,7 +25,7 @@ def before_request():
 	if user:
 		session['logged_in'] = True
 		session['user_email'] = user.email()
-	# session['user_admin'] = users.is_current_user_admin()
+		session['is_admin'] = users.is_current_user_admin()
 	else:
 		session['logged_in'] = False
 
@@ -39,6 +42,8 @@ class Main(Resource):
 
 api.add_resource(Main, '/', endpoint='home')
 api.add_resource(Intro, '/intro', endpoint='intro')
+
+from blog import handler
 
 
 @app.after_request

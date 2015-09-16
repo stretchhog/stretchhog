@@ -10,4 +10,5 @@ lib/
 # Translations
 *.mo
 *.pot
+*.DS_Store
 

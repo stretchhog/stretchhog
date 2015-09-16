@@ -1,0 +1,15 @@
+{% extends "index.html" %}
+{% block body %}
+	<div class="col-md-4">
+		{% for tag in tags %}
+			<a class="btn btn-sm btn-danger" href="{{ url_for('delete_tag', id=tag.key.id()) }}"><i class="fa fa-remove"></i></a>
+			<a class="btn btn-sm btn-warning" href="{{ url_for('edit_tag', id=tag.key.id()) }}"><i class="fa fa-edit"></i></a>
+			|
+			{{ tag.category.category }} | {{ tag.tag }}
+			<br>
+		{% endfor %}
+	</div>
+	<div class="col-md-8">
+		{% block tag %}{% endblock %}
+	</div>
+{% endblock %}

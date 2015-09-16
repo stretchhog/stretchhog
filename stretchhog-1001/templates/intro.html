@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>{{ title }}</title>
+	<meta charset="utf-8">
+
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/font-awesome.min.css') }}">
+
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/intro.css') }}">
+</head>
+<body>
+
+<div class="container">
+	<div class="row col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+		<div class="col-sm-5" style="padding-right: 5px">
+			<i class="hidden-sm hidden-md hidden-lg fa fa-3x fa-android" style="color: #3b5998"></i>
+			<p>Resume</p>
+			<img class="hidden-xs img-responsive" src="http://placehold.it/300x300">
+		</div>
+		<div class="col-sm-7" style="padding-left: 5px">
+			<i class="hidden-sm hidden-md hidden-lg fa fa-3x fa-android" style="color: #3b5998"></i>
+			<p>Artificial Intelligence</p>
+			<img class="hidden-xs img-responsive" src="http://placehold.it/500x300">
+		</div>
+		<div class="col-sm-4 col-md-6"></div>
+	</div>
+	<div class="row col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+		<div class="col-sm-7" style="padding-right: 5px">
+			<i class="hidden-sm hidden-md hidden-lg fa fa-3x fa-android" style="color: #3b5998"></i>
+			<p>Music</p>
+			<img class="hidden-xs img-responsive" src="http://placehold.it/500x300">
+		</div>
+		<div class="col-sm-5" style="padding-left: 5px">
+			<i class="hidden-sm hidden-md hidden-lg fa fa-3x fa-android" style="color: #3b5998"></i>
+			<p>Fitness and health</p>
+			<img class="hidden-xs img-responsive" src="http://placehold.it/300x200">
+		</div>
+		<div class="col-xs-1 col-sm-4 col-md-6"></div>
+	</div>
+	<div class="row col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3" style="text-align: center">
+		<div>
+			<i class="fa fa-2x fa-linkedin" style="color: #0077b5"></i>
+			<i class="fa fa-2x fa-facebook-official" style="color: #3b5998"></i>
+			<i class="fa fa-2x fa-youtube" style="color: #cd201f"></i>
+			<i class="fa fa-2x fa-soundcloud" style="color: #ff8800"></i>
+		</div>
+	</div>
+</div>
+
+<script src="{{ url_for('static', filename='js/jquery-2.1.4.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+</body>
+</html>

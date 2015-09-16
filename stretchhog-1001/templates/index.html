@@ -4,16 +4,20 @@
 	<meta charset="utf-8"/>
 	<title>timvancann.nl</title>
 
+	<link href='https://fonts.googleapis.com/css?family=Noticia+Text:400,700' rel='stylesheet' type='text/css'>
+
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/font-awesome.min.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+
 </head>
 <body>
-<nav class="navbar navbar-default">
+<nav class="navbar navbar-fixed-top">
 	<div class="container-fluid">
 		<!-- Brand and toggle get grouped for better mobile display -->
 		<div class="navbar-header">
 			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-			        data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+					data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
 				<span class="sr-only">Toggle navigation</span>
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
@@ -25,22 +29,19 @@
 		<!-- Collect the nav links, forms, and other content for toggling -->
 		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			<ul class="nav navbar-nav">
-				<li class="active"><a href="#">Home <span class="sr-only">(current)</span></a></li>
-				<li><a href="#">About</a></li>
-				<li class="dropdown">
-					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-					   aria-expanded="false">Comics<span class="caret"></span></a>
-					<ul class="dropdown-menu">
-						<li><a href="/comics/list">Suske en Wiske</a></li>
-						<li><a href="/comics/kiekeboe">Kiekeboe</a></li>
-						<li role="separator" class="divider"></li>
-						<li><a href="/comics/dc">DC Comics</a></li>
-						<li role="separator" class="divider"></li>
-						<li><a href="/comics/marvel">Marvel</a></li>
-						<li role="separator" class="divider"></li>
-						<li><a href="/comics/gft">Grim Fairy Tales</a></li>
-					</ul>
-				</li>
+				<li class="menu-link"><a href="#">Artificial Intelligence</a></li>
+				<li class="menu-link"><a href="#">Music</a></li>
+				<li class="menu-link"><a href="#">Fitness & Health</a></li>
+				{% if user_is_admin %}
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+								aria-expanded="false">Comics<span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li><a href="/comics/list">Suske en Wiske</a></li>
+							<li><a href="/comics/kiekeboe">Kiekeboe</a></li>
+						</ul>
+					</li>
+				{% endif %}
 			</ul>
 			<form class="navbar-form navbar-left" role="search">
 				<div class="form-group">
@@ -49,7 +50,43 @@
 				<button type="submit" class="btn btn-default">Submit</button>
 			</form>
 			<ul class="nav navbar-nav navbar-right">
-				<li><a href="/login"><span class="glyphicon glyphicon-log-in"></span>&nbsp;Login</a></li>
+				<li class="menu-icon"><a href="/login"><i class="fa fa-facebook"></i></a></li>
+				<li class="menu-icon"><a href="/login"><i class="fa fa-instagram"></i></a></li>
+				<li class="menu-icon"><a href="/login"><i class="fa fa-youtube-play"></i></a></li>
+				<li class="menu-icon"><a href="/login"><i class="fa fa-linkedin"></i></a></li>
+				{% if session.is_admin %}
+					<li class="dropdown">
+						<a href="#" style="text-align: center" class="dropdown-toggle" data-toggle="dropdown"
+								role="button" aria-haspopup="true"
+								aria-expanded="false">
+							<i class="caret"></i>&nbsp;&nbsp;
+							Toevoegen
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="{{ url_for('create_category') }}">Category</a></li>
+							<li><a href="{{ url_for('create_tag') }}">Tag</a></li>
+							<li><a href="">Blog entry</a></li>
+						</ul>
+					</li>
+				{% endif %}
+
+				{% if session.logged_in %}
+					<li>
+						<a {% if 'logout' == active_page %} class="active"{% endif %} style="text-align: center"
+								href="{{ url_for_logout }}">
+							<i class="fa fa-sign-out"></i>&nbsp;&nbsp;
+							Uitloggen
+						</a>
+					</li>
+				{% else %}
+					<li>
+						<a {% if 'login' == active_page %} class="active"{% endif %} style="text-align: center"
+								href="{{ url_for_login }}">
+							<i class="fa fa-sign-in"></i>&nbsp;&nbsp;
+							Inloggen
+						</a>
+					</li>
+				{% endif %}
 			</ul>
 		</div>
 		<!-- /.navbar-collapse -->
@@ -57,7 +94,9 @@
 	<!-- /.container-fluid -->
 </nav>
 
-{% block body %}{% endblock %}
+<div class="container">
+	{% block body %}{% endblock %}
+</div>
 
 <script src="{{ url_for('static', filename='js/jquery-2.1.4.min.js') }}"></script>
 <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>

@@ -1,0 +1,28 @@
+body{
+	font-family: 'Noticia Text', serif;
+	padding-top: 70px;
+}
+
+.navbar-nav {
+	margin-bottom: 10px;
+}
+
+.navbar-nav > li > a {
+	font-weight: 500;
+	font-size: 15px;
+	text-align: center;
+	height: 50px;
+}
+
+.navbar-nav > li > a:hover {
+	text-decoration: underline;
+	background-color: #fff;
+}
+
+.navbar-nav > li > a:hover {
+
+}
+
+
+
+

@@ -13,6 +13,11 @@ handlers:
 #- url: /music/.*
 #  script: music.app
 #
+- url: /comics/.*
+  script: main.app
+  login: admin
+
+#
 #- url: /ai/.*
 #  script: ai.app
 #
