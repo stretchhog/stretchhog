@@ -1,19 +1,23 @@
 from wtforms.validators import DataRequired
 from flask.ext.wtf import Form
 from wtforms import StringField, SelectField, SelectMultipleField, HiddenField
+from blog.models import Tag
 
 from blog import service
 
 
-class BlogEntryCreateForm(Form):
-	def __init__(self, *args, **kwargs):
-		super(BlogEntryCreateForm, self).__init__(*args, **kwargs)
-
+class EntryForm(Form):
 	title = StringField(validators=[DataRequired()])
 	post = StringField(validators=[DataRequired()])
 	category = HiddenField()
 	tags = SelectMultipleField()
 	user = StringField(validators=[DataRequired()])
+
+	def __init__(self, key=None, *args, **kwargs):
+		super(EntryForm, self).__init__(*args, **kwargs)
+		self.category.data = key
+		tags = service.get_all_tags(key, Tag.category == key)
+		self.tags.choices = [(tag.key.urlsafe(), tag.tag) for tag in tags]
 
 
 class CategoryForm(Form):

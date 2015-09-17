@@ -1,4 +1,4 @@
-from blog.forms import CategoryForm, TagForm
+from blog.forms import CategoryForm, TagForm, EntryForm
 from blog.models import BlogEntry
 from flask import make_response, render_template, request, redirect
 from blog import service
@@ -9,31 +9,41 @@ from main import api
 __author__ = 'tvancann'
 
 
-class BlogEntryCreate(Resource):
+class EntryCreate(Resource):
 	def get(self, key):
-		form, tags = service.get_blog_form(key)
-		return make_response(render_template('blog/create.html', form=form, tags=tags))
+		return make_response(render_template('blog/create.html', form=EntryForm(key)))
 
 	def post(self):
-		service.create_blog(request.get_json())
-		return redirect(api.url_for(BlogEntryList), 301)
+		service.create_entry(EntryForm(data=request.get_json()))
+		return redirect(api.url_for(EntryList), 301)
 
 
-class BlogEntryDelete(Resource):
+class EntryUpdate(Resource):
 	def get(self, key):
-		service.delete_blog(key)
-		return redirect(api.url_for(BlogEntryList), 301)
+		form = EntryForm()
+		form = service.update_entry_form(form, key)
+		return make_response(render_template('blog/create.html', form=EntryForm(key)))
+
+	def post(self, key):
+		service.update_entry(key, EntryForm(data=request.get_json()))
+		return redirect(api.url_for(EntryList), 301)
 
 
-class BlogEntryDetail(Resource):
+class EntryDelete(Resource):
 	def get(self, key):
-		entry = service.get_by_id(BlogEntry, key)
+		service.delete_entry(key)
+		return redirect(api.url_for(EntryList), 301)
+
+
+class EntryDetail(Resource):
+	def get(self, key):
+		entry = service.get_by_key(key)
 		return make_response(render_template('blog/detail.html', entry=entry))
 
 
-class BlogEntryList(Resource):
+class EntryList(Resource):
 	def get(self):
-		entries = service.get_all_blog()
+		entries = service.get_all_entries()
 		return make_response(render_template("blog/list.html", entries=entries))
 
 
@@ -106,16 +116,18 @@ class TagList(Resource):
 		return sorted_view
 
 
-api.add_resource(BlogEntryDelete, '/blog/delete/<string:key>', endpoint='delete_blog_entry')
-api.add_resource(BlogEntryDetail, '/blog/<string:key>', endpoint='get_blog_entry')
-api.add_resource(BlogEntryList, '/blog', endpoint='list_blog')
+api.add_resource(EntryCreate, '/blog/admin/entry/create/<string:key>', endpoint='create_entry')
+api.add_resource(EntryUpdate, '/blog/admin/entry/update/<string:key>', endpoint='update_entry')
+api.add_resource(EntryDelete, '/blog/admin/entry/delete/<string:key>', endpoint='delete_entry')
+api.add_resource(EntryDetail, '/blog/entry/<string:key>', endpoint='get_entry')
+api.add_resource(EntryList, '/blog/entry/list', endpoint='list_blog')
 
-api.add_resource(CategoryCreate, '/blog/category/create', endpoint='create_category')
-api.add_resource(CategoryUpdate, '/blog/category/update/<string:key>', endpoint='update_category')
-api.add_resource(CategoryDelete, '/blog/category/delete/<string:key>', endpoint='delete_category')
+api.add_resource(CategoryCreate, '/blog/admin/category/create', endpoint='create_category')
+api.add_resource(CategoryUpdate, '/blog/admin/category/update/<string:key>', endpoint='update_category')
+api.add_resource(CategoryDelete, '/blog/admin/category/delete/<string:key>', endpoint='delete_category')
 api.add_resource(CategoryList, '/blog/category/list', endpoint='list_category')
 
-api.add_resource(TagCreate, '/blog/tag/create', endpoint='create_tag')
-api.add_resource(TagUpdate, '/blog/tag/update/<string:key>', endpoint='update_tag')
-api.add_resource(TagDelete, '/blog/tag/delete/<string:key>', endpoint='delete_tag')
+api.add_resource(TagCreate, '/blog/admin/tag/create', endpoint='create_tag')
+api.add_resource(TagUpdate, '/blog/admin/tag/update/<string:key>', endpoint='update_tag')
+api.add_resource(TagDelete, '/blog/admin/tag/delete/<string:key>', endpoint='delete_tag')
 api.add_resource(TagList, '/blog/tag/list', endpoint='list_tag')

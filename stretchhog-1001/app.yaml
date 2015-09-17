@@ -17,6 +17,9 @@ handlers:
   script: main.app
   login: admin
 
+- url: /blog/admin/.*
+  script: main.app
+  login: admin
 #
 #- url: /ai/.*
 #  script: ai.app
