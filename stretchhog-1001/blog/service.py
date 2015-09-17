@@ -49,7 +49,7 @@ def delete_blog(id):
 	return get_by_key(id).key.delete()
 
 
-def create_category(key, form):
+def create_category(form):
 	category = Category(category=form.category.data)
 	return category.put()
 
@@ -92,3 +92,9 @@ def delete_tag(key):
 
 def get_all_tags():
 	return __get_all(Tag)
+
+
+def update_category_form(form, key):
+	category = get_by_key(key)
+	form.category.data = category.category
+	return form

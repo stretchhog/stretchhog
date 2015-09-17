@@ -1,8 +1,8 @@
 from blog.forms import CategoryForm, TagForm
 from blog.models import BlogEntry
-from flask import make_response, render_template, request, redirect, jsonify
+from flask import make_response, render_template, request, redirect
 from blog import service
-from blog.view import TagView
+from blog.view import TagView, CategoryView
 from flask.ext.restful import Resource
 from main import api
 
@@ -47,6 +47,30 @@ class CategoryCreate(Resource):
 		return redirect(api.url_for(CategoryCreate), 301)
 
 
+class CategoryUpdate(Resource):
+	def get(self, key):
+		form = CategoryForm()
+		form = service.update_category_form(form, key)
+		return make_response(render_template('blog/category/create.html', form=form))
+
+	def post(self, key):
+		service.update_category(key, CategoryForm(data=request.get_json()))
+		return redirect(api.url_for(TagCreate), 301)
+
+
+class CategoryDelete(Resource):
+	def get(self, key):
+		service.delete_category(key)
+		return redirect(api.url_for(TagCreate), 301)
+
+
+class CategoryList(Resource):
+	def get(self):
+		categories = service.get_all_categories()
+		view = [CategoryView(cat).__dict__ for cat in categories]
+		return view
+
+
 class TagCreate(Resource):
 	def get(self):
 		form = TagForm()
@@ -56,19 +80,12 @@ class TagCreate(Resource):
 		service.create_tag(TagForm(data=request.get_json()))
 		return redirect(api.url_for(TagCreate), 301)
 
-class TagList(Resource):
-	def get(self):
-		tags = service.get_all_tags()
-		view = [TagView(tag).__dict__ for tag in tags]
-		sorted_view = sorted(view, key=lambda t: t['category'])
-		return sorted_view
-
 
 class TagUpdate(Resource):
 	def get(self, key):
 		form = TagForm()
 		form = service.update_tag_form(form, key)
-		return make_response(render_template('blog/tag/edit.html', form=form))
+		return make_response(render_template('blog/tag/create.html', form=form))
 
 	def post(self, key):
 		service.update_tag(key, TagForm(data=request.get_json()))
@@ -81,11 +98,22 @@ class TagDelete(Resource):
 		return redirect(api.url_for(TagCreate), 301)
 
 
+class TagList(Resource):
+	def get(self):
+		tags = service.get_all_tags()
+		view = [TagView(tag).__dict__ for tag in tags]
+		sorted_view = sorted(view, key=lambda t: t['category'])
+		return sorted_view
+
+
 api.add_resource(BlogEntryDelete, '/blog/delete/<string:key>', endpoint='delete_blog_entry')
 api.add_resource(BlogEntryDetail, '/blog/<string:key>', endpoint='get_blog_entry')
 api.add_resource(BlogEntryList, '/blog', endpoint='list_blog')
 
 api.add_resource(CategoryCreate, '/blog/category/create', endpoint='create_category')
+api.add_resource(CategoryUpdate, '/blog/category/update/<string:key>', endpoint='update_category')
+api.add_resource(CategoryDelete, '/blog/category/delete/<string:key>', endpoint='delete_category')
+api.add_resource(CategoryList, '/blog/category/list', endpoint='list_category')
 
 api.add_resource(TagCreate, '/blog/tag/create', endpoint='create_tag')
 api.add_resource(TagUpdate, '/blog/tag/update/<string:key>', endpoint='update_tag')
