@@ -1,6 +1,5 @@
-{% extends "blog/tag/tag.html" %}
-{% import 'macros.html' as macros %}
-{% block tag %}
+{% extends "blog/tag/list.html" %}
+{% block right %}
 	<form id="main-family-form" class="form-group" name="family-form" method="post" action="" role="form">
 		{{ form.csrf_token }}
 		<div class="row">

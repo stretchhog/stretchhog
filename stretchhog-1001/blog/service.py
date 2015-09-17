@@ -74,19 +74,19 @@ def update_category_form(form, key):
 
 def update_category(key, form):
 	category = get_by_key(key)
-	category.category = form.category.data,
+	category.category = form.category.data
 	return category.put()
 
 
 def delete_category(key):
-	tags = Tag.query(Tag.category == key).fetch()
+	tags = Tag.query(Tag.category == Key(urlsafe=key)).fetch()
 	for tag in tags:
 		tag.key.delete()
 	return Key(urlsafe=key).delete()
 
 
 def get_all_categories(*filters):
-	return __get_all(Category, filters)
+	return __get_all(Category, *filters)
 
 
 def create_tag(form):
@@ -98,16 +98,17 @@ def create_tag(form):
 
 def update_tag_form(form, key):
 	tag = get_by_key(key)
-	form.tag.data = tag.tag
 	form.category.coerce = str
-	form.category.default = tag.category
+	form.category.default = tag.category.urlsafe()
+	form.process()
+	form.tag.data = tag.tag
 	return form
 
 
 def update_tag(key, form):
 	tag = get_by_key(key)
-	tag.tag = form.tag.data,
-	tag.category = form.category.data
+	tag.tag = form.tag.data
+	tag.category = Key(urlsafe=form.category.data)
 	return tag.put()
 
 
@@ -116,4 +117,4 @@ def delete_tag(key):
 
 
 def get_all_tags(*filters):
-	return __get_all(Tag, filters)
+	return __get_all(Tag, *filters)

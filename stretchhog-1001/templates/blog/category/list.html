@@ -10,21 +10,21 @@
 		{% endfor %}
 	</div>
 	<div class="col-md-8">
-		{% block tag %}{% endblock %}
+		{% block right %}{% endblock %}
 	</div>
 
 	<script>
 		var tagListContainer = $('.tag-list');
 		var tagListContainerList = tagListContainer.append('<ul>');
 
-		$.get('http://127.0.0.1:8080/blog/tag/list', function (tags) {
-			tags.forEach(function (tag) {
-				var deleteUrl = Flask.url_for('delete_tag', {key: tag.key});
-				var updateUrl = Flask.url_for('update_tag', {key: tag.key});
+		$.get('http://127.0.0.1:8080/blog/category/list', function (categories) {
+			categories.forEach(function (cat) {
+				var deleteUrl = Flask.url_for('delete_category', {key: cat.key});
+				var updateUrl = Flask.url_for('update_category', {key: cat.key});
 				tagListContainerList.append('<a class="btn btn-sm btn-danger" href="' + deleteUrl + '"><i class="fa fa-remove"></i></a>');
 				tagListContainerList.append('<a class="btn btn-sm btn-warning" href="' + updateUrl + '"><i class="fa fa-edit"></i></a>');
 				tagListContainerList.append('||');
-				tagListContainerList.append(tag.category + '-' + tag.tag);
+				tagListContainerList.append(cat.category);
 				tagListContainerList.append('<br>');
 			})
 		});

@@ -65,13 +65,13 @@ class CategoryUpdate(Resource):
 
 	def post(self, key):
 		service.update_category(key, CategoryForm(data=request.get_json()))
-		return redirect(api.url_for(TagCreate), 301)
+		return redirect(api.url_for(CategoryCreate), 301)
 
 
 class CategoryDelete(Resource):
 	def get(self, key):
 		service.delete_category(key)
-		return redirect(api.url_for(TagCreate), 301)
+		return redirect(api.url_for(CategoryCreate), 301)
 
 
 class CategoryList(Resource):
