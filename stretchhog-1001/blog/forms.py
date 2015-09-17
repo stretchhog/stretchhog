@@ -1,6 +1,7 @@
+from google.appengine.ext.ndb.key import Key
 from wtforms.validators import DataRequired
 from flask.ext.wtf import Form
-from wtforms import StringField, SelectField, SelectMultipleField, HiddenField
+from wtforms import StringField, SelectField, SelectMultipleField, HiddenField, TextField
 from blog.models import Tag
 
 from blog import service
@@ -8,15 +9,14 @@ from blog import service
 
 class EntryForm(Form):
 	title = StringField(validators=[DataRequired()])
-	post = StringField(validators=[DataRequired()])
+	post = TextField(validators=[DataRequired()])
 	category = HiddenField()
 	tags = SelectMultipleField()
-	user = StringField(validators=[DataRequired()])
 
-	def __init__(self, key=None, *args, **kwargs):
+	def __init__(self, key, *args, **kwargs):
 		super(EntryForm, self).__init__(*args, **kwargs)
 		self.category.data = key
-		tags = service.get_all_tags(key, Tag.category == key)
+		tags = service.get_all_tags(Tag.category == Key(urlsafe=key))
 		self.tags.choices = [(tag.key.urlsafe(), tag.tag) for tag in tags]
 
 

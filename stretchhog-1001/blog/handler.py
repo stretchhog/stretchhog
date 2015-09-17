@@ -2,7 +2,7 @@ from blog.forms import CategoryForm, TagForm, EntryForm
 from blog.models import BlogEntry
 from flask import make_response, render_template, request, redirect
 from blog import service
-from blog.view import TagView, CategoryView
+from blog.view import TagView, CategoryView, EntryView
 from flask.ext.restful import Resource
 from main import api
 
@@ -11,40 +11,42 @@ __author__ = 'tvancann'
 
 class EntryCreate(Resource):
 	def get(self, key):
-		return make_response(render_template('blog/create.html', form=EntryForm(key)))
+		form = EntryForm(key)
+		return make_response(render_template('blog/entry/create.html', form=form))
 
-	def post(self):
-		service.create_entry(EntryForm(data=request.get_json()))
-		return redirect(api.url_for(EntryList), 301)
+	def post(self, key):
+		service.create_entry(EntryForm(key, data=request.get_json()))
+		return redirect(api.url_for(EntryCreate), 301)
 
 
 class EntryUpdate(Resource):
 	def get(self, key):
-		form = EntryForm()
+		form = EntryForm(key)
 		form = service.update_entry_form(form, key)
-		return make_response(render_template('blog/create.html', form=EntryForm(key)))
+		return make_response(render_template('blog/entry/create.html', form=EntryForm(key)))
 
 	def post(self, key):
 		service.update_entry(key, EntryForm(data=request.get_json()))
-		return redirect(api.url_for(EntryList), 301)
+		return redirect(api.url_for(EntryCreate), 301)
 
 
 class EntryDelete(Resource):
 	def get(self, key):
 		service.delete_entry(key)
-		return redirect(api.url_for(EntryList), 301)
+		return redirect(api.url_for(EntryCreate), 301)
 
 
 class EntryDetail(Resource):
 	def get(self, key):
 		entry = service.get_by_key(key)
-		return make_response(render_template('blog/detail.html', entry=entry))
+		return make_response(render_template('blog/entry/detail.html', entry=entry))
 
 
 class EntryList(Resource):
 	def get(self):
 		entries = service.get_all_entries()
-		return make_response(render_template("blog/list.html", entries=entries))
+		view = [EntryView(entry).__dict__ for entry in entries]
+		return view
 
 
 class CategoryCreate(Resource):

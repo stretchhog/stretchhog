@@ -11,7 +11,7 @@ class Tag(ndb.Model):
 
 
 class BlogEntry(ndb.Model):
-	title = ndb.IntegerProperty()
+	title = ndb.StringProperty()
 	post = ndb.StringProperty()
 	category = ndb.KeyProperty(kind=Category)
 	tags = ndb.KeyProperty(kind=Tag, repeated=True)

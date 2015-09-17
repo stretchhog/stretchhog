@@ -4,9 +4,6 @@ from google.appengine.ext.ndb.key import Key
 from blog.models import Category, Tag, BlogEntry
 
 
-__author__ = 'tvancann'
-
-
 def get_by_key(key):
 	entity = Key(urlsafe=key)
 	return entity.get()
@@ -24,12 +21,12 @@ def __get_all(clazz, *filters):
 
 
 def create_entry(form):
-	entry = BlogEntry(
-		title=form.title.data,
-		post=form.post.data,
-		category=form.category.data,
-		tags=form.tags.data,
-		user=users.get_current_user)
+	entry = BlogEntry()
+	entry.title = form.title.data
+	entry.post = form.post.data
+	entry.category = Key(urlsafe=form.category.data)
+	entry.tags = [Key(urlsafe=tag) for tag in form.tags.data]
+	entry.user = users.get_current_user()
 	return entry.put()
 
 

@@ -4,7 +4,7 @@
 	<meta charset="utf-8"/>
 	<title>timvancann.nl</title>
 
-	<link href='https://fonts.googleapis.com/css?family=Noticia+Text:400,700' rel='stylesheet' type='text/css'>
+{#	<link href='https://fonts.googleapis.com/css?family=Noticia+Text:400,700' rel='stylesheet' type='text/css'>#}
 
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/font-awesome.min.css') }}">
@@ -65,10 +65,9 @@
 							<i class="caret"></i>&nbsp;&nbsp;
 							Toevoegen
 						</a>
-						<ul class="dropdown-menu">
+						<ul class="dropdown-menu entry-list">
 							<li><a href="{{ url_for('create_category') }}">Category</a></li>
 							<li><a href="{{ url_for('create_tag') }}">Tag</a></li>
-							<li><a href="">Blog entry</a></li>
 						</ul>
 					</li>
 				{% endif %}
@@ -101,5 +100,16 @@
 	{% import 'macros.html' as macros %}
 	{% block body %}{% endblock %}
 </div>
+
+<script>
+	var categoryCreateList = $('.entry-list');
+
+	$.get('http://127.0.0.1:8080/blog/category/list', function (entries) {
+		entries.forEach(function (entry) {
+			var url = Flask.url_for('create_entry', {key: entry.key});
+			categoryCreateList.append('<li><a href="' + url + '">' + entry.category + ' entry</a></li>');
+		})
+	});
+</script>
 </body>
 </html>

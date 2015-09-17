@@ -1,31 +1,20 @@
 {% extends "index.html" %}
 {% block body %}
-	<div class="col-md-4 tag-list">
-		{% for tag in tags %}
-			<a class="btn btn-sm btn-danger" href="{{ url_for('delete_tag', key=tag.key.urlsafe()) }}"><i class="fa fa-remove"></i></a>
-			<a class="btn btn-sm btn-warning" href="{{ url_for('edit_tag', key=tag.key.urlsafe()) }}"><i class="fa fa-edit"></i></a>
-			|
-			{{ tag.category.category }} | {{ tag.tag }}
-			<br>
-		{% endfor %}
-	</div>
-	<div class="col-md-8">
-		{% block right %}{% endblock %}
-	</div>
+	<div class="col-md-4 category-list"></div>
+	<div class="col-md-8">{% block right %}{% endblock %}</div>
 
 	<script>
-		var tagListContainer = $('.tag-list');
-		var tagListContainerList = tagListContainer.append('<ul>');
+		var categoryList = $('.category-list');
 
-		$.get('http://127.0.0.1:8080/blog/category/list', function (categories) {
-			categories.forEach(function (cat) {
-				var deleteUrl = Flask.url_for('delete_category', {key: cat.key});
-				var updateUrl = Flask.url_for('update_category', {key: cat.key});
-				tagListContainerList.append('<a class="btn btn-sm btn-danger" href="' + deleteUrl + '"><i class="fa fa-remove"></i></a>');
-				tagListContainerList.append('<a class="btn btn-sm btn-warning" href="' + updateUrl + '"><i class="fa fa-edit"></i></a>');
-				tagListContainerList.append('||');
-				tagListContainerList.append(cat.category);
-				tagListContainerList.append('<br>');
+		$.get('http://127.0.0.1:8080/blog/category/list', function (entries) {
+			entries.forEach(function (entry) {
+				var deleteUrl = Flask.url_for('delete_category', {key: entry.key});
+				var updateUrl = Flask.url_for('update_category', {key: entry.key});
+				categoryList.append('<a class="btn btn-sm btn-danger" href="' + deleteUrl + '"><i class="fa fa-remove"></i></a>');
+				categoryList.append('<a class="btn btn-sm btn-warning" href="' + updateUrl + '"><i class="fa fa-edit"></i></a>');
+				categoryList.append('||');
+				categoryList.append(entry.category);
+				categoryList.append('<br>');
 			})
 		});
 	</script>
