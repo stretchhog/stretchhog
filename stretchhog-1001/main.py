@@ -5,6 +5,7 @@ from google.appengine.api import users
 from flask import Flask, session, render_template, make_response
 from flask.ext.restful import Api, Resource
 import wtforms_json
+from flask_jsglue import JSGlue
 
 
 wtforms_json.init()
@@ -12,6 +13,7 @@ wtforms_json.init()
 base_dir = os.path.abspath(os.path.dirname(__file__))
 
 app = Flask(__name__)
+jsglue = JSGlue(app)
 app.config['DEBUG'] = True
 app.config['WTF_CSRF_ENABLED'] = False
 app.config['SECRET_KEY'] = 'you-will-never-guess'

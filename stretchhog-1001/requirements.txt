@@ -8,6 +8,7 @@
 Flask==0.10.1
 Flask-RESTful==0.2.12
 Flask-WTF==0.10.0
+Flask-JSGlue
 Jinja2==2.7.3
 WTForms==2.0.1
 WTForms-Components==0.9.5

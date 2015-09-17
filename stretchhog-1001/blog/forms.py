@@ -6,6 +6,9 @@ from blog import service
 
 
 class BlogEntryCreateForm(Form):
+	def __init__(self, *args, **kwargs):
+		super(BlogEntryCreateForm, self).__init__(*args, **kwargs)
+
 	title = StringField(validators=[DataRequired()])
 	post = StringField(validators=[DataRequired()])
 	category = HiddenField()
@@ -13,11 +16,15 @@ class BlogEntryCreateForm(Form):
 	user = StringField(validators=[DataRequired()])
 
 
-class CategoryCreateForm(Form):
+class CategoryForm(Form):
 	category = StringField()
 
 
-class TagCreateForm(Form):
+class TagForm(Form):
 	tag = StringField()
-	categories = service.get_all_categories()
-	category = SelectField(choices=[(category.key.urlsafe(), category.category) for category in categories])
+	category = SelectField()
+
+	def __init__(self, *args, **kwargs):
+		super(TagForm, self).__init__(*args, **kwargs)
+		categories = service.get_all_categories()
+		self.category.choices = [(category.key.urlsafe(), category.category) for category in categories]
