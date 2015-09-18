@@ -6,7 +6,7 @@
 	<script>
 		var tagList = $('.tag-list');
 
-		$.get('http://127.0.0.1:8080/blog/tag/list', function (tags) {
+		$.get(Flask.url_for('list_tags'), function (tags) {
 			tags.forEach(function (tag) {
 				var deleteUrl = Flask.url_for('delete_tag', {key: tag.key});
 				var updateUrl = Flask.url_for('update_tag', {key: tag.key});

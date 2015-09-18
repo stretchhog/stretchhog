@@ -4,7 +4,7 @@
 	<meta charset="utf-8"/>
 	<title>timvancann.nl</title>
 
-{#	<link href='https://fonts.googleapis.com/css?family=Noticia+Text:400,700' rel='stylesheet' type='text/css'>#}
+	<link href='https://fonts.googleapis.com/css?family=Noticia+Text:400,700' rel='stylesheet' type='text/css'>
 
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/font-awesome.min.css') }}">
@@ -53,17 +53,18 @@
 				<button type="submit" class="btn btn-default">Submit</button>
 			</form>
 			<ul class="nav navbar-nav navbar-right">
-				<li class="menu-icon"><a href="/login"><i class="fa fa-facebook"></i></a></li>
-				<li class="menu-icon"><a href="/login"><i class="fa fa-instagram"></i></a></li>
-				<li class="menu-icon"><a href="/login"><i class="fa fa-youtube-play"></i></a></li>
-				<li class="menu-icon"><a href="/login"><i class="fa fa-linkedin"></i></a></li>
+				<li class="menu-icon icon-fa"><a href="#"><i class="fa fa-facebook"></i></a></li>
+				<li class="menu-icon icon-yt"><a href="#"><i class="fa fa-youtube-play"></i></a></li>
+				<li class="menu-icon icon-ig"><a href="#"><i class="fa fa-instagram"></i></a></li>
+				<li class="menu-icon icon-sc"><a href="#"><i class="fa fa-soundcloud"></i></a></li>
+				<li class="menu-icon icon-li"><a href="#"><i class="fa fa-linkedin"></i></a></li>
 				{% if session.is_admin %}
 					<li class="dropdown">
 						<a href="#" style="text-align: center" class="dropdown-toggle" data-toggle="dropdown"
 								role="button" aria-haspopup="true"
 								aria-expanded="false">
 							<i class="caret"></i>&nbsp;&nbsp;
-							Toevoegen
+							Add
 						</a>
 						<ul class="dropdown-menu entry-list">
 							<li><a href="{{ url_for('create_category') }}">Category</a></li>
@@ -104,7 +105,7 @@
 <script>
 	var categoryCreateList = $('.entry-list');
 
-	$.get('http://127.0.0.1:8080/blog/category/list', function (entries) {
+	$.get(Flask.url_for('list_entry'), function (entries) {
 		entries.forEach(function (entry) {
 			var url = Flask.url_for('create_entry', {key: entry.key});
 			categoryCreateList.append('<li><a href="' + url + '">' + entry.category + ' entry</a></li>');

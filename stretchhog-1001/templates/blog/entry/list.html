@@ -6,7 +6,7 @@
 	<script>
 		var entryList = $('.entry-create-list');
 
-		$.get('http://127.0.0.1:8080/blog/entry/list', function (entries) {
+		$.get(Flask.url_for('list_entry'), function (entries) {
 			entries.forEach(function (entry) {
 				var deleteUrl = Flask.url_for('delete_entry', {key: entry.key, cat_key: entry.cat_key});
 				var updateUrl = Flask.url_for('update_entry', {key: entry.key, cat_key: entry.cat_key});

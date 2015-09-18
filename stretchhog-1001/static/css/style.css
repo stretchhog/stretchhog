@@ -12,11 +12,38 @@ body{
 	font-size: 15px;
 	text-align: center;
 	height: 50px;
+	color: #000;
+	-webkit-transition: background 0.2s linear;
+	-moz-transition: background 0.2s linear;
+	-ms-transition: background 0.2s linear;
+	-o-transition: background 0.2s linear;
+	transition: background 0.2s linear;
 }
 
 .navbar-nav > li > a:hover {
 	text-decoration: underline;
 	background-color: #fff;
+}
+
+.navbar-nav > li.icon-fa a:hover {
+	background-color: #3b5998;
+	color: #fff
+}
+.navbar-nav > li.icon-yt a:hover {
+	background-color: #cd201f;
+	color: #fff
+}
+.navbar-nav > li.icon-ig a:hover {
+	background-color: #3f729b;
+	color: #fff
+}
+.navbar-nav > li.icon-sc a:hover {
+	background-color: #ff8800;
+	color: #fff
+}
+.navbar-nav > li.icon-li a:hover {
+	background-color: #00a0dc;
+	color: #fff
 }
 
 .navbar-nav > li > a:hover {
