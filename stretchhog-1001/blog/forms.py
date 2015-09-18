@@ -5,11 +5,12 @@ from wtforms import StringField, SelectField, SelectMultipleField, HiddenField, 
 from blog.models import Tag
 
 from blog import service
+from wtforms.widgets import TextArea, CheckboxInput, ListWidget
 
 
 class EntryForm(Form):
 	title = StringField(validators=[DataRequired()])
-	post = TextField(validators=[DataRequired()])
+	post = StringField(widget=TextArea(), validators=[DataRequired()])
 	category = HiddenField()
 	tags = SelectMultipleField()
 

@@ -8,8 +8,8 @@
 
 		$.get('http://127.0.0.1:8080/blog/entry/list', function (entries) {
 			entries.forEach(function (entry) {
-				var deleteUrl = Flask.url_for('delete_entry', {key: entry.key});
-				var updateUrl = Flask.url_for('update_entry', {key: entry.key});
+				var deleteUrl = Flask.url_for('delete_entry', {key: entry.key, cat_key: entry.cat_key});
+				var updateUrl = Flask.url_for('update_entry', {key: entry.key, cat_key: entry.cat_key});
 				entryList.append('<a class="btn btn-sm btn-danger" href="' + deleteUrl + '"><i class="fa fa-remove"></i></a>');
 				entryList.append('<a class="btn btn-sm btn-warning" href="' + updateUrl + '"><i class="fa fa-edit"></i></a>');
 				entryList.append('||');

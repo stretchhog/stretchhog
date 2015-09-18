@@ -20,6 +20,7 @@ class EntryView():
 		self.title = entry.title
 		self.post = entry.post
 		self.category = entry.category.get().category
+		self.cat_key = entry.category.urlsafe()
 		self.tags = [tag.get().tag for tag in entry.tags]
 		# self.user = entry.user
-		# self.date_added = entry.date_added
+		self.date_added = str(entry.date_added)

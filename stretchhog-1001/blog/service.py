@@ -32,21 +32,17 @@ def create_entry(form):
 
 def update_entry_form(form, key):
 	entry = get_by_key(key)
+	form.tags.data = [tag.urlsafe() for tag in entry.tags]
 	form.title.data = entry.title
-	form.title.data = entry.post
-	form.category.data = entry.category
-	form.category.default = entry.category
-	form.tags.data = entry.tags
-	form.user.data = entry.user
+	form.post.data = entry.post
 	return form
 
 
 def update_entry(key, form):
 	entry = get_by_key(key)
-	entry.title = form.title.data,
-	entry.post = form.post.data,
-	entry.category = form.category.data,
-	entry.tags = form.tags.data,
+	entry.title = form.title.data
+	entry.post = form.post.data
+	entry.tags = [Key(urlsafe=tag) for tag in form.tags.data]
 	return entry.put()
 
 
@@ -95,9 +91,7 @@ def create_tag(form):
 
 def update_tag_form(form, key):
 	tag = get_by_key(key)
-	form.category.coerce = str
-	form.category.default = tag.category.urlsafe()
-	form.process()
+	form.category.data = tag.category.urlsafe()
 	form.tag.data = tag.tag
 	return form
 

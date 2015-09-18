@@ -16,24 +16,24 @@ class EntryCreate(Resource):
 
 	def post(self, key):
 		service.create_entry(EntryForm(key, data=request.get_json()))
-		return redirect(api.url_for(EntryCreate), 301)
+		return redirect(api.url_for(EntryCreate, key=key), 301)
 
 
 class EntryUpdate(Resource):
-	def get(self, key):
-		form = EntryForm(key)
+	def get(self, key, cat_key):
+		form = EntryForm(cat_key)
 		form = service.update_entry_form(form, key)
-		return make_response(render_template('blog/entry/create.html', form=EntryForm(key)))
+		return make_response(render_template('blog/entry/create.html', form=form))
 
-	def post(self, key):
-		service.update_entry(key, EntryForm(data=request.get_json()))
-		return redirect(api.url_for(EntryCreate), 301)
+	def post(self, key, cat_key):
+		service.update_entry(key, EntryForm(cat_key, data=request.get_json()))
+		return redirect(api.url_for(EntryCreate, key=cat_key), 301)
 
 
 class EntryDelete(Resource):
 	def get(self, key):
 		service.delete_entry(key)
-		return redirect(api.url_for(EntryCreate), 301)
+		return redirect(api.url_for(EntryCreate, key=key), 301)
 
 
 class EntryDetail(Resource):
@@ -119,7 +119,7 @@ class TagList(Resource):
 
 
 api.add_resource(EntryCreate, '/blog/admin/entry/create/<string:key>', endpoint='create_entry')
-api.add_resource(EntryUpdate, '/blog/admin/entry/update/<string:key>', endpoint='update_entry')
+api.add_resource(EntryUpdate, '/blog/admin/entry/update/<string:key>/<string:cat_key>', endpoint='update_entry')
 api.add_resource(EntryDelete, '/blog/admin/entry/delete/<string:key>', endpoint='delete_entry')
 api.add_resource(EntryDetail, '/blog/entry/<string:key>', endpoint='get_entry')
 api.add_resource(EntryList, '/blog/entry/list', endpoint='list_blog')
