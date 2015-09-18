@@ -16,7 +16,7 @@ class EntryCreate(Resource):
 
 	def post(self, key):
 		service.create_entry(EntryForm(key, data=request.get_json()))
-		return redirect(api.url_for(EntryCreate, key=key), 301)
+		return redirect(api.url_for(EntryCreate, key=key))
 
 
 class EntryUpdate(Resource):
@@ -27,13 +27,13 @@ class EntryUpdate(Resource):
 
 	def post(self, key, cat_key):
 		service.update_entry(key, EntryForm(cat_key, data=request.get_json()))
-		return redirect(api.url_for(EntryCreate, key=cat_key), 301)
+		return redirect(api.url_for(EntryCreate, key=cat_key))
 
 
 class EntryDelete(Resource):
 	def get(self, key):
 		service.delete_entry(key)
-		return redirect(api.url_for(EntryCreate, key=key), 301)
+		return redirect(api.url_for(EntryCreate, key=key))
 
 
 class EntryDetail(Resource):
@@ -56,7 +56,7 @@ class CategoryCreate(Resource):
 
 	def post(self):
 		service.create_category(CategoryForm(data=request.get_json()))
-		return redirect(api.url_for(CategoryCreate), 301)
+		return redirect(api.url_for(CategoryCreate))
 
 
 class CategoryUpdate(Resource):
@@ -67,13 +67,13 @@ class CategoryUpdate(Resource):
 
 	def post(self, key):
 		service.update_category(key, CategoryForm(data=request.get_json()))
-		return redirect(api.url_for(CategoryCreate), 301)
+		return redirect(api.url_for(CategoryCreate))
 
 
 class CategoryDelete(Resource):
 	def get(self, key):
 		service.delete_category(key)
-		return redirect(api.url_for(CategoryCreate), 301)
+		return redirect(api.url_for(CategoryCreate))
 
 
 class CategoryList(Resource):
@@ -90,7 +90,7 @@ class TagCreate(Resource):
 
 	def post(self):
 		service.create_tag(TagForm(data=request.get_json()))
-		return redirect(api.url_for(TagCreate), 301)
+		return redirect(api.url_for(TagCreate))
 
 
 class TagUpdate(Resource):
@@ -101,13 +101,13 @@ class TagUpdate(Resource):
 
 	def post(self, key):
 		service.update_tag(key, TagForm(data=request.get_json()))
-		return redirect(api.url_for(TagCreate), 301)
+		return redirect(api.url_for(TagCreate))
 
 
 class TagDelete(Resource):
 	def get(self, key):
 		service.delete_tag(key)
-		return redirect(api.url_for(TagCreate), 301)
+		return redirect(api.url_for(TagCreate))
 
 
 class TagList(Resource):
