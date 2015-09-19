@@ -13,16 +13,21 @@ def __to_key(urlsafe):
 	return Key(urlsafe=urlsafe)
 
 
-def __get_all(clazz, *filters):
+def __get_all(clazz, **kwargs):
 	qry = clazz.query()
-	for f in filters:
-		qry = qry.filter(f)
+	if 'filter' in kwargs:
+		for f in kwargs['filter']:
+			qry = qry.filter(f)
+	if 'sort' in kwargs:
+		for s in kwargs['sort']:
+			qry.order(s)
 	return qry.fetch()
 
 
 def create_entry(form):
 	entry = BlogEntry()
 	entry.title = form.title.data
+	entry.summary = form.summary.data
 	entry.post = form.post.data
 	entry.category = Key(urlsafe=form.category.data)
 	entry.tags = [Key(urlsafe=tag) for tag in form.tags.data]
@@ -34,6 +39,7 @@ def update_entry_form(form, key):
 	entry = get_by_key(key)
 	form.tags.data = [tag.urlsafe() for tag in entry.tags]
 	form.title.data = entry.title
+	form.summary.data = entry.summary
 	form.post.data = entry.post
 	return form
 
@@ -41,6 +47,7 @@ def update_entry_form(form, key):
 def update_entry(key, form):
 	entry = get_by_key(key)
 	entry.title = form.title.data
+	entry.summary = form.summary.data
 	entry.post = form.post.data
 	entry.tags = [Key(urlsafe=tag) for tag in form.tags.data]
 	return entry.put()
@@ -50,8 +57,8 @@ def delete_entry(key):
 	return Key(urlsafe=key).delete()
 
 
-def get_all_entries():
-	return __get_all(BlogEntry)
+def get_all_entries(**kwargs):
+	return __get_all(BlogEntry, **kwargs)
 
 
 def create_category(form):
@@ -78,8 +85,8 @@ def delete_category(key):
 	return Key(urlsafe=key).delete()
 
 
-def get_all_categories(*filters):
-	return __get_all(Category, *filters)
+def get_all_categories(**kwargs):
+	return __get_all(Category, **kwargs)
 
 
 def create_tag(form):
@@ -107,5 +114,14 @@ def delete_tag(key):
 	return Key(urlsafe=key).delete()
 
 
-def get_all_tags(*filters):
-	return __get_all(Tag, *filters)
+def get_all_tags(**kwargs):
+	return __get_all(Tag, **kwargs)
+
+
+def search(data):
+	qry = BlogEntry.query()
+	if 'category' in data:
+		qry.filter(BlogEntry.category == Key(urlsafe=data['category']))
+	if 'tag' in data:
+		qry.filter(BlogEntry.tags == Key(urlsafe=data['tag']))
+	return qry.fetch()

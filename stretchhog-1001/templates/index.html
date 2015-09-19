@@ -4,7 +4,7 @@
 	<meta charset="utf-8"/>
 	<title>timvancann.nl</title>
 
-{#	<link href='https://fonts.googleapis.com/css?family=Noticia+Text:400,700' rel='stylesheet' type='text/css'>#}
+	{#	<link href='https://fonts.googleapis.com/css?family=Noticia+Text:400,700' rel='stylesheet' type='text/css'>#}
 
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/font-awesome.min.css') }}">
@@ -12,6 +12,8 @@
 
 	<script src="{{ url_for('static', filename='js/jquery-2.1.4.min.js') }}"></script>
 	<script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/list.min.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/list.fuzzysearch.min.js') }}"></script>
 	{{ JSGlue.include() }}
 </head>
 <body>
@@ -32,9 +34,15 @@
 		<!-- Collect the nav links, forms, and other content for toggling -->
 		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			<ul class="nav navbar-nav">
-				<li class="icon-ai"><a href="#">Artificial Intelligence</a></li>
-				<li class="icon-music"><a href="#">Music</a></li>
-				<li class="icon-health"><a href="#">Fitness & Health</a></li>
+				<li class="icon-ai">
+					<a href="{{ url_for('category_entry', cat_key='ahNkZXZ-c3RyZXRjaGhvZy0xMDAxchULEghDYXRlZ29yeRiAgICAgPiFCQw') }}">Artificial Intelligence</a>
+				</li>
+				<li class="icon-music">
+					<a href="{{ url_for('category_entry', cat_key='ahNkZXZ-c3RyZXRjaGhvZy0xMDAxchULEghDYXRlZ29yeRiAgICAgICACgw') }}">Music</a>
+				</li>
+				<li class="icon-health">
+					<a href="{{ url_for('category_entry', cat_key='ahNkZXZ-c3RyZXRjaGhvZy0xMDAxchULEghDYXRlZ29yeRiAgICAgMijCww') }}">Fitness & Health</a>
+				</li>
 				{% if user_is_admin %}
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
@@ -98,7 +106,7 @@
 <script>
 	var categoryCreateList = $('.entry-list');
 
-	$.get(Flask.url_for('list_entry'), function (entries) {
+	$.get(Flask.url_for('list_category'), function (entries) {
 		entries.forEach(function (entry) {
 			var url = Flask.url_for('create_entry', {key: entry.key});
 			categoryCreateList.append('<li><a href="' + url + '">' + entry.category + ' entry</a></li>');
