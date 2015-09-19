@@ -12,5 +12,5 @@ Flask-JSGlue
 Jinja2==2.7.3
 WTForms==2.0.1
 WTForms-Components==0.9.5
-WTForms-JSON
 BeautifulSoup4
+Flask-Markdown

@@ -75,18 +75,11 @@
 
 				{% if session.logged_in %}
 					<li>
-						<a {% if 'logout' == active_page %} class="active"{% endif %} style="text-align: center"
-								href="{{ url_for_logout }}">
-							<i class="fa fa-sign-out"></i>&nbsp;&nbsp;
-							Uitloggen
-						</a>
+						<a href="{{ url_for_logout }}"><i class="fa fa-sign-out"></i>&nbsp;&nbsp; Uitloggen</a>
 					</li>
 				{% else %}
 					<li>
-						<a {% if 'login' == active_page %} class="active"{% endif %} style="text-align: center"
-								href="{{ url_for_login }}">
-							<i class="fa fa-sign-in"></i>&nbsp;&nbsp;
-							Inloggen
+						<a href="{{ url_for_login }}"><i class="fa fa-sign-in"></i>&nbsp;&nbsp; Inloggen
 						</a>
 					</li>
 				{% endif %}
