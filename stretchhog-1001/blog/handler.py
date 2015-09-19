@@ -1,3 +1,5 @@
+from google.appengine.ext.ndb.key import Key
+
 from blog.forms import CategoryForm, TagForm, EntryForm
 from blog.models import BlogEntry
 from flask import make_response, render_template, request, redirect
@@ -5,6 +7,7 @@ from blog import service
 from blog.view import TagView, CategoryView, EntryView
 from flask.ext.restful import Resource
 from main import api
+
 
 __author__ = 'tvancann'
 
@@ -45,6 +48,21 @@ class EntryDetail(Resource):
 class EntryList(Resource):
 	def get(self):
 		entries = service.get_all_entries()
+		view = [EntryView(entry).__dict__ for entry in entries]
+		return view
+
+
+class EntryListCategory(Resource):
+	def get(self, cat_key):
+		entries = service.get_all_entries(filter=[BlogEntry.category == Key(urlsafe=cat_key)],
+		                                  sort=[-BlogEntry.date_added])
+		view = [EntryView(entry).__dict__ for entry in entries]
+		return make_response(render_template("blog/entry/entries.html", entries=view))
+
+
+class EntrySearch(Resource):
+	def post(self):
+		entries = service.search(request.data)
 		view = [EntryView(entry).__dict__ for entry in entries]
 		return view
 
@@ -122,7 +140,9 @@ api.add_resource(EntryCreate, '/blog/admin/entry/create/<string:key>', endpoint=
 api.add_resource(EntryUpdate, '/blog/admin/entry/update/<string:key>/<string:cat_key>', endpoint='update_entry')
 api.add_resource(EntryDelete, '/blog/admin/entry/delete/<string:key>', endpoint='delete_entry')
 api.add_resource(EntryDetail, '/blog/entry/<string:key>', endpoint='get_entry')
-api.add_resource(EntryList, '/blog/entry/list', endpoint='list_blog')
+api.add_resource(EntryList, '/blog/entry/list', endpoint='list_entry')
+api.add_resource(EntryListCategory, '/blog/entry/list/<string:cat_key>', endpoint='category_entry')
+api.add_resource(EntrySearch, '/blog/entry/search', endpoint='search_entry')
 
 api.add_resource(CategoryCreate, '/blog/admin/category/create', endpoint='create_category')
 api.add_resource(CategoryUpdate, '/blog/admin/category/update/<string:key>', endpoint='update_category')

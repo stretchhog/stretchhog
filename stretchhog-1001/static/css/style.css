@@ -26,8 +26,17 @@ body {
 }
 
 .navbar-nav > li.menu-icon {
-	border-width: 1px;
+	border-right: 1px solid;
+	border-bottom: 1px solid;
+	border-color: rgba(216, 216, 216, 0.77);
+	display: block;
 	width: 50px;
+}
+
+.navbar-nav > li.icon-fa {
+	border-left: 1px solid;
+	border-color: rgba(216, 216, 216, 0.77);
+	display: bock;
 }
 
 .navbar-nav > li.icon-fa a:hover {

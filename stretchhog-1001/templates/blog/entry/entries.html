@@ -1,0 +1,26 @@
+{% extends "index.html" %}
+{% block body %}
+	{% for entry in entries %}
+		<div class="col-sm-12 entry-title">
+			Title: {{ entry.title }}
+		</div>
+		<hr>
+		<div class="col-sm-12 entry-summary">
+			Summary: {{ entry.summary }}
+		</div>
+		<hr>
+		<div class="col-sm-12 entry-date">
+			Date: {{ entry.date_added }}
+		</div>
+		<hr>
+		<div class="col-sm-12 entry-tags">
+			{% for tag in entry.tags %}
+				<div class="col-sm-12 entry-tag">
+					{{ tag.tag }}
+				</div>
+			{% endfor %}
+		</div>
+		<hr>
+	{% endfor %}
+	<hr>
+{% endblock %}

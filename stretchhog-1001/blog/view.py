@@ -1,26 +1,34 @@
 __author__ = 'tvancann'
 
 
-class TagView():
-	def __init__(self, tag):
-		self.key = tag.key.urlsafe()
-		self.tag = tag.tag
-		self.category = tag.category.get().category
+class TagView:
+	def __init__(self, entity):
+		self.key = entity.key.urlsafe()
+		self.tag = entity.tag
+		self.category = entity.category.get().category
 
 
-class CategoryView():
+class CategoryView:
 	def __init__(self, category):
 		self.key = category.key.urlsafe()
 		self.category = category.category
 
 
-class EntryView():
-	def __init__(self, entry):
-		self.key = entry.key.urlsafe()
-		self.title = entry.title
-		self.post = entry.post
-		self.category = entry.category.get().category
-		self.cat_key = entry.category.urlsafe()
-		self.tags = [tag.get().tag for tag in entry.tags]
-		# self.user = entry.user
-		self.date_added = str(entry.date_added)
+class EntryView:
+	def __init__(self, entity):
+		self.key = entity.key.urlsafe()
+		self.title = entity.title
+		self.summary = entity.summary
+		self.post = entity.post
+		self.category = CategoryView(entity.category.get()).__dict__
+		self.tags = [TagView(tag.get()).__dict__ for tag in entity.tags]
+		self.date_added = entity.date_added.strftime('%Y, %d %B')
+
+class EntrySummaryView:
+	def __init__(self, entity):
+		self.key = entity.key.urlsafe()
+		self.title = entity.title
+		self.summary = entity.summary
+		self.category = CategoryView(entity.category.get())
+		self.tags = [TagView(entity.tag.get()) for tag in entity.tags]
+		self.date_added = str(entity.date_added)
