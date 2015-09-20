@@ -125,7 +125,6 @@ def search(data):
 
 def create_comment(key, form):
 	comment = Comment(parent=__to_key(key),
-	                  entry=Key(urlsafe=form.entry.data),
 	                  user=users.get_current_user(),
 	                  comment=form.comment.data)
 	return comment.put()
@@ -141,3 +140,8 @@ def get_all_tags_by_ancestor(ancestor):
 
 def get_all_entries_by_ancestor(ancestor, **kwargs):
 	return __get_all(Entry.query(ancestor=ancestor), **kwargs)
+
+
+def get_all_comments_by_ancestor(ancestor, **kwargs):
+	return __get_all(Comment.query(ancestor=ancestor), **kwargs)
+

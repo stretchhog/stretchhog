@@ -49,7 +49,6 @@ class EntryDetail(Resource):
 	def get(self, key):
 		entry = self.get_entry(key)
 		comment_form = CommentForm()
-		comment_form.entry.data = key
 		return make_response(render_template('blog/entry/entry.html', entry=entry, form=comment_form))
 
 
@@ -157,8 +156,7 @@ class TagList(Resource):
 
 class CommentList(Resource):
 	def get(self, key):
-		comments = service.get_all_comments(filter=[Comment.entry == Key(urlsafe=key)],
-		                                    sort=[-Comment.date_added])
+		comments = service.get_all_comments_by_ancestor(Key(urlsafe=key), sort=[-Comment.date_added])
 		view = [CommentView(comment).__dict__ for comment in comments]
 		return view
 
