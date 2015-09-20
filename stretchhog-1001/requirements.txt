@@ -14,3 +14,4 @@ WTForms==2.0.1
 WTForms-Components==0.9.5
 BeautifulSoup4
 Markdown
+Pygments

@@ -61,36 +61,36 @@
 				<button type="submit" class="btn btn-default">Submit</button>
 			</form>
 			<ul class="nav navbar-nav navbar-right">
-				<li class="menu-icon icon-fa"><a href="#"><i class="fa fa-facebook"></i></a></li>
-				<li class="menu-icon icon-yt"><a href="#"><i class="fa fa-youtube-play"></i></a></li>
-				<li class="menu-icon icon-ig"><a href="#"><i class="fa fa-instagram"></i></a></li>
-				<li class="menu-icon icon-sc"><a href="#"><i class="fa fa-soundcloud"></i></a></li>
-				<li class="menu-icon icon-li"><a href="#"><i class="fa fa-linkedin"></i></a></li>
 				{% if session.is_admin %}
-					<li class="dropdown">
-						<a href="#" style="text-align: center" class="dropdown-toggle" data-toggle="dropdown"
-								role="button" aria-haspopup="true"
-								aria-expanded="false">
-							<i class="caret"></i>&nbsp;&nbsp;
-							Add
-						</a>
-						<ul class="dropdown-menu entry-list">
-							<li><a href="{{ url_for('create_category') }}">Category</a></li>
-							<li><a href="{{ url_for('create_tag') }}">Tag</a></li>
-						</ul>
-					</li>
+				<li class="dropdown">
+					<a href="#" style="text-align: center" class="dropdown-toggle" data-toggle="dropdown"
+					   role="button" aria-haspopup="true"
+					   aria-expanded="false">
+						<i class="caret"></i>&nbsp;&nbsp;
+						Add
+					</a>
+					<ul class="dropdown-menu entry-list">
+						<li><a href="{{ url_for('create_category') }}">Category</a></li>
+						<li><a href="{{ url_for('create_tag') }}">Tag</a></li>
+					</ul>
+				</li>
 				{% endif %}
 
 				{% if session.logged_in %}
-					<li>
-						<a href="{{ url_for_logout }}"><i class="fa fa-sign-out"></i>&nbsp;&nbsp; Uitloggen</a>
-					</li>
+				<li>
+					<a href="{{ url_for_logout }}"><i class="fa fa-sign-out"></i>&nbsp;&nbsp; Uitloggen</a>
+				</li>
 				{% else %}
-					<li>
-						<a href="{{ url_for_login }}"><i class="fa fa-sign-in"></i>&nbsp;&nbsp; Inloggen
-						</a>
-					</li>
+				<li>
+					<a href="{{ url_for_login }}"><i class="fa fa-sign-in"></i>&nbsp;&nbsp; Inloggen
+					</a>
+				</li>
 				{% endif %}
+				<li class="menu-icon icon-fa"><a href="https://www.facebook.com/timvancann"><i class="fa fa-facebook"></i></a></li>
+				<li class="menu-icon icon-yt"><a href="https://www.youtube.com/user/timvancann"><i class="fa fa-youtube-play"></i></a></li>
+				<li class="menu-icon icon-ig"><a href="#"><i class="fa fa-instagram"></i></a></li>
+				<li class="menu-icon icon-sc"><a href="https://soundcloud.com/stretchhog"><i class="fa fa-soundcloud"></i></a></li>
+				<li class="menu-icon icon-li"><a href="https://nl.linkedin.com/in/timvancann"><i class="fa fa-linkedin"></i></a></li>
 			</ul>
 		</div>
 		<!-- /.navbar-collapse -->

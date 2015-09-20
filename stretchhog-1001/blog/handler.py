@@ -1,14 +1,13 @@
-from blog.forms import CategoryForm, TagForm, EntryForm
-
-from blog.models import BlogEntry, Category
+from google.appengine.ext.ndb.key import Key
+from blog.forms import CategoryForm, TagForm, EntryForm, CommentForm
+from blog.models import Entry, Category, Comment
 from flask import make_response, render_template, request, redirect
 from blog import service
-from blog.view import TagView, CategoryView, EntryView
+from blog.view import TagView, CategoryView, EntryView, CommentView
 from flask.ext.restful import Resource
 from main import api
 from flask import Markup
 import markdown
-
 
 categories = {1: "Music", 2: "Artificial Intelligence", 3: "Fitness & Health"}
 
@@ -40,11 +39,27 @@ class EntryDelete(Resource):
 		return redirect(api.url_for(EntryCreate, key=key))
 
 
-class Entry(Resource):
-	def get(self, key):
+class EntryDetail(Resource):
+	@staticmethod
+	def get_entry(key):
 		entry = service.get_by_key(key)
 		entry.post = Markup(markdown.markdown(entry.post))
-		return make_response(render_template('blog/entry/entry.html', entry=entry))
+		return entry
+
+	def get(self, key):
+		entry = self.get_entry(key)
+		comment_form = CommentForm()
+		comment_form.entry.data = key
+		return make_response(render_template('blog/entry/entry.html', entry=entry, form=comment_form))
+
+
+	def post(self, key):
+		comment_form = CommentForm()
+		form = CommentForm(data=request.get_json())
+		if comment_form.validate():
+			service.create_comment(form)
+		entry = self.get_entry(key)
+		return make_response(render_template('blog/entry/entry.html', entry=entry, form=comment_form))
 
 
 class EntryList(Resource):
@@ -57,8 +72,8 @@ class EntryList(Resource):
 class EntryListCategory(Resource):
 	def get(self, cat):
 		category = service.get_all_categories(filter=[Category.category == categories[cat]])[0]
-		entries = service.get_all_entries(filter=[BlogEntry.category == category.key],
-		                                  sort=[-BlogEntry.date_added])
+		entries = service.get_all_entries(filter=[Entry.category == category.key],
+		                                  sort=[-Entry.date_added])
 		view = [EntryView(entry).__dict__ for entry in entries]
 		return make_response(render_template("blog/entry/entries.html", entries=view))
 
@@ -139,13 +154,23 @@ class TagList(Resource):
 		return sorted_view
 
 
+class CommentList(Resource):
+	def get(self, key):
+		comments = service.get_all_comments(filter=[Comment.entry == Key(urlsafe=key)],
+		                                    sort=[-Comment.date_added])
+		view = [CommentView(comment).__dict__ for comment in comments]
+		return view
+
+
 api.add_resource(EntryCreate, '/blog/admin/entry/create/<string:key>', endpoint='create_entry')
 api.add_resource(EntryUpdate, '/blog/admin/entry/update/<string:key>/<string:cat_key>', endpoint='update_entry')
 api.add_resource(EntryDelete, '/blog/admin/entry/delete/<string:key>', endpoint='delete_entry')
-api.add_resource(Entry, '/blog/entry/<string:key>', endpoint='get_entry')
+api.add_resource(EntryDetail, '/blog/entry/<string:key>', endpoint='get_entry')
 api.add_resource(EntryList, '/blog/entry/list', endpoint='list_entry')
 api.add_resource(EntryListCategory, '/blog/entry/list/<int:cat>', endpoint='category_entry')
 api.add_resource(EntrySearch, '/blog/entry/search', endpoint='search_entry')
+
+api.add_resource(CommentList, '/blog/comment/list/<string:key>', endpoint='list_comment')
 
 api.add_resource(CategoryCreate, '/blog/admin/category/create', endpoint='create_category')
 api.add_resource(CategoryUpdate, '/blog/admin/category/update/<string:key>', endpoint='update_category')

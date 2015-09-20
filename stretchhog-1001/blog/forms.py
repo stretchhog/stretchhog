@@ -1,8 +1,7 @@
 from google.appengine.ext.ndb.key import Key
-
 from wtforms.validators import DataRequired
 from flask.ext.wtf import Form
-from wtforms import StringField, SelectField, SelectMultipleField, HiddenField
+from wtforms import StringField, SelectField, SelectMultipleField, HiddenField, TextField, TextAreaField
 from blog.models import Tag
 from blog import service
 from wtforms.widgets import TextArea
@@ -10,8 +9,8 @@ from wtforms.widgets import TextArea
 
 class EntryForm(Form):
 	title = StringField(validators=[DataRequired()])
-	summary = StringField(widget=TextArea(), validators=[DataRequired()])
-	post = StringField(widget=TextArea(), validators=[DataRequired()])
+	summary = TextAreaField(validators=[DataRequired()])
+	post = TextAreaField(validators=[DataRequired()])
 	category = HiddenField()
 	tags = SelectMultipleField()
 
@@ -34,3 +33,8 @@ class TagForm(Form):
 		super(TagForm, self).__init__(*args, **kwargs)
 		categories = service.get_all_categories()
 		self.category.choices = [(category.key.urlsafe(), category.category) for category in categories]
+
+
+class CommentForm(Form):
+	entry = HiddenField()
+	comment = TextAreaField(validators=[DataRequired('Please enter your comment.')])

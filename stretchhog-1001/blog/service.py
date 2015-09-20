@@ -1,7 +1,6 @@
 from google.appengine.api import users
 from google.appengine.ext.ndb.key import Key
-
-from blog.models import Category, Tag, BlogEntry
+from blog.models import Category, Tag, Entry, Comment
 
 
 def get_by_key(key):
@@ -25,7 +24,7 @@ def __get_all(clazz, **kwargs):
 
 
 def create_entry(form):
-	entry = BlogEntry()
+	entry = Entry()
 	entry.title = form.title.data
 	entry.summary = form.summary.data
 	entry.post = form.post.data
@@ -58,7 +57,7 @@ def delete_entry(key):
 
 
 def get_all_entries(**kwargs):
-	return __get_all(BlogEntry, **kwargs)
+	return __get_all(Entry, **kwargs)
 
 
 def create_category(form):
@@ -119,9 +118,21 @@ def get_all_tags(**kwargs):
 
 
 def search(data):
-	qry = BlogEntry.query()
+	qry = Entry.query()
 	if 'category' in data:
-		qry.filter(BlogEntry.category == Key(urlsafe=data['category']))
+		qry.filter(Entry.category == Key(urlsafe=data['category']))
 	if 'tag' in data:
-		qry.filter(BlogEntry.tags == Key(urlsafe=data['tag']))
+		qry.filter(Entry.tags == Key(urlsafe=data['tag']))
 	return qry.fetch()
+
+
+def create_comment(form):
+	comment = Comment(
+		entry=Key(urlsafe=form.entry.data),
+		user=users.get_current_user(),
+		comment=form.comment.data)
+	return comment.put()
+
+
+def get_all_comments(**kwargs):
+	return __get_all(Comment, **kwargs)

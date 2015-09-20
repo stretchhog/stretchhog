@@ -1,24 +1,58 @@
 {% extends "index.html" %}
 {% block body %}
-		<div class="col-sm-12 entry-title">
-			Title: {{ entry.title }}
+<div class="col-sm-12 entry-title">
+	Title: {{ entry.title }}
+</div>
+<hr>
+<div class="col-sm-12 entry-summary">
+	Post: {{ entry.post }}
+</div>
+<hr>
+<div class="col-sm-12 entry-date">
+	Date: {{ entry.date_added }}
+</div>
+<hr>
+<div class="col-sm-12 entry-tags">
+	{% for tag in entry.tags %}
+	<div class="col-sm-12 entry-tag">
+		{{ tag.tag }}
+	</div>
+	{% endfor %}
+</div>
+<hr>
+
+{% if session.logged_in %}
+<form id="main-family-form" class="form-group" name="family-form" method="post" action="" role="form">
+	{{ form.csrf_token }}
+	<div class="row">
+		<div class="col-sm-8">
+			{{ macros.render_field(form.comment) }}
+			{{ macros.render_field(form.entry) }}
 		</div>
-		<hr>
-		<div class="col-sm-12 entry-summary">
-			Post: {{ entry.post }}
+	</div>
+	<div class="row">
+		<div class="col-md-2">
+			<button type="submit" class="btn btn-primary">Submit</button>
 		</div>
-		<hr>
-		<div class="col-sm-12 entry-date">
-			Date: {{ entry.date_added }}
-		</div>
-		<hr>
-		<div class="col-sm-12 entry-tags">
-			{% for tag in entry.tags %}
-				<div class="col-sm-12 entry-tag">
-					{{ tag.tag }}
-				</div>
-			{% endfor %}
-		</div>
-		<hr>
-	<hr>
+	</div>
+</form>
+{% endif %}
+
+<div class="comment-list"><h4>Previous comments</h4></div>
+
+<script>
+	var entryList = $('.comment-list');
+
+	$.get(Flask.url_for('list_comment', {"key": "{{ entry.key.urlsafe()}}" }), function (comments) {
+		comments.forEach(function (comment) {
+			entryList.append(comment.comment);
+			entryList.append(comment.user);
+			entryList.append(comment.date_added);
+			entryList.append('<button type="submit" class="btn btn-primary">Reply</button>');
+			entryList.append('<br>');
+		})
+	});
+</script>
 {% endblock %}
+
+

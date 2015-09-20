@@ -24,6 +24,7 @@ class EntryView:
 		self.tags = [TagView(tag.get()).__dict__ for tag in entity.tags]
 		self.date_added = entity.date_added.strftime('%Y, %d %B')
 
+
 class EntrySummaryView:
 	def __init__(self, entity):
 		self.key = entity.key.urlsafe()
@@ -32,3 +33,10 @@ class EntrySummaryView:
 		self.category = CategoryView(entity.category.get())
 		self.tags = [TagView(entity.tag.get()) for tag in entity.tags]
 		self.date_added = str(entity.date_added)
+
+
+class CommentView:
+	def __init__(self, entity):
+		self.comment = entity.comment
+		self.user = entity.user.nickname()
+		self.date_added = entity.date_added.strftime('%a, %d %b %Y %H:%M')
