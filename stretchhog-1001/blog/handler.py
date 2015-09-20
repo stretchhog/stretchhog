@@ -1,15 +1,16 @@
-from google.appengine.ext.ndb.key import Key
-
 from blog.forms import CategoryForm, TagForm, EntryForm
-from blog.models import BlogEntry
+
+from blog.models import BlogEntry, Category
 from flask import make_response, render_template, request, redirect
 from blog import service
 from blog.view import TagView, CategoryView, EntryView
 from flask.ext.restful import Resource
 from main import api
+from flask import Markup
+import markdown
 
 
-__author__ = 'tvancann'
+categories = {1: "Music", 2: "Artificial Intelligence", 3: "Fitness & Health"}
 
 
 class EntryCreate(Resource):
@@ -39,10 +40,11 @@ class EntryDelete(Resource):
 		return redirect(api.url_for(EntryCreate, key=key))
 
 
-class EntryDetail(Resource):
+class Entry(Resource):
 	def get(self, key):
 		entry = service.get_by_key(key)
-		return make_response(render_template('blog/entry/detail.html', entry=entry))
+		entry.post = Markup(markdown.markdown(entry.post))
+		return make_response(render_template('blog/entry/entry.html', entry=entry))
 
 
 class EntryList(Resource):
@@ -53,8 +55,9 @@ class EntryList(Resource):
 
 
 class EntryListCategory(Resource):
-	def get(self, cat_key):
-		entries = service.get_all_entries(filter=[BlogEntry.category == Key(urlsafe=cat_key)],
+	def get(self, cat):
+		category = service.get_all_categories(filter=[Category.category == categories[cat]])[0]
+		entries = service.get_all_entries(filter=[BlogEntry.category == category.key],
 		                                  sort=[-BlogEntry.date_added])
 		view = [EntryView(entry).__dict__ for entry in entries]
 		return make_response(render_template("blog/entry/entries.html", entries=view))
@@ -139,9 +142,9 @@ class TagList(Resource):
 api.add_resource(EntryCreate, '/blog/admin/entry/create/<string:key>', endpoint='create_entry')
 api.add_resource(EntryUpdate, '/blog/admin/entry/update/<string:key>/<string:cat_key>', endpoint='update_entry')
 api.add_resource(EntryDelete, '/blog/admin/entry/delete/<string:key>', endpoint='delete_entry')
-api.add_resource(EntryDetail, '/blog/entry/<string:key>', endpoint='get_entry')
+api.add_resource(Entry, '/blog/entry/<string:key>', endpoint='get_entry')
 api.add_resource(EntryList, '/blog/entry/list', endpoint='list_entry')
-api.add_resource(EntryListCategory, '/blog/entry/list/<string:cat_key>', endpoint='category_entry')
+api.add_resource(EntryListCategory, '/blog/entry/list/<int:cat>', endpoint='category_entry')
 api.add_resource(EntrySearch, '/blog/entry/search', endpoint='search_entry')
 
 api.add_resource(CategoryCreate, '/blog/admin/category/create', endpoint='create_category')
