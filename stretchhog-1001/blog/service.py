@@ -13,7 +13,10 @@ def __to_key(urlsafe):
 
 
 def __get_all(clazz, **kwargs):
-	qry = clazz.query()
+	if 'qry' in kwargs:
+		qry = clazz.query(kwargs['qry'])
+	else:
+		qry = clazz.query()
 	if 'filter' in kwargs:
 		for f in kwargs['filter']:
 			qry = qry.filter(f)
@@ -90,14 +93,14 @@ def get_all_categories(**kwargs):
 
 def create_tag(form):
 	tag = Tag(
-		tag=form.tag.data,
-		category=__to_key(form.category.data))
+		parent=__to_key(form.category.data),
+		tag=form.tag.data)
 	return tag.put()
 
 
 def update_tag_form(form, key):
 	tag = get_by_key(key)
-	form.category.data = tag.category.urlsafe()
+	form.category.data = tag.key.parent().urlsafe()
 	form.tag.data = tag.tag
 	return form
 
@@ -105,7 +108,6 @@ def update_tag_form(form, key):
 def update_tag(key, form):
 	tag = get_by_key(key)
 	tag.tag = form.tag.data
-	tag.category = Key(urlsafe=form.category.data)
 	return tag.put()
 
 
@@ -136,3 +138,7 @@ def create_comment(form):
 
 def get_all_comments(**kwargs):
 	return __get_all(Comment, **kwargs)
+
+
+def get_all_tags_by_ancestor(ancestor):
+	return Tag.query(ancestor=ancestor).fetch()

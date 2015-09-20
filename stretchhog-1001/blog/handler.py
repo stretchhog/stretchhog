@@ -40,7 +40,6 @@ class EntryDelete(Resource):
 
 
 class EntryDetail(Resource):
-	@staticmethod
 	def get_entry(key):
 		entry = service.get_by_key(key)
 		entry.post = Markup(markdown.markdown(entry.post))

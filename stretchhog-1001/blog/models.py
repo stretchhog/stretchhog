@@ -7,7 +7,6 @@ class Category(ndb.Model):
 
 class Tag(ndb.Model):
 	tag = ndb.StringProperty()
-	category = ndb.KeyProperty(kind=Category)
 
 
 class Entry(ndb.Model):

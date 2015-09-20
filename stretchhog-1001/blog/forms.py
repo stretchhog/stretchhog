@@ -17,7 +17,7 @@ class EntryForm(Form):
 	def __init__(self, key, *args, **kwargs):
 		super(EntryForm, self).__init__(*args, **kwargs)
 		self.category.data = key
-		tags = service.get_all_tags(filter=[Tag.category == Key(urlsafe=key)])
+		tags = service.get_all_tags_by_ancestor(Key(urlsafe=key))
 		self.tags.choices = [(tag.key.urlsafe(), tag.tag) for tag in tags]
 
 

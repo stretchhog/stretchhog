@@ -5,7 +5,7 @@ class TagView:
 	def __init__(self, entity):
 		self.key = entity.key.urlsafe()
 		self.tag = entity.tag
-		self.category = entity.category.get().category
+		self.category = entity.key.parent().get().category
 
 
 class CategoryView:
