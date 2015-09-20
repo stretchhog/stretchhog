@@ -36,5 +36,4 @@ class TagForm(Form):
 
 
 class CommentForm(Form):
-	entry = HiddenField()
 	comment = TextAreaField(validators=[DataRequired('Please enter your comment.')])

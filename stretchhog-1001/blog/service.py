@@ -123,11 +123,11 @@ def search(data):
 	return qry.fetch()
 
 
-def create_comment(form):
-	comment = Comment(
-		entry=Key(urlsafe=form.entry.data),
-		user=users.get_current_user(),
-		comment=form.comment.data)
+def create_comment(key, form):
+	comment = Comment(parent=__to_key(key),
+	                  entry=Key(urlsafe=form.entry.data),
+	                  user=users.get_current_user(),
+	                  comment=form.comment.data)
 	return comment.put()
 
 

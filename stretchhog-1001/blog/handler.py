@@ -56,9 +56,11 @@ class EntryDetail(Resource):
 	def post(self, key):
 		comment_form = CommentForm()
 		form = CommentForm(data=request.get_json())
-		if comment_form.validate():
-			service.create_comment(form)
 		entry = self.get_entry(key)
+		if comment_form.validate():
+			if 'parent_comment' in request.data:
+				key = request.data['parent_comment']
+			service.create_comment(key, form)
 		return make_response(render_template('blog/entry/entry.html', entry=entry, form=comment_form))
 
 

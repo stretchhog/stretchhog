@@ -20,6 +20,5 @@ class Entry(ndb.Model):
 
 class Comment(ndb.Model):
 	user = ndb.UserProperty()
-	entry = ndb.KeyProperty(kind=Entry)
 	comment = ndb.StringProperty()
 	date_added = ndb.DateTimeProperty(auto_now_add=True)

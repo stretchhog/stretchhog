@@ -36,6 +36,8 @@
 		</div>
 	</div>
 </form>
+{% else %}
+You need to be <a href="{{ url_for('logged_in' }}"></a>
 {% endif %}
 
 <div class="comment-list"><h4>Previous comments</h4></div>
