@@ -40,6 +40,7 @@ class EntryDelete(Resource):
 
 
 class EntryDetail(Resource):
+	@staticmethod
 	def get_entry(key):
 		entry = service.get_by_key(key)
 		entry.post = Markup(markdown.markdown(entry.post))
@@ -71,8 +72,7 @@ class EntryList(Resource):
 class EntryListCategory(Resource):
 	def get(self, cat):
 		category = service.get_all_categories(filter=[Category.category == categories[cat]])[0]
-		entries = service.get_all_entries(filter=[Entry.category == category.key],
-		                                  sort=[-Entry.date_added])
+		entries = service.get_all_entries_by_ancestor(category.key, sort=[-Entry.date_added])
 		view = [EntryView(entry).__dict__ for entry in entries]
 		return make_response(render_template("blog/entry/entries.html", entries=view))
 

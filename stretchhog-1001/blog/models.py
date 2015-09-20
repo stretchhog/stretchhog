@@ -13,7 +13,6 @@ class Entry(ndb.Model):
 	title = ndb.StringProperty()
 	summary = ndb.StringProperty()
 	post = ndb.StringProperty()
-	category = ndb.KeyProperty(kind=Category)
 	tags = ndb.KeyProperty(kind=Tag, repeated=True)
 	user = ndb.UserProperty()
 	date_added = ndb.DateTimeProperty(auto_now_add=True)

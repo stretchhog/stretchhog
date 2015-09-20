@@ -12,11 +12,7 @@ def __to_key(urlsafe):
 	return Key(urlsafe=urlsafe)
 
 
-def __get_all(clazz, **kwargs):
-	if 'qry' in kwargs:
-		qry = clazz.query(kwargs['qry'])
-	else:
-		qry = clazz.query()
+def __get_all(qry, **kwargs):
 	if 'filter' in kwargs:
 		for f in kwargs['filter']:
 			qry = qry.filter(f)
@@ -27,11 +23,10 @@ def __get_all(clazz, **kwargs):
 
 
 def create_entry(form):
-	entry = Entry()
+	entry = Entry(parent=__to_key(form.category.data))
 	entry.title = form.title.data
 	entry.summary = form.summary.data
 	entry.post = form.post.data
-	entry.category = Key(urlsafe=form.category.data)
 	entry.tags = [Key(urlsafe=tag) for tag in form.tags.data]
 	entry.user = users.get_current_user()
 	return entry.put()
@@ -60,7 +55,7 @@ def delete_entry(key):
 
 
 def get_all_entries(**kwargs):
-	return __get_all(Entry, **kwargs)
+	return __get_all(Entry.query(), **kwargs)
 
 
 def create_category(form):
@@ -88,7 +83,7 @@ def delete_category(key):
 
 
 def get_all_categories(**kwargs):
-	return __get_all(Category, **kwargs)
+	return __get_all(Category.query(), **kwargs)
 
 
 def create_tag(form):
@@ -116,7 +111,7 @@ def delete_tag(key):
 
 
 def get_all_tags(**kwargs):
-	return __get_all(Tag, **kwargs)
+	return __get_all(Tag.query(), **kwargs)
 
 
 def search(data):
@@ -141,4 +136,8 @@ def get_all_comments(**kwargs):
 
 
 def get_all_tags_by_ancestor(ancestor):
-	return Tag.query(ancestor=ancestor).fetch()
+	return __get_all(Tag.query(ancestor=ancestor))
+
+
+def get_all_entries_by_ancestor(ancestor, **kwargs):
+	return __get_all(Entry.query(ancestor=ancestor), **kwargs)

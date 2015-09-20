@@ -20,7 +20,7 @@ class EntryView:
 		self.title = entity.title
 		self.summary = entity.summary
 		self.post = entity.post
-		self.category = CategoryView(entity.category.get()).__dict__
+		self.category = CategoryView(entity.key.parent().get()).__dict__
 		self.tags = [TagView(tag.get()).__dict__ for tag in entity.tags]
 		self.date_added = entity.date_added.strftime('%Y, %d %B')
 
