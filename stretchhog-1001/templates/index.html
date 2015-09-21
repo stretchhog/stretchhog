@@ -17,47 +17,7 @@
 	<script src="{{ url_for('static', filename='js/angular.min.js') }}"></script>
 	{{ JSGlue.include() }}
 
-	<script>
-
-		// define angular module/app
-		var formApp = angular.module('angularApp', [])
-				.controller('formController', function formController($scope, $http) {
-					$scope.formData = {
-						category: null
-					};
-					$scope.formSubmit = function () {
-						$http({
-							method: 'POST',
-							url: Flask.url_for('create_category'),
-							data: $scope.formData
-						})
-						.then(function (data) {
-							$scope.message = data.message;
-							$scope.$root.$broadcast('renderList');
-							})
-						.catch(function (error) {
-							$scope.errorCategory = error.category;
-						});
-					}
-				})
-				.controller('listController', function listController($scope, $http){
-					function renderList() {
-						$http({
-							method: 'GET',
-							url: Flask.url_for('list_category')
-						})
-								.then(function (response) {
-									$scope.categories = response.data;
-								})
-								.catch(function (error) {
-									$scope.errorCategory = error.category;
-								});
-					}
-					$scope.$on('renderList', renderList);
-					renderList()
-				});
-
-	</script>
+	<script src="{{ url_for('static', filename='js/blog/blog.js') }}"></script>
 
 </head>
 <body ng-app="angularApp">
