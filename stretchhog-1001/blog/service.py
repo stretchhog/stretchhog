@@ -145,3 +145,5 @@ def get_all_entries_by_ancestor(ancestor, **kwargs):
 def get_all_comments_by_ancestor(ancestor, **kwargs):
 	return __get_all(Comment.query(ancestor=ancestor), **kwargs)
 
+def count_comments_by_ancestor(ancestor):
+	return Comment.query(ancestor=ancestor).count()

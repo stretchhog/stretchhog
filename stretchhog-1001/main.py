@@ -2,7 +2,7 @@ import os
 
 from google.appengine.api import users
 
-from flask import Flask, session, render_template, make_response
+from flask import Flask, session, render_template, make_response, redirect
 from flask.ext.restful import Api, Resource
 from flask.ext.markdown import markdown
 import wtforms_json
@@ -44,8 +44,20 @@ class Main(Resource):
 		return make_response(render_template("index.html"))
 
 
+class Login(Resource):
+	def get(self):
+		return redirect(users.create_login_url(dest_url='/'))
+
+
+class Logout(Resource):
+	def get(self):
+		return redirect(users.create_logout_url(dest_url='/'))
+
+
 api.add_resource(Main, '/', endpoint='home')
 api.add_resource(Intro, '/intro', endpoint='intro')
+api.add_resource(Login, '/login', endpoint='login')
+api.add_resource(Logout, '/logout', endpoint='logout')
 
 from blog import handler
 
