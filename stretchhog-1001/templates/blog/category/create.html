@@ -1,19 +1,28 @@
 {% extends "blog/category/list.html" %}
 {% block right %}
-	<form id="main-family-form" class="form-group" name="family-form" method="post" action="" role="form">
-		{{ form.csrf_token }}
-		<div class="row">
-			<div class="col-sm-8">
-				{{ macros.render_field(form.category) }}
+	{% raw %}
+	<div  ng-controller="formController">
+		<form id="main-family-form" class="form-group" name="family-form" role="form" ng-submit="formSubmit()">
+			<div class="row">
+				<div class="col-sm-8">
+					<div class="form-group ">
+
+						<label for="category">Category</label>
+
+						<input class="form-control" id="category" name="category" type="text" ng-model="formData.category">
+						<span ng-class="{'hide': !message}">{{ message }}</span>
+					</div>
+				</div>
 			</div>
-		</div>
-		<div class="row">
-			<div class="col-md-2">
-				<button type="submit" class="btn btn-primary">Submit</button>
+			<div class="row">
+				<div class="col-md-2">
+					<button type="submit" class="btn btn-primary">Submit</button>
+				</div>
+				<div class="col-md-2">
+					<a class="btn btn-default" href="/blog/admin/tag/create">Reset</a>
+				</div>
 			</div>
-			<div class="col-md-2">
-				<a class="btn btn-default" href="{{ url_for('create_tag') }}">Reset</a>
-			</div>
-		</div>
-	</form>
+		</form>
+	</div>
+	{% endraw %}
 {% endblock %}

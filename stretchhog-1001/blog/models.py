@@ -14,7 +14,7 @@ class Entry(ndb.Model):
 	summary = ndb.StringProperty()
 	post = ndb.StringProperty()
 	tags = ndb.KeyProperty(kind=Tag, repeated=True)
-	user = ndb.User()
+	user = ndb.UserProperty()
 	date_added = ndb.DateTimeProperty(auto_now_add=True)
 
 

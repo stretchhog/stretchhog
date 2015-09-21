@@ -15,3 +15,4 @@ WTForms-Components==0.9.5
 BeautifulSoup4
 Markdown
 Pygments
+Flask-Triangle

@@ -5,6 +5,7 @@ from google.appengine.api import users
 from flask import Flask, session, render_template, make_response, redirect
 from flask.ext.restful import Api, Resource
 from flask.ext.markdown import markdown
+from flask.ext.triangle import Triangle
 import wtforms_json
 from flask_jsglue import JSGlue
 
@@ -16,6 +17,7 @@ base_dir = os.path.abspath(os.path.dirname(__file__))
 app = Flask(__name__)
 markdown(app)
 JSGlue(app)
+Triangle(app)
 app.config['DEBUG'] = True
 app.config['WTF_CSRF_ENABLED'] = False
 app.config['SECRET_KEY'] = 'you-will-never-guess'

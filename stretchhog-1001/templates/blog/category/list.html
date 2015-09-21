@@ -1,21 +1,14 @@
 {% extends "index.html" %}
 {% block body %}
-	<div class="col-md-4 category-list"></div>
+	{% raw %}
+	<div class="col-md-4 category-list" ng-controller="listController">
+		<ul>
+			<li ng-repeat="category in categories">
+				{{ category.category }}
+			</li>
+		</ul>
+	</div>
+	{% endraw %}
 	<div class="col-md-8">{% block right %}{% endblock %}</div>
 
-	<script>
-		var categoryList = $('.category-list');
-
-		$.get(Flask.url_for('list_category'), function (entries) {
-			entries.forEach(function (entry) {
-				var deleteUrl = Flask.url_for('delete_category', {key: entry.key});
-				var updateUrl = Flask.url_for('update_category', {key: entry.key});
-				categoryList.append('<a class="btn btn-sm btn-danger" href="' + deleteUrl + '"><i class="fa fa-remove"></i></a>');
-				categoryList.append('<a class="btn btn-sm btn-warning" href="' + updateUrl + '"><i class="fa fa-edit"></i></a>');
-				categoryList.append('||');
-				categoryList.append(entry.category);
-				categoryList.append('<br>');
-			})
-		});
-	</script>
 {% endblock %}
