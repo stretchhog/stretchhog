@@ -1,4 +1,5 @@
 from google.appengine.ext.ndb.key import Key
+import time
 
 from blog.forms import CategoryForm, TagForm, EntryForm, CommentForm
 from blog.models import Entry, Category, Comment
@@ -112,12 +113,19 @@ class CategoryCL(Resource):
 	def get(self):
 		categories = service.get_all_categories()
 		view = [CategoryView(cat).__dict__ for cat in categories]
+		# time.sleep(2)
 		return Response(json.dumps(view), 200, mimetype='application/json')
 
 	def post(self):
-		key = service.create_category(CategoryForm(data=request.get_json()))
-		view = CategoryView(key.get()).__dict__
-		return Response(json.dumps(view), 201, mimetype='application/json')
+		form = CategoryForm(data=request.get_json())
+		if form.validate():
+			key = service.create_category(form)
+			view = CategoryView(key.get()).__dict__
+			return Response(json.dumps(view), 201, mimetype='application/json')
+		else:
+			return Response(status=400, mimetype='application/json')
+
+
 
 
 class TagCreate(Resource):

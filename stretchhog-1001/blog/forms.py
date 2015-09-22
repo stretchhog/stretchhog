@@ -22,7 +22,7 @@ class EntryForm(Form):
 
 
 class CategoryForm(Form):
-	category = StringField()
+	category = StringField(validators=[DataRequired()])
 
 
 class TagForm(Form):

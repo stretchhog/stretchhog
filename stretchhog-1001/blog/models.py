@@ -1,5 +1,7 @@
 from google.appengine.ext import ndb
 
+from wtforms.validators import DataRequired
+
 
 class Category(ndb.Model):
 	category = ndb.StringProperty()

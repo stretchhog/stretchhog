@@ -1,34 +1,61 @@
 {% extends "index.html" %}
 {% block body %}
-	<div ng-controller="categoryController">
-		<div class="col-md-4">
-			<ul>
-				<li ng-repeat="category in categories">
-					{[ category.category ]}
-					<a class="btn btn-primary" ng-click="readCategory(category.key)">Edit</a>
-					<a class="btn btn-danger" ng-click="deleteCategory(category.key)">Delete</a>
-				</li>
-			</ul>
-		</div>
-		<div class="col-md-8">
-			<form id="categoryForm" class="form-group" name="family-form" role="form" ng-submit="createCategory(categoryForm.$valid)"
-					ng-class="{ 'has-error' : categoryForm.category.$invalid && !categoryForm.category.$pristine }">
-				<div class="row">
-					<div class="col-sm-8">
-						<div class="form-group ">
-							<label for="category">Category</label>
-							<input class="form-control" id="category" name="category" type="text" ng-model="categoryData.category" required>
+<div ng-controller="categoryController">
 
-							<p ng-show="categoryForm.category.$invalid && !categoryForm.name.$pristine" class="help-block">Category is required.</p>
-						</div>
-					</div>
+	<table class="table table-striped table-hover" ng-hide="loading">
+		<thead>
+		<tr>
+			<th width="100px"></th>
+			<th>Category</th>
+		</tr>
+		</thead>
+		<tbody>
+		<tr>
+			<td colspan="2">
+				<button class="btn btn-default fa fa-plus" ng-click="toggleAddMode()" ng-hide="addMode"></button>
+			</td>
+		</tr>
+		<tr ng-show="addMode">
+			<td>
+				<div class="btn-group">
+					<button class="btn btn-default fa fa-save" ng-click="createItem()" ng-disabled="addForm.$invalid"name="Create"></button>
+					<button class="btn btn-default fa fa-times" ng-click="toggleAddMode()" name="Create"></button>
 				</div>
-				<div class="row">
-					<div class="col-md-2">
-						<button type="submit" class="btn btn-primary" ng-disabled="categoryForm.$invalid">Submit</button>
-					</div>
+			</td>
+			<td>
+				<form name="addForm" class="form-group ">
+					<input class="form-control" name="category" type="text" ng-model="newCategory.category" required
+					       placeholder="new category...">
+				</form>
+			</td>
+		</tr>
+		<tr ng-repeat="category in categories">
+			<td>
+				<div class="btn-group" ng-show="category.editMode">
+					<button class="btn btn-default fa fa-save" ng-click="updateItem(category)" ng-disabled="editForm.$invalid"
+					   title="Save"></button>
+					<button class="btn btn-default fa fa-times" ng-click="toggleEditMode(category)" title="Cancel"></button>
 				</div>
-			</form>
-		</div>
-	</div>
+				<div class="btn-group" ng-show="category.editMode == null || category.editMode == false">
+					<button class="btn btn-default fa fa-edit" ng-click="toggleEditMode(category)" title="Edit"></button>
+					<button class="btn btn-default fa fa-trash" ng-click="deleteItem(category)" title="Delete" data-toggle="modal"></button>
+				</div>
+			</td>
+			<td>
+				<span ng-show="category.editMode == null || category.editMode == false">
+                    {[category.category]}
+                </span>
+				<!--Name edit mode-->
+				<form name="editForm">
+					<input ng-model="category.category" ng-show="category.editMode" required class="form-control"/>
+				</form>
+			</td>
+		</tr>
+
+		</tbody>
+	</table>
+
+	<img src="{{ url_for('static', filename='images/ajax-loader.gif') }}" ng-show="loading" class="center-block"
+	     title="Loading..."/>
+</div>
 {% endblock %}
