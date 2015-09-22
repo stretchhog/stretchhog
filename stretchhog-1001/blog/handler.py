@@ -2,12 +2,12 @@ from google.appengine.ext.ndb.key import Key
 
 from blog.forms import CategoryForm, TagForm, EntryForm, CommentForm
 from blog.models import Entry, Category, Comment
-from flask import make_response, render_template, request, redirect
+from flask import make_response, render_template, request, redirect, Response
 from blog import service
 from blog.view import TagView, CategoryView, EntryView, CommentView
 from flask.ext.restful import Resource
 from main import api
-from flask import Markup, jsonify
+from flask import Markup, jsonify, json
 import markdown
 
 
@@ -68,8 +68,8 @@ class EntryDetail(Resource):
 class EntryList(Resource):
 	def get(self):
 		entries = service.get_all_entries()
-		view = [EntryView(entry).__dict__ for entry in entries]
-		return view
+		view = [EntryView(entry) for entry in entries]
+		return jsonify(view)
 
 
 class EntryListCategory(Resource):
@@ -95,26 +95,29 @@ class CategoryTemplate(Resource):
 class CategoryRUD(Resource):
 	def get(self, key):
 		entity = service.get_by_urlsafe_key(key)
-		return CategoryView(entity).__dict__
+		view = CategoryView(entity).__dict__
+		return Response(json.dumps(view), 201, mimetype='application/json')
 
 	def delete(self, key):
 		service.delete_category(key)
-		return 204
+		return Response(status=201)
 
 	def put(self, key):
 		key = service.update_category(key, CategoryForm(data=request.get_json()))
-		return CategoryView(key.get()).__dict__, 202
+		view = CategoryView(key.get()).__dict__
+		return Response(json.dumps(view), 201, mimetype='application/json')
 
 
 class CategoryCL(Resource):
 	def get(self):
 		categories = service.get_all_categories()
 		view = [CategoryView(cat).__dict__ for cat in categories]
-		return view
+		return Response(json.dumps(view), 200, mimetype='application/json')
 
 	def post(self):
 		key = service.create_category(CategoryForm(data=request.get_json()))
-		return
+		view = CategoryView(key.get()).__dict__
+		return Response(json.dumps(view), 201, mimetype='application/json')
 
 
 class TagCreate(Resource):

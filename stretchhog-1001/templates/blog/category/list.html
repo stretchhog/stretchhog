@@ -11,7 +11,7 @@
 			</ul>
 		</div>
 		<div class="col-md-8">
-			<form id="categoryForm" class="form-group" name="family-form" role="form" ng-submit="{createCategory(categoryForm.$valid) ? {[edit]} : updateCategory(categoryForm.$valid, category.key)}"
+			<form id="categoryForm" class="form-group" name="family-form" role="form" ng-submit="createCategory(categoryForm.$valid)"
 					ng-class="{ 'has-error' : categoryForm.category.$invalid && !categoryForm.category.$pristine }">
 				<div class="row">
 					<div class="col-sm-8">
