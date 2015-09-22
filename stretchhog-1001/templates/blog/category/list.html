@@ -1,14 +1,34 @@
 {% extends "index.html" %}
 {% block body %}
-	{% raw %}
-	<div class="col-md-4 category-list" ng-controller="listController">
-		<ul>
-			<li ng-repeat="category in categories">
-				{{ category.category }}
-			</li>
-		</ul>
-	</div>
-	{% endraw %}
-	<div class="col-md-8">{% block right %}{% endblock %}</div>
+	<div ng-controller="categoryController">
+		<div class="col-md-4">
+			<ul>
+				<li ng-repeat="category in categories">
+					{[ category.category ]}
+					<a class="btn btn-primary" ng-click="readCategory(category.key)">Edit</a>
+					<a class="btn btn-danger" ng-click="deleteCategory(category.key)">Delete</a>
+				</li>
+			</ul>
+		</div>
+		<div class="col-md-8">
+			<form id="categoryForm" class="form-group" name="family-form" role="form" ng-submit="{createCategory(categoryForm.$valid) ? {[edit]} : updateCategory(categoryForm.$valid, category.key)}"
+					ng-class="{ 'has-error' : categoryForm.category.$invalid && !categoryForm.category.$pristine }">
+				<div class="row">
+					<div class="col-sm-8">
+						<div class="form-group ">
+							<label for="category">Category</label>
+							<input class="form-control" id="category" name="category" type="text" ng-model="categoryData.category" required>
 
+							<p ng-show="categoryForm.category.$invalid && !categoryForm.name.$pristine" class="help-block">Category is required.</p>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-2">
+						<button type="submit" class="btn btn-primary" ng-disabled="categoryForm.$invalid">Submit</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
 {% endblock %}

@@ -1,9 +1,10 @@
 from google.appengine.api import users
 from google.appengine.ext.ndb.key import Key
+
 from blog.models import Category, Tag, Entry, Comment
 
 
-def get_by_key(key):
+def get_by_urlsafe_key(key):
 	entity = Key(urlsafe=key)
 	return entity.get()
 
@@ -33,7 +34,7 @@ def create_entry(form):
 
 
 def update_entry_form(form, key):
-	entry = get_by_key(key)
+	entry = get_by_urlsafe_key(key)
 	form.tags.data = [tag.urlsafe() for tag in entry.tags]
 	form.title.data = entry.title
 	form.summary.data = entry.summary
@@ -42,7 +43,7 @@ def update_entry_form(form, key):
 
 
 def update_entry(key, form):
-	entry = get_by_key(key)
+	entry = get_by_urlsafe_key(key)
 	entry.title = form.title.data
 	entry.summary = form.summary.data
 	entry.post = form.post.data
@@ -64,19 +65,19 @@ def create_category(form):
 
 
 def update_category_form(form, key):
-	category = get_by_key(key)
+	category = get_by_urlsafe_key(key)
 	form.category.data = category.category
 	return form
 
 
 def update_category(key, form):
-	category = get_by_key(key)
+	category = get_by_urlsafe_key(key)
 	category.category = form.category.data
 	return category.put()
 
 
 def delete_category(key):
-	tags = Tag.query(Tag.category == Key(urlsafe=key)).fetch()
+	tags = Tag.query(ancestor=Key(urlsafe=key)).fetch()
 	for tag in tags:
 		tag.key.delete()
 	return Key(urlsafe=key).delete()
@@ -94,14 +95,14 @@ def create_tag(form):
 
 
 def update_tag_form(form, key):
-	tag = get_by_key(key)
+	tag = get_by_urlsafe_key(key)
 	form.category.data = tag.key.parent().urlsafe()
 	form.tag.data = tag.tag
 	return form
 
 
 def update_tag(key, form):
-	tag = get_by_key(key)
+	tag = get_by_urlsafe_key(key)
 	tag.tag = form.tag.data
 	return tag.put()
 
@@ -144,6 +145,7 @@ def get_all_entries_by_ancestor(ancestor, **kwargs):
 
 def get_all_comments_by_ancestor(ancestor, **kwargs):
 	return __get_all(Comment.query(ancestor=ancestor), **kwargs)
+
 
 def count_comments_by_ancestor(ancestor):
 	return Comment.query(ancestor=ancestor).count()

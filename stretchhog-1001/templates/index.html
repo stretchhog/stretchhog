@@ -20,7 +20,7 @@
 	<script src="{{ url_for('static', filename='js/blog/blog.js') }}"></script>
 
 </head>
-<body ng-app="angularApp">
+<body>
 <nav class="navbar navbar-fixed-top">
 	<div class="container-fluid">
 		<!-- Brand and toggle get grouped for better mobile display -->
@@ -74,7 +74,7 @@
 							Add
 						</a>
 						<ul class="dropdown-menu entry-list">
-							<li><a href="{{ url_for('create_category') }}">Category</a></li>
+							<li><a href="{{ url_for('category_template') }}">Category</a></li>
 							<li><a href="{{ url_for('create_tag') }}">Tag</a></li>
 						</ul>
 					</li>
@@ -106,20 +106,9 @@
 	<!-- /.container-fluid -->
 </nav>
 
-<div class="container">
+<div class="container" ng-app="angularApp">
 	{% import 'macros.html' as macros %}
 	{% block body %}{% endblock %}
 </div>
-
-<script>
-	var categoryCreateList = $('.entry-list');
-
-	$.get(Flask.url_for('list_category'), function (entries) {
-		entries.forEach(function (entry) {
-			var url = Flask.url_for('create_entry', {key: entry.key});
-			categoryCreateList.append('<li><a href="' + url + '">' + entry.category + ' entry</a></li>');
-		})
-	});
-</script>
 </body>
 </html>

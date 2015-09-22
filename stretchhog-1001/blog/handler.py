@@ -1,4 +1,5 @@
 from google.appengine.ext.ndb.key import Key
+
 from blog.forms import CategoryForm, TagForm, EntryForm, CommentForm
 from blog.models import Entry, Category, Comment
 from flask import make_response, render_template, request, redirect
@@ -6,8 +7,9 @@ from blog import service
 from blog.view import TagView, CategoryView, EntryView, CommentView
 from flask.ext.restful import Resource
 from main import api
-from flask import Markup
+from flask import Markup, jsonify
 import markdown
+
 
 categories = {1: "Music", 2: "Artificial Intelligence", 3: "Fitness & Health"}
 
@@ -42,7 +44,7 @@ class EntryDelete(Resource):
 class EntryDetail(Resource):
 	@staticmethod
 	def get_entry(key):
-		entry = service.get_by_key(key)
+		entry = service.get_by_urlsafe_key(key)
 		entry.post = Markup(markdown.markdown(entry.post))
 		return entry
 
@@ -85,38 +87,34 @@ class EntrySearch(Resource):
 		return view
 
 
-class CategoryCreate(Resource):
+class CategoryTemplate(Resource):
 	def get(self):
-		form = CategoryForm()
-		return make_response(render_template('blog/category/create.html', form=form))
-
-	def post(self):
-		service.create_category(CategoryForm(data=request.get_json()))
-		return redirect(api.url_for(CategoryCreate))
+		return make_response(render_template('blog/category/list.html'))
 
 
-class CategoryUpdate(Resource):
+class CategoryRUD(Resource):
 	def get(self, key):
-		form = CategoryForm()
-		form = service.update_category_form(form, key)
-		return make_response(render_template('blog/category/create.html', form=form))
+		entity = service.get_by_urlsafe_key(key)
+		return CategoryView(entity).__dict__
 
-	def post(self, key):
-		service.update_category(key, CategoryForm(data=request.get_json()))
-		return redirect(api.url_for(CategoryCreate))
-
-
-class CategoryDelete(Resource):
-	def get(self, key):
+	def delete(self, key):
 		service.delete_category(key)
-		return redirect(api.url_for(CategoryCreate))
+		return 204
+
+	def put(self, key):
+		key = service.update_category(key, CategoryForm(data=request.get_json()))
+		return CategoryView(key.get()).__dict__, 202
 
 
-class CategoryList(Resource):
+class CategoryCL(Resource):
 	def get(self):
 		categories = service.get_all_categories()
 		view = [CategoryView(cat).__dict__ for cat in categories]
 		return view
+
+	def post(self):
+		key = service.create_category(CategoryForm(data=request.get_json()))
+		return
 
 
 class TagCreate(Resource):
@@ -171,10 +169,9 @@ api.add_resource(EntrySearch, '/blog/entry/search', endpoint='search_entry')
 
 api.add_resource(CommentList, '/blog/comment/list/<string:key>', endpoint='list_comment')
 
-api.add_resource(CategoryCreate, '/blog/admin/category/create', endpoint='create_category')
-api.add_resource(CategoryUpdate, '/blog/admin/category/update/<string:key>', endpoint='update_category')
-api.add_resource(CategoryDelete, '/blog/admin/category/delete/<string:key>', endpoint='delete_category')
-api.add_resource(CategoryList, '/blog/category/list', endpoint='list_category')
+api.add_resource(CategoryRUD, '/blog/admin/category/<string:key>', endpoint='category_rud')
+api.add_resource(CategoryCL, '/blog/admin/category', endpoint='category_cl')
+api.add_resource(CategoryTemplate, '/blog/admin/category/template', endpoint='category_template')
 
 api.add_resource(TagCreate, '/blog/admin/tag/create', endpoint='create_tag')
 api.add_resource(TagUpdate, '/blog/admin/tag/update/<string:key>', endpoint='update_tag')
