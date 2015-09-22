@@ -16,6 +16,11 @@ var app = angular.module('angularApp', ['ngResource'])
 		};
 		$scope.loading = false;
 		$scope.addMode = true;
+		$scope.filterText = '';
+
+		$scope.clearFilter = function () {
+			$scope.filterText = '';
+		};
 
 		$scope.toggleAddMode = function () {
 			$scope.addMode = !$scope.addMode;
@@ -84,6 +89,25 @@ var app = angular.module('angularApp', ['ngResource'])
 			$scope.categories = categoryFactory.query(function () {
 				$scope.loading = false;
 			});
+		};
+
+		$scope.updateOnEnter = function (item, args) {
+			// if key is enter
+			if (args.keyCode == 13) {
+				$scope.updateItem(item);
+				// remove focus
+				args.target.blur();
+			}
+		};
+
+		// In add mode, if user press ENTER, add item
+		$scope.saveOnEnter = function (args) {
+			// if key is enter
+			if (args.keyCode == 13) {
+				$scope.createItem();
+				// remove focus
+				args.target.blur();
+			}
 		};
 
 		$scope.getAllItems();
