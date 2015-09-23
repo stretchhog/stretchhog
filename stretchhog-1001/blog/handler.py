@@ -113,7 +113,6 @@ class CategoryCL(Resource):
 	def get(self):
 		categories = service.get_all_categories()
 		view = [CategoryView(cat).__dict__ for cat in categories]
-		# time.sleep(2)
 		return Response(json.dumps(view), 200, mimetype='application/json')
 
 	def post(self):
