@@ -12,8 +12,6 @@
 
 	<script src="{{ url_for('static', filename='js/jquery-2.1.4.min.js') }}"></script>
 	<script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
-	<script src="{{ url_for('static', filename='js/list.min.js') }}"></script>
-	<script src="{{ url_for('static', filename='js/list.fuzzysearch.min.js') }}"></script>
 	<script src="{{ url_for('static', filename='js/angular.min.js') }}"></script>
 	<script src="{{ url_for('static', filename='js/angular-resource.min.js') }}"></script>
 	{{ JSGlue.include() }}
@@ -79,7 +77,7 @@
 						</a>
 						<ul class="dropdown-menu entry-list">
 							<li><a href="{{ url_for('category_template') }}">Category</a></li>
-							<li><a href="{{ url_for('create_tag') }}">Tag</a></li>
+							<li><a href="{{ url_for('tag_template') }}">Tag</a></li>
 						</ul>
 					</li>
 				{% endif %}

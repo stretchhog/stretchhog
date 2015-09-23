@@ -9,9 +9,13 @@ blogApp.factory('entryFactory', function ($resource) {
 })
 	.controller('entryController', function categoryController($scope, categoryFactory) {
 
-		$scope.categories = [];
-		$scope.newCategory = {
-			category: ''
+		$scope.entries = [];
+		$scope.entry = {
+			title: '',
+			summary: '',
+			post: '',
+			tags: [],
+			user: ''
 		};
 		$scope.loading = false;
 		$scope.addMode = true;

@@ -1,5 +1,4 @@
 from google.appengine.ext.ndb.key import Key
-import time
 
 from blog.forms import CategoryForm, TagForm, EntryForm, CommentForm
 from blog.models import Entry, Category, Comment
@@ -125,41 +124,57 @@ class CategoryCL(Resource):
 			return Response(status=400, mimetype='application/json')
 
 
-
-
-class TagCreate(Resource):
+class TagTemplate(Resource):
 	def get(self):
-		form = TagForm()
-		return make_response(render_template('blog/tag/create.html', form=form))
-
-	def post(self):
-		service.create_tag(TagForm(data=request.get_json()))
-		return redirect(api.url_for(TagCreate))
+		return make_response(render_template('blog/tag/create.html'))
 
 
-class TagUpdate(Resource):
+def get_response_for(key, view):
+	entity = service.get_by_urlsafe_key(key)
+	view = view(entity).__dict__
+	return Response(json.dumps(view), 201, mimetype='application/json')
+
+
+def put_response_for(key, view, form, update_function):
+	key = update_function(key, form)
+	view = view(key.get()).__dict__
+	return Response(json.dumps(view), 201, mimetype='application/json')
+
+
+def delete_response_for(key, delete_function):
+	delete_function(key)
+	return Response(status=201)
+
+
+def post_response_for(form, view, create_function):
+	if form.validate():
+		key = create_function(form)
+		view = view(key.get()).__dict__
+		return Response(json.dumps(view), 201, mimetype='application/json')
+	else:
+		return Response(status=400, mimetype='application/json')
+
+
+class TagRUD(Resource):
 	def get(self, key):
-		form = TagForm()
-		form = service.update_tag_form(form, key)
-		return make_response(render_template('blog/tag/create.html', form=form))
+		return get_response_for(key, TagView)
 
-	def post(self, key):
-		service.update_tag(key, TagForm(data=request.get_json()))
-		return redirect(api.url_for(TagCreate))
+	def put(self, key):
+		return put_response_for(key, TagView, TagForm(data=request.get_json()), service.update_tag)
 
-
-class TagDelete(Resource):
-	def get(self, key):
-		service.delete_tag(key)
-		return redirect(api.url_for(TagCreate))
+	def delete(self, key):
+		return delete_response_for(key, service.delete_tag)
 
 
-class TagList(Resource):
+class TagCL(Resource):
 	def get(self):
 		tags = service.get_all_tags()
 		view = [TagView(tag).__dict__ for tag in tags]
 		sorted_view = sorted(view, key=lambda t: t['category'])
-		return sorted_view
+		return Response(json.dumps(sorted_view), 200, mimetype='application/json')
+
+	def post(self):
+		return post_response_for(TagForm(data=request.get_json()), TagView, service.create_tag)
 
 
 class CommentList(Resource):
@@ -183,7 +198,6 @@ api.add_resource(CategoryRUD, '/blog/admin/category/<string:key>', endpoint='cat
 api.add_resource(CategoryCL, '/blog/admin/category', endpoint='category_cl')
 api.add_resource(CategoryTemplate, '/blog/admin/category/template', endpoint='category_template')
 
-api.add_resource(TagCreate, '/blog/admin/tag/create', endpoint='create_tag')
-api.add_resource(TagUpdate, '/blog/admin/tag/update/<string:key>', endpoint='update_tag')
-api.add_resource(TagDelete, '/blog/admin/tag/delete/<string:key>', endpoint='delete_tag')
-api.add_resource(TagList, '/blog/tag/list', endpoint='list_tag')
+api.add_resource(TagRUD, '/blog/admin/tag/<string:key>', endpoint='tag_rud')
+api.add_resource(TagCL, '/blog/admin/tag', endpoint='tag_cl')
+api.add_resource(TagTemplate, '/blog/admin/tag/template', endpoint='tag_template')
