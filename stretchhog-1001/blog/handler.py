@@ -21,9 +21,12 @@ def __get_response_for(key, view):
 
 
 def __put_response_for(key, view, form, update_function):
-	key = update_function(key, form)
-	view = view(key.get()).__dict__
-	return Response(json.dumps(view), 201, mimetype='application/json')
+	if form.validate():
+		key = update_function(key, form)
+		view = view(key.get()).__dict__
+		return Response(json.dumps(view), 201, mimetype='application/json')
+	else:
+		return Response(status=400, mimetype='application/json')
 
 
 def __delete_response_for(key, delete_function):
@@ -38,6 +41,10 @@ def __post_response_for(form, view, create_function):
 		return Response(json.dumps(view), 201, mimetype='application/json')
 	else:
 		return Response(status=400, mimetype='application/json')
+
+
+def __template_response_for(template):
+	return make_response(render_template(template))
 
 
 def __get_form(form, req):
@@ -119,7 +126,7 @@ class EntrySearch(Resource):
 
 class CategoryTemplate(Resource):
 	def get(self):
-		return make_response(render_template('blog/category/list.html'))
+		return __template_response_for('blog/category/list.html')
 
 
 class CategoryRUD(Resource):
@@ -146,7 +153,7 @@ class CategoryCL(Resource):
 
 class TagTemplate(Resource):
 	def get(self):
-		return make_response(render_template('blog/tag/list.html'))
+		return __template_response_for('blog/tag/list.html')
 
 
 class TagRUD(Resource):
