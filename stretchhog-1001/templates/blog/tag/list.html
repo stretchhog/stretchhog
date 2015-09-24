@@ -35,7 +35,7 @@
 				</td>
 				<form name="addForm" class="form-group">
 					<td>
-						<input class="form-control" name="tag" type="text" ng-model="newTag.tag" required
+						<input class="form-control" name="tag" type="text" ng-model="newItem.tag" required
 								placeholder="new tag...">
 					</td>
 					<td>
@@ -44,33 +44,32 @@
 					</td>
 				</form>
 			</tr>
-			<tr ng-repeat="tag in tags | filter:filterText">
+			<tr ng-repeat="item in items | filter:filterText">
 				<td>
-					<div class="btn-group" ng-show="tag.editMode">
-						<button class="btn btn-default fa fa-save" ng-click="updateItem(tag)"
+					<div class="btn-group" ng-show="item.editMode">
+						<button class="btn btn-default fa fa-save" ng-click="updateItem(item)"
 								ng-disabled="editForm.$invalid"
 								title="Save"></button>
-						<button class="btn btn-default fa fa-times" ng-click="toggleEditMode(tag)"
+						<button class="btn btn-default fa fa-times" ng-click="toggleEditMode(item)"
 								title="Cancel"></button>
 					</div>
-					<div class="btn-group" ng-show="tag.editMode == null || tag.editMode == false">
-						<button class="btn btn-default fa fa-edit" ng-click="toggleEditMode(tag)"
+					<div class="btn-group" ng-show="item.editMode == null || item.editMode == false">
+						<button class="btn btn-default fa fa-edit" ng-click="toggleEditMode(item)"
 								title="Edit"></button>
-						<button class="btn btn-default fa fa-trash" ng-click="deleteItem(tag)" title="Delete"
+						<button class="btn btn-default fa fa-trash" ng-click="deleteItem(item)" title="Delete"
 								data-toggle="modal"></button>
 					</div>
 				</td>
 				<td>
-					<span ng-show="tag.editMode == null || tag.editMode == false"> {[tag.tag]} </span>
+					<span ng-show="item.editMode == null || item.editMode == false"> {[item.tag]} </span>
 
 					<form name="editForm" class="form-group ">
-						<input class="form-control" ng-model="tag.tag" required
-								ng-show="tag.editMode" ng-keydown="updateOnEnter($event)">
+						<input class="form-control" ng-model="item.tag" required ng-show="item.editMode">
 					</form>
 
 				</td>
 				<td>
-					<span> {[tag.category.category]}</span>
+					<span> {[item.category.category]}</span>
 				</td>
 			</tr>
 
