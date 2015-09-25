@@ -15,7 +15,7 @@ ng-controller="tagController"
 	       placeholder="new tag..." ng-keydown="saveOnEnter(item, $event)"/>
 </td>
 <td>
-	<select class="form-control" name="category" ng-model="newTag.category"
+	<select class="form-control" name="category" ng-model="newItem.category"
 	        ng-options="category.key as category.category for category in categories" required>
 </td>
 {% endblock %}

@@ -31,7 +31,8 @@ class EntryView:
 		self.category = CategoryView(entity.key.parent().get()).__dict__
 		self.tags = [TagView(tag.get()).__dict__ for tag in entity.tags]
 		self.date_added = entity.date_added.strftime('%Y, %d %B')
-		self.comments = get_comments(entity)
+		self.comments = [CommentView(comment).__dict__ for comment in get_comments(entity)]
+		self.comment_count = len(self.comments)
 
 
 class EntrySummaryView:
@@ -54,5 +55,4 @@ class CommentView:
 		self.comment = entity.comment
 		self.user = entity.user.nickname()
 		self.date_added = entity.date_added.strftime('%a, %d %b %Y %H:%M')
-		self.comments = [CommentView(e) for e in get_comments(entity)]
 

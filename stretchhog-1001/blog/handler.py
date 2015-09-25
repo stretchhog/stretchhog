@@ -49,6 +49,11 @@ def get_form(form, req):
 	return form.from_json(req.get_json())
 
 
+class EntryTemplate(Resource):
+	def get(self):
+		return template_response_for('blog/entry/entryCRUD.html')
+
+
 class EntryRUD(Resource):
 	def get(self, key):
 		entry = service.get_by_urlsafe_key(key)
@@ -66,7 +71,8 @@ class EntryRUD(Resource):
 class EntryCL(Resource):
 	def get(self):
 		entries = service.get_all_entries()
-		view = [EntryView(entry) for entry in entries]
+		view = [EntryView(entry).__dict__ for entry in entries]
+		return Response(json.dumps(view), 200, mimetype='application/json')
 
 	def post(self):
 		post_response_for(get_form(EntryForm, request), EntryView, service.create_entry)
@@ -148,6 +154,9 @@ class CommentList(Resource):
 
 
 api.add_resource(EntryListCategory, '/blog/entry/list/<int:cat>', endpoint='category_entry')
+api.add_resource(EntryRUD, '/blog/admin/entry/<string:key>', endpoint='entry_rud')
+api.add_resource(EntryCL, '/blog/admin/entry', endpoint='entry_cl')
+api.add_resource(EntryTemplate, '/blog/admin/entry/template', endpoint='entry_template')
 
 api.add_resource(CommentList, '/blog/comment/list/<string:key>', endpoint='list_comment')
 

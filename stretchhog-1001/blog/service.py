@@ -1,6 +1,5 @@
 from google.appengine.api import users
 from google.appengine.ext.ndb.key import Key
-
 from blog.models import Category, Tag, Entry, Comment
 
 

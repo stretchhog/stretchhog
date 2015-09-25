@@ -1,0 +1,38 @@
+{% extends "blog/parentCRUD.html" %}
+
+{% block controller %}
+ng-controller="entryController"
+{% endblock %}
+
+{% block columns %}
+<th>Category</th>
+{% endblock %}
+
+{% block addForm %}
+<td>
+	<input class="form-control" name="title" type="text" ng-model="newItem.title" required
+	       placeholder="new title..."/>
+	<textarea class="form-control" name="summary" type="text" ng-model="newItem.summary" required
+	       placeholder="new summary..." ng-keydown="saveOnEnter(item, $event)"></textarea>
+	<textarea class="form-control" name="post" type="text" ng-model="newItem.post" required
+	          placeholder="new post..." ng-keydown="saveOnEnter(item, $event)"></textarea>
+	<select class="form-control" name="category" ng-model="newItem.category"
+	        ng-options="category.key as category.category for category in categories" required></select>
+
+	<select class="form-control" name="category" ng-model="newItem.tags"
+	        ng-options="tag.key as tag.tag for tag in tags | filter:filterTags" required>
+</td>
+{% endblock %}
+
+{% block editForm %}
+<td>
+				<span ng-show="item.editMode == null || item.editMode == false">
+                    {[item.title]}
+                </span>
+	<!--Name edit mode-->
+	<form name="editForm">
+		<input ng-model="item.category" ng-show="item.editMode" required class="form-control"
+		       ng-keydown="updateOnEnter(item, $event)"/>
+	</form>
+</td>
+{% endblock %}
