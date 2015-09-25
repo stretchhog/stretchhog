@@ -16,7 +16,7 @@ blogApp.factory('entryFactory', function ($resource) {
 			});
 
 			$scope.filterTags = function(obj) {
-				if (obj == null) return false;
+				if ($scope.newItem === null) return false;
 				return obj.category.key == $scope.newItem.category;
 			};
 
