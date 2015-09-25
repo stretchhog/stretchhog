@@ -34,35 +34,35 @@
 			</td>
 			<td>
 				<form name="addForm" class="form-group ">
-					<input class="form-control" name="category" type="text" ng-model="newCategory.category" required
+					<input class="form-control" name="category" type="text" ng-model="newItem.category" required
 					       placeholder="new category..." ng-keydown="saveOnEnter($event)">
 				</form>
 			</td>
 		</tr>
-		<tr ng-repeat="category in categories | filter:filterText">
+		<tr ng-repeat="item in items | filter:filterText">
 			<td>
-				<div class="btn-group" ng-show="category.editMode">
-					<button class="btn btn-default fa fa-save" ng-click="updateItem(category)"
+				<div class="btn-group" ng-show="item.editMode">
+					<button class="btn btn-default fa fa-save" ng-click="updateItem(item)"
 					        ng-disabled="editForm.$invalid"
 					        title="Save"></button>
-					<button class="btn btn-default fa fa-times" ng-click="toggleEditMode(category)"
+					<button class="btn btn-default fa fa-times" ng-click="toggleEditMode(item)"
 					        title="Cancel"></button>
 				</div>
-				<div class="btn-group" ng-show="category.editMode == null || category.editMode == false">
-					<button class="btn btn-default fa fa-edit" ng-click="toggleEditMode(category)"
+				<div class="btn-group" ng-show="item.editMode == null || item.editMode == false">
+					<button class="btn btn-default fa fa-edit" ng-click="toggleEditMode(item)"
 					        title="Edit"></button>
-					<button class="btn btn-default fa fa-trash" ng-click="deleteItem(category)" title="Delete"
+					<button class="btn btn-default fa fa-trash" ng-click="deleteItem(item)" title="Delete"
 					        data-toggle="modal"></button>
 				</div>
 			</td>
 			<td>
-				<span ng-show="category.editMode == null || category.editMode == false">
-                    {[category.category]}
+				<span ng-show="item.editMode == null || item.editMode == false">
+                    {[item.category]}
                 </span>
 				<!--Name edit mode-->
 				<form name="editForm">
-					<input ng-model="category.category" ng-show="category.editMode" required class="form-control"
-					       ng-keydown="updateOnEnter(category, $event)"/>
+					<input ng-model="item.category" ng-show="item.editMode" required class="form-control"
+					       ng-keydown="updateOnEnter(item, $event)"/>
 				</form>
 			</td>
 		</tr>

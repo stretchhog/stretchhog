@@ -1,5 +1,4 @@
 from google.appengine.ext.ndb.key import Key
-
 from blog.forms import CategoryForm, TagForm, EntryForm
 from blog.models import Entry, Category, Comment
 from flask import make_response, render_template, request, Response
@@ -9,7 +8,6 @@ from flask.ext.restful import Resource
 from main import api
 from flask import Markup, json
 import markdown
-
 
 categories = {1: "Music", 2: "Artificial Intelligence", 3: "Fitness & Health"}
 
@@ -48,7 +46,7 @@ def template_response_for(template):
 
 
 def get_form(form, req):
-	return form(data=req.get_json())
+	return form.from_json(req.get_json())
 
 
 class EntryRUD(Resource):
@@ -57,7 +55,6 @@ class EntryRUD(Resource):
 		entry.post = Markup(markdown.markdown(entry.post))
 		view = EntryView(entry).__dict__
 		return Response(view, 200, mimetype='application/json')
-
 
 	def put(self, key):
 		return put_response_for(key, EntryView, get_form(EntryForm, request), service.update_entry)
@@ -101,7 +98,6 @@ class CategoryRUD(Resource):
 
 	def delete(self, key):
 		return delete_response_for(key, service.delete_category)
-
 
 	def put(self, key):
 		return put_response_for(key, CategoryView, get_form(CategoryForm, request), service.update_category)

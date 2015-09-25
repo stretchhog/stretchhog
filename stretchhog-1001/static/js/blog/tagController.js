@@ -15,7 +15,7 @@ blogApp.factory('tagFactory', function ($resource) {
 				factory: tagFactory
 			});
 
-			$scope.resetItem = function newTag() {
+			$scope.resetItem = function resetTag() {
 				$scope.newItem.tag = '';
 				$scope.newItem.category = '';
 			};

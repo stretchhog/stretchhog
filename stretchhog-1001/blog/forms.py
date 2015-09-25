@@ -24,6 +24,12 @@ class EntryForm(Form):
 class CategoryForm(Form):
 	category = StringField(validators=[DataRequired()])
 
+	@staticmethod
+	def from_json(json):
+		form = CategoryForm()
+		form.category.data = json['category']
+		return form
+
 
 class TagForm(Form):
 	tag = StringField()
@@ -33,6 +39,13 @@ class TagForm(Form):
 		super(TagForm, self).__init__(*args, **kwargs)
 		categories = service.get_all_categories()
 		self.category.choices = [(category.key.urlsafe(), category.category) for category in categories]
+
+	@staticmethod
+	def from_json(json):
+		form = TagForm()
+		form.tag.data = json['tag']
+		form.category.data = json['category']['key']
+		return form
 
 
 class CommentForm(Form):
