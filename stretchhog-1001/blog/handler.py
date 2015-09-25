@@ -89,7 +89,7 @@ class EntrySearch(Resource):
 
 class CategoryTemplate(Resource):
 	def get(self):
-		return template_response_for('blog/category/list.html')
+		return template_response_for('blog/category/categoryCRUD.html')
 
 
 class CategoryRUD(Resource):
@@ -115,7 +115,7 @@ class CategoryCL(Resource):
 
 class TagTemplate(Resource):
 	def get(self):
-		return template_response_for('blog/tag/list.html')
+		return template_response_for('blog/tag/tagCRUD.html')
 
 
 class TagRUD(Resource):

@@ -1,6 +1,6 @@
 {% extends "index.html" %}
 {% block body %}
-<div ng-controller="categoryController">
+<div ng-controller="tagController">
 
 	<div class="input-group col-md-12 filter">
     <span class="input-group-addon">
@@ -21,23 +21,21 @@
 				<button class="btn btn-default fa fa-plus" ng-click="toggleAddMode()" ng-hide="addMode"></button>
 				<button class="btn btn-default fa fa-minus" ng-click="toggleAddMode()" ng-show="addMode"></button>
 			</th>
-			<th>Category</th>
+			{% block columns %}{% endblock %}
 		</tr>
 		</thead>
 		<tbody>
 		<tr ng-show="addMode">
 			<td>
 				<div class="btn-group">
-					<button class="btn btn-default fa fa-save" ng-click="createItem()" ng-disabled="addForm.$invalid" name="Create"></button>
+					<button class="btn btn-default fa fa-save" ng-click="createItem()" ng-keydown="saveOnEnter($event) "
+					        ng-disabled="addForm.$invalid" name="Create"></button>
 					<button class="btn btn-default fa fa-times" ng-click="toggleAddMode()" name="Create"></button>
 				</div>
 			</td>
-			<td>
-				<form name="addForm" class="form-group ">
-					<input class="form-control" name="category" type="text" ng-model="newItem.category" required
-					       placeholder="new category..." ng-keydown="saveOnEnter($event)">
-				</form>
-			</td>
+			<form name="addForm" class="form-group">
+				{% block addForm %}{% endblock %}
+			</form>
 		</tr>
 		<tr ng-repeat="item in items | filter:filterText">
 			<td>
@@ -55,16 +53,7 @@
 					        data-toggle="modal"></button>
 				</div>
 			</td>
-			<td>
-				<span ng-show="item.editMode == null || item.editMode == false">
-                    {[item.category]}
-                </span>
-				<!--Name edit mode-->
-				<form name="editForm">
-					<input ng-model="item.category" ng-show="item.editMode" required class="form-control"
-					       ng-keydown="updateOnEnter(item, $event)"/>
-				</form>
-			</td>
+			{% block editForm %}{% endblock %}
 		</tr>
 
 		</tbody>
@@ -74,3 +63,4 @@
 	     title="Loading..."/>
 </div>
 {% endblock %}
+

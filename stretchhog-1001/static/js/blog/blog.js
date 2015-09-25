@@ -44,7 +44,7 @@ blogApp.controller('blog.baseController', [
 				// save server name to restore it if the user cancel edition
 				$scope.saveToServer(item);
 
-				$scope.categories.forEach(function (i) {
+				$scope.items.forEach(function (i) {
 					// item is not the item being edited now and it is in edit mode
 					if (item.id != i.id && i.editMode) {
 						// Restore name

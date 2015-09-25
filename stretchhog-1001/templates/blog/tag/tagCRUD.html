@@ -1,0 +1,36 @@
+{% extends "blog/parentCRUD.html" %}
+
+{% block controller %}
+ng-controller="tagController"
+{% endblock %}
+
+{% block columns %}
+<th>Tag</th>
+<th>Category</th>
+{% endblock %}
+
+{% block addForm %}
+<td>
+	<input class="form-control" name="tag" type="text" ng-model="newItem.tag" required
+	       placeholder="new tag..." ng-keydown="saveOnEnter(item, $event)"/>
+</td>
+<td>
+	<select class="form-control" name="category" ng-model="newTag.category"
+	        ng-options="category.key as category.category for category in categories" required>
+</td>
+{% endblock %}
+
+{% block editForm %}
+<td>
+	<span ng-show="item.editMode == null || item.editMode == false"> {[item.tag]} </span>
+
+	<form name="editForm" class="form-group ">
+		<input class="form-control" ng-model="item.tag" required ng-show="item.editMode"
+		       ng-keydown="updateOnEnter(item, $event)"/>
+	</form>
+
+</td>
+<td>
+	<span> {[item.category.category]}</span>
+</td>
+{% endblock %}
