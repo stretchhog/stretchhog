@@ -5,7 +5,7 @@ ng-controller="entryController"
 {% endblock %}
 
 {% block columns %}
-<th>Category</th>
+<th>Entry</th>
 {% endblock %}
 
 {% block addForm %}
@@ -13,7 +13,7 @@ ng-controller="entryController"
 	<input class="form-control" name="title" type="text" ng-model="newItem.title" required
 	       placeholder="new title..."/>
 	<textarea class="form-control" name="summary" type="text" ng-model="newItem.summary" required
-	       placeholder="new summary..."></textarea>
+	          placeholder="new summary..."></textarea>
 	<textarea class="form-control" name="post" type="text" ng-model="newItem.post" required
 	          placeholder="new post..."></textarea>
 	<select class="form-control" name="category" ng-model="newItem.category"
@@ -29,12 +29,16 @@ ng-controller="entryController"
 				<span ng-show="item.editMode == null || item.editMode == false">
                     {[item.title]}
                 </span>
-	<div ng-repeat="tag in tags" class="pull-right label label-primary">{[tag.tag]}</div>
+
+	<div ng-repeat="tag in item.tags" class="pull-right label label-primary">{[tag.tag]}</div>
 
 	<!--Name edit mode-->
 	<form name="editForm">
-		<input ng-model="item.category" ng-show="item.editMode" required class="form-control"
-		       ng-keydown="updateOnEnter(item, $event)"/>
+		<input class="form-control" ng-show="item.editMode" name="title" type="text" ng-model="item.title" required/>
+		<textarea class="form-control" ng-show="item.editMode" name="summary" type="text" ng-model="item.summary"
+		          required></textarea>
+		<textarea class="form-control" ng-show="item.editMode" name="post" type="text" ng-model="item.post"
+		          required></textarea>
 	</form>
 </td>
 {% endblock %}

@@ -29,8 +29,8 @@ class EntryForm(Form):
 		form.title.data = json['title']
 		form.summary.data = json['summary']
 		form.post.data = json['post']
-		form.category.data = json['category']
-		form.tags.data = json['tags']
+		form.category.data = json['category']['key']
+		form.tags.data = [tag['key'] for tag in json['tags']]
 		return form
 
 class CategoryForm(Form):

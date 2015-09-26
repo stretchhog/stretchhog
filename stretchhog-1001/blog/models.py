@@ -1,5 +1,4 @@
 from google.appengine.ext import ndb
-
 from wtforms.validators import DataRequired
 
 

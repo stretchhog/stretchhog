@@ -11,7 +11,7 @@ ng-controller="categoryController"
 {% block addForm %}
 <td>
 	<input class="form-control" name="tag" type="text" ng-model="newItem.category" required
-	       placeholder="new category..." ng-keydown="saveOnEnter(item, $event)"/>
+	       placeholder="new category...">
 </td>
 {% endblock %}
 
@@ -22,8 +22,7 @@ ng-controller="categoryController"
                 </span>
 	<!--Name edit mode-->
 	<form name="editForm">
-		<input ng-model="item.category" ng-show="item.editMode" required class="form-control"
-		       ng-keydown="updateOnEnter(item, $event)"/>
+		<input ng-model="item.category" ng-show="item.editMode" required class="form-control">
 	</form>
 </td>
 {% endblock %}

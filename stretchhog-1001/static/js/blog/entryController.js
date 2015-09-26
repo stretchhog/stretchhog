@@ -34,14 +34,14 @@ blogApp.factory('entryFactory', function ($resource) {
 				item.serverTitle = item.title;
 				item.serverSummary = item.summary;
 				item.serverPost = item.post;
-				item.serverTags = items.tags;
+				item.serverTags = item.tags;
 			};
 
 			$scope.restoreFromServer = function restoreTag(item) {
 				item.title = item.serverTitle;
 				item.summary = item.serverSummary;
 				item.post = item.serverPost;
-				item.tags = items.serverTags;
+				item.tags = item.serverTags;
 			};
 
 			$scope.categories = categoryFactory.query();
