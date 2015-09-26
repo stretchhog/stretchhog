@@ -1,0 +1,5 @@
+{% extends "blog/entry/parentMain.html" %}
+{% block items %}
+ng-repeat="item in items | filter:filterAIItems"
+{% endblock %}
+

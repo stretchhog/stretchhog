@@ -41,13 +41,13 @@
 		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			<ul class="nav navbar-nav">
 				<li class="icon-ai">
-					<a href="#">Artificial Intelligence</a>
+					<a href="{{ url_for('ai_main') }}">Artificial Intelligence</a>
 				</li>
 				<li class="icon-music">
-					<a href="#">Music</a>
+					<a href="{{ url_for('music_main') }}">Music</a>
 				</li>
 				<li class="icon-health">
-					<a href="#">Fitness & Health</a>
+					<a href="{{ url_for('fitness_main') }}">Fitness & Health</a>
 				</li>
 				{% if user_is_admin %}
 					<li class="dropdown">

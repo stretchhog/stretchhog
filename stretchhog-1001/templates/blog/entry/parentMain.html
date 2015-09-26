@@ -1,0 +1,64 @@
+{% extends "index.html" %}
+{% block body %}
+<div ng-controller="entryController">
+	<div class="row">
+
+		<div class="col-md-12">
+
+			<div class="panel">
+				<div class="panel-body">
+
+
+					<!--/stories-->
+					<div class="row" {% block items %}{% endblock %}>
+						<br>
+
+						<div class="col-md-2 col-sm-3 text-center">
+							<a class="story-img" href="#"><img src="//placehold.it/100" style="width:100px;height:100px"
+							                                   class="img-circle"></a>
+						</div>
+						<div class="col-md-10 col-sm-9">
+							<h3 class="entry-title">{[ item.title ]}</h3>
+
+							<div class="row">
+								<div class="col-xs-9">
+									<p class="entry-summary">{[ item.summary ]}</p>
+
+									<p class="lead">
+										<a class="btn btn-default" href="#">Read
+											More</a>
+									</p>
+
+									<p class="pull-right">
+
+									<div ng-repeat="tag in item.tags">
+										<span class="label label-primary">{[ tag.tag ]}</span>
+									</div>
+									</p>
+									<ul class="list-inline">
+										<li><a href="#"><i class="fa fa-calendar"></i> {[item.date_added ]}</a></li>
+										<li><a href="#"><i class="fa fa-comment"></i> {[ item.comment_count ]} Comments</a></li>
+									</ul>
+								</div>
+								<div class="col-xs-3"></div>
+							</div>
+							<br><br>
+						</div>
+					</div>
+					<hr>
+
+					<!--/stories-->
+
+
+					<a href="/" class="btn btn-primary pull-right btnNext">More <i
+							class="glyphicon glyphicon-chevron-right"></i></a>
+
+
+				</div>
+			</div>
+
+		</div><!--/col-12-->
+	</div>
+</div>
+{% endblock %}
+

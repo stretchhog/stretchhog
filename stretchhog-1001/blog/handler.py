@@ -78,6 +78,13 @@ class EntryCL(Resource):
 		post_response_for(get_form(EntryForm, request), EntryView, service.create_entry)
 
 
+class EntryPerCategory(Resource):
+	def get(self, key):
+		entries = service.get_all_entries_by_ancestor(service.to_key(key))
+		view = [EntryView(entry).__dict__ for entry in entries]
+		return Response(json.dumps(view), 200, mimetype='application/json')
+
+
 class CategoryTemplate(Resource):
 	def get(self):
 		return template_response_for('blog/category/categoryCRUD.html')
@@ -138,6 +145,21 @@ class CommentList(Resource):
 		return view
 
 
+class AIMain(Resource):
+	def get(self):
+		return template_response_for('blog/entry/ai/main.html')
+
+
+class MusicMain(Resource):
+	def get(self):
+		return template_response_for('blog/entry/music/main.html')
+
+
+class FitnessMain(Resource):
+	def get(self):
+		return template_response_for('blog/entry/fitness/main.html')
+
+
 api.add_resource(EntryRUD, '/blog/admin/entry/<string:key>', endpoint='entry_rud')
 api.add_resource(EntryCL, '/blog/admin/entry', endpoint='entry_cl')
 api.add_resource(EntryTemplate, '/blog/admin/entry/template', endpoint='entry_template')
@@ -151,3 +173,7 @@ api.add_resource(TagCL, '/blog/admin/tag', endpoint='tag_cl')
 api.add_resource(TagTemplate, '/blog/admin/tag/template', endpoint='tag_template')
 
 api.add_resource(CommentList, '/blog/comment/list/<string:key>', endpoint='list_comment')
+
+api.add_resource(AIMain, '/artificial-intelligence', endpoint='ai_main')
+api.add_resource(MusicMain, '/music', endpoint='music_main')
+api.add_resource(FitnessMain, '/fitness-and-health', endpoint='fitness_main')

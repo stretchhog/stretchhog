@@ -20,6 +20,18 @@ blogApp.factory('entryFactory', function ($resource) {
 				return obj.category.key == $scope.newItem.category;
 			};
 
+			$scope.filterMusicItems = function (obj) {
+				return obj.category.category == 'Music'
+			};
+
+			$scope.filterAIItems = function (obj) {
+				return obj.category.category == 'Artificial Intelligence'
+			};
+
+			$scope.filterFitnessItems = function (obj) {
+				return obj.category.category == 'Fitness & Health'
+			};
+
 			$scope.resetItem = function resetTag() {
 				$scope.newItem = {
 					title: '',
