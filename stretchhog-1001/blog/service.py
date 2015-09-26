@@ -8,7 +8,7 @@ def get_by_urlsafe_key(key):
 	return entity.get()
 
 
-def __to_key(urlsafe):
+def to_key(urlsafe):
 	return Key(urlsafe=urlsafe)
 
 
@@ -23,7 +23,7 @@ def __get_all(qry, **kwargs):
 
 
 def create_entry(form):
-	entry = Entry(parent=__to_key(form.category.data))
+	entry = Entry(parent=to_key(form.category.data))
 	entry.title = form.title.data
 	entry.summary = form.summary.data
 	entry.post = form.post.data
@@ -88,7 +88,7 @@ def get_all_categories(**kwargs):
 
 def create_tag(form):
 	tag = Tag(
-		parent=__to_key(form.category.data),
+		parent=to_key(form.category.data),
 		tag=form.tag.data)
 	return tag.put()
 
@@ -124,7 +124,7 @@ def search(data):
 
 
 def create_comment(key, form):
-	comment = Comment(parent=__to_key(key),
+	comment = Comment(parent=to_key(key),
 	                  user=users.get_current_user(),
 	                  comment=form.comment.data)
 	return comment.put()

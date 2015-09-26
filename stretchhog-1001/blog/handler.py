@@ -78,21 +78,6 @@ class EntryCL(Resource):
 		post_response_for(get_form(EntryForm, request), EntryView, service.create_entry)
 
 
-class EntryListCategory(Resource):
-	def get(self, cat):
-		category = service.get_all_categories(filter=[Category.category == categories[cat]])[0]
-		entries = service.get_all_entries_by_ancestor(category.key, sort=[-Entry.date_added])
-		view = [EntryView(entry).__dict__ for entry in entries]
-		return make_response(render_template("blog/entry/entries.html", entries=view))
-
-
-class EntrySearch(Resource):
-	def post(self):
-		entries = service.search(request.data)
-		view = [EntryView(entry).__dict__ for entry in entries]
-		return view
-
-
 class CategoryTemplate(Resource):
 	def get(self):
 		return template_response_for('blog/category/categoryCRUD.html')
@@ -153,12 +138,9 @@ class CommentList(Resource):
 		return view
 
 
-api.add_resource(EntryListCategory, '/blog/entry/list/<int:cat>', endpoint='category_entry')
 api.add_resource(EntryRUD, '/blog/admin/entry/<string:key>', endpoint='entry_rud')
 api.add_resource(EntryCL, '/blog/admin/entry', endpoint='entry_cl')
 api.add_resource(EntryTemplate, '/blog/admin/entry/template', endpoint='entry_template')
-
-api.add_resource(CommentList, '/blog/comment/list/<string:key>', endpoint='list_comment')
 
 api.add_resource(CategoryRUD, '/blog/admin/category/<string:key>', endpoint='category_rud')
 api.add_resource(CategoryCL, '/blog/admin/category', endpoint='category_cl')
@@ -167,3 +149,5 @@ api.add_resource(CategoryTemplate, '/blog/admin/category/template', endpoint='ca
 api.add_resource(TagRUD, '/blog/admin/tag/<string:key>', endpoint='tag_rud')
 api.add_resource(TagCL, '/blog/admin/tag', endpoint='tag_cl')
 api.add_resource(TagTemplate, '/blog/admin/tag/template', endpoint='tag_template')
+
+api.add_resource(CommentList, '/blog/comment/list/<string:key>', endpoint='list_comment')

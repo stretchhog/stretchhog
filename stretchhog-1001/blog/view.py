@@ -13,16 +13,16 @@ class TagView:
 
 
 class CategoryView:
-	def __init__(self, category):
-		self.key = category.key.urlsafe()
-		self.category = category.category
-
-
-def get_comments(entity):
-	return service.get_all_comments_by_ancestor(entity.key, sort=[-Comment.date_added])
+	def __init__(self, entity):
+		self.key = entity.key.urlsafe()
+		self.category = entity.category
 
 
 class EntryView:
+	@staticmethod
+	def get_comments(entity):
+		return service.get_all_comments_by_ancestor(entity.key, sort=[-Comment.date_added])
+
 	def __init__(self, entity):
 		self.key = entity.key.urlsafe()
 		self.title = entity.title
@@ -31,23 +31,8 @@ class EntryView:
 		self.category = CategoryView(entity.key.parent().get()).__dict__
 		self.tags = [TagView(tag.get()).__dict__ for tag in entity.tags]
 		self.date_added = entity.date_added.strftime('%Y, %d %B')
-		self.comments = [CommentView(comment).__dict__ for comment in get_comments(entity)]
+		self.comments = [CommentView(comment).__dict__ for comment in self.get_comments(entity)]
 		self.comment_count = len(self.comments)
-
-
-class EntrySummaryView:
-	@staticmethod
-	def get_number_of_comments(entity):
-		return service.get_all_comments_by_ancestor(entity.key)
-
-	def __init__(self, entity):
-		self.key = entity.key.urlsafe()
-		self.title = entity.title
-		self.summary = entity.summary
-		self.category = CategoryView(entity.category.get())
-		self.tags = [TagView(entity.tag.get()) for tag in entity.tags]
-		self.date_added = str(entity.date_added)
-		self.nr_of_comments = self.get_number_of_comments(entity)
 
 
 class CommentView:
@@ -55,4 +40,3 @@ class CommentView:
 		self.comment = entity.comment
 		self.user = entity.user.nickname()
 		self.date_added = entity.date_added.strftime('%a, %d %b %Y %H:%M')
-

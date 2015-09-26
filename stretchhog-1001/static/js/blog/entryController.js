@@ -15,7 +15,7 @@ blogApp.factory('entryFactory', function ($resource) {
 				factory: entryFactory
 			});
 
-			$scope.filterTags = function(obj) {
+			$scope.filterTags = function (obj) {
 				if ($scope.newItem === null) return false;
 				return obj.category.key == $scope.newItem.category;
 			};
@@ -38,13 +38,13 @@ blogApp.factory('entryFactory', function ($resource) {
 			};
 
 			$scope.restoreFromServer = function restoreTag(item) {
-				item.title= item.serverTitle;
-				item.summary= item.serverSummary;
-				item.post= item.serverPost;
-				item.tags= items.serverTags;
+				item.title = item.serverTitle;
+				item.summary = item.serverSummary;
+				item.post = item.serverPost;
+				item.tags = items.serverTags;
 			};
 
 			$scope.categories = categoryFactory.query();
-			$scope.tags = tagFactory.query()
+			$scope.tags = tagFactory.query();
 		}]);
 
