@@ -1,9 +1,11 @@
 from google.appengine.ext.ndb.key import Key
+import time
+
 from blog.forms import CategoryForm, TagForm, EntryForm
 from blog.models import Entry, Category, Comment
 from flask import make_response, render_template, request, Response
 from blog import service
-from blog.view import TagView, CategoryView, EntryView, CommentView
+from blog.view import TagView, CategoryView, EntryView, CommentView, EntryPostView
 from flask.ext.restful import Resource
 from main import api
 from flask import Markup, json
@@ -45,8 +47,8 @@ def template_response_for(template):
 	return make_response(render_template(template))
 
 
-def get_form(form, req):
-	return form.from_json(req.get_json())
+def get_form(form, req, put_mode=False):
+	return form.from_json(req.get_json(), put_mode=put_mode)
 
 
 class EntryTemplate(Resource):
@@ -62,7 +64,7 @@ class EntryRUD(Resource):
 		return Response(view, 200, mimetype='application/json')
 
 	def put(self, key):
-		return put_response_for(key, EntryView, get_form(EntryForm, request), service.update_entry)
+		return put_response_for(key, EntryView, get_form(EntryForm, request, put_mode=True), service.update_entry)
 
 	def delete(self, key):
 		return delete_response_for(key, service.delete_entry)
@@ -78,10 +80,10 @@ class EntryCL(Resource):
 		post_response_for(get_form(EntryForm, request), EntryView, service.create_entry)
 
 
-class EntryPerCategory(Resource):
+class EntryPost(Resource):
 	def get(self, key):
-		entries = service.get_all_entries_by_ancestor(service.to_key(key))
-		view = [EntryView(entry).__dict__ for entry in entries]
+		entry = service.get_by_urlsafe_key(key)
+		view = EntryPostView(entry).__dict__
 		return Response(json.dumps(view), 200, mimetype='application/json')
 
 
@@ -121,7 +123,7 @@ class TagRUD(Resource):
 		return get_response_for(key, TagView)
 
 	def put(self, key):
-		return put_response_for(key, TagView, get_form(TagForm, request), service.update_tag)
+		return put_response_for(key, TagView, get_form(TagForm, request, put_mode=True), service.update_tag)
 
 	def delete(self, key):
 		return delete_response_for(key, service.delete_tag)
@@ -163,6 +165,7 @@ class FitnessMain(Resource):
 api.add_resource(EntryRUD, '/blog/admin/entry/<string:key>', endpoint='entry_rud')
 api.add_resource(EntryCL, '/blog/admin/entry', endpoint='entry_cl')
 api.add_resource(EntryTemplate, '/blog/admin/entry/template', endpoint='entry_template')
+api.add_resource(EntryPost, '/blog/admin/entry/post/<string:key>', endpoint='entry_post')
 
 api.add_resource(CategoryRUD, '/blog/admin/category/<string:key>', endpoint='category_rud')
 api.add_resource(CategoryCL, '/blog/admin/category', endpoint='category_cl')

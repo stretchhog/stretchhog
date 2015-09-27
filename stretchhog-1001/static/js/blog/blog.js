@@ -1,4 +1,4 @@
-var blogApp = angular.module('blogApp', ['ngResource']);
+var blogApp = angular.module('blogApp', ['ngResource', 'ngSanitize']);
 
 blogApp.config(['$interpolateProvider', function ($interpolateProvider) {
 	$interpolateProvider.startSymbol('{[');

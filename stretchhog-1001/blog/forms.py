@@ -24,20 +24,24 @@ class EntryForm(Form):
 		self.tags.choices = [(tag.key.urlsafe(), tag.tag) for tag in tags]
 
 	@staticmethod
-	def from_json(json):
+	def from_json(json, put_mode):
 		form = EntryForm()
 		form.title.data = json['title']
 		form.summary.data = json['summary']
 		form.post.data = json['post']
-		form.category.data = json['category']
-		form.tags.data = json['tags']
+		if put_mode:
+			form.category.data = json['category']['key']
+			form.tags.data = [tag['key'] for tag in json['tags']]
+		else:
+			form.category.data = json['category']
+			form.tags.data = json['tags']
 		return form
 
 class CategoryForm(Form):
 	category = StringField(validators=[DataRequired()])
 
 	@staticmethod
-	def from_json(json):
+	def from_json(json, put_mode):
 		form = CategoryForm()
 		form.category.data = json['category']
 		return form
@@ -53,10 +57,13 @@ class TagForm(Form):
 		self.category.choices = [(cat.key.urlsafe(), cat.category) for cat in categories]
 
 	@staticmethod
-	def from_json(json):
+	def from_json(json, put_mode):
 		form = TagForm()
-		form.tag.data = json['tag']
-		form.category.data = json['category']
+		if put_mode:
+			form.category.data = json['category']['key']
+		else:
+			form.tag.data = json['tag']
+			form.category.data = json['category']
 		return form
 
 

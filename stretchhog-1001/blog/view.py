@@ -1,4 +1,7 @@
+import markdown2
+
 from blog.models import Comment
+from main import markdown
 
 __author__ = 'tvancann'
 
@@ -33,6 +36,11 @@ class EntryView:
 		self.date_added = entity.date_added.strftime('%Y, %d %B')
 		self.comments = [CommentView(comment).__dict__ for comment in self.get_comments(entity)]
 		self.comment_count = len(self.comments)
+
+
+class EntryPostView:
+	def __init__(self, entity):
+		self.post = markdown(entity.post)
 
 
 class CommentView:

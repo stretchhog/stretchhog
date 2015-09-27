@@ -1,6 +1,10 @@
 {% extends "index.html" %}
 {% block body %}
 <div ng-controller="entryController">
+
+	<img src="{{ url_for('static', filename='images/ajax-loader.gif') }}"
+	     ng-show="loading" class="center-block" title="Loading..."/>
+
 	<div class="row">
 
 		<div class="col-md-12">
@@ -25,19 +29,31 @@
 									<p class="entry-summary">{[ item.summary ]}</p>
 
 									<p class="lead">
-										<a class="btn btn-default" href="#">Read
-											More</a>
+										<button class="btn btn-default" ng-click="openItem(item)" title="Read more">Read
+											more
+										</button>
+										<button class="btn btn-default" ng-click="closeItem(item)">Close</button>
 									</p>
 
-									<p class="pull-right">
+									<div ng-show="item.readMode == true" ng-bind-html="item.postRendered"></div>
+									<div ng-show="item.readMode == true">
+										<hr>
+										<h4>Comments</h4>
 
-									<div ng-repeat="tag in item.tags">
-										<span class="label label-primary">{[ tag.tag ]}</span>
+										<div ng-show="item.comment_count == 0">No comments yet, be the first!</div>
+										<div ng-repeat="comment in item.comments">{[ comment ]}</div>
 									</div>
-									</p>
-									<ul class="list-inline">
+									<img src="{{ url_for('static', filename='images/ajax-loader.gif') }}"
+									     ng-show="item.loadingPost" class="center-block"
+									     title="Loading..."/>
+
+									<div ng-hide="item.readMode == true" ng-repeat="tag in item.tags">
+										<span class="pull-right label label-primary">{[ tag.tag ]}</span>
+									</div>
+									<ul ng-hide="item.readMode == true" class="list-inline">
 										<li><a href="#"><i class="fa fa-calendar"></i> {[item.date_added ]}</a></li>
-										<li><a href="#"><i class="fa fa-comment"></i> {[ item.comment_count ]} Comments</a></li>
+										<li><a href="#"><i class="fa fa-comment"></i> {[ item.comment_count ]} Comments</a>
+										</li>
 									</ul>
 								</div>
 								<div class="col-xs-3"></div>

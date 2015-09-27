@@ -8,8 +8,8 @@ blogApp.factory('entryFactory', function ($resource) {
 			});
 	})
 	.controller('entryController', [
-		'$scope', '$controller', 'entryFactory', 'categoryFactory', 'tagFactory',
-		function ($scope, $controller, entryFactory, categoryFactory, tagFactory) {
+		'$scope', '$controller', '$http', 'entryFactory', 'categoryFactory', 'tagFactory',
+		function ($scope, $controller, $http, entryFactory, categoryFactory, tagFactory) {
 			$controller('blog.baseController', {
 				$scope: $scope,
 				factory: entryFactory
@@ -56,7 +56,30 @@ blogApp.factory('entryFactory', function ($resource) {
 				item.tags = item.serverTags;
 			};
 
+			$scope.openItem = function (item) {
+				item.loadingPost = true;
+				if (item.postRendered == null) {
+					$http.get('/blog/admin/entry/post/' + item.key).
+					then(function (response) {
+						item.postRendered = response.data.post;
+						item.loadingPost = false;
+						item.readMode = true;
+					}, function (response) {
+						// called asynchronously if an error occurs
+						// or server returns response with an error status.
+					});
+				} else {
+					item.readMode = true;
+					item.loadingPost = false;
+				}
+			};
+
+			$scope.closeItem = function (item) {
+				item.readMode = false;
+			};
+
 			$scope.categories = categoryFactory.query();
 			$scope.tags = tagFactory.query();
-		}]);
+		}])
+;
 
