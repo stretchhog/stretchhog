@@ -41,7 +41,14 @@
 										<h4>Comments</h4>
 
 										<div ng-show="item.comment_count == 0">No comments yet, be the first!</div>
-										<div ng-repeat="comment in item.comments">{[ comment ]}</div>
+
+										<form name="commentForm" class="form-group">
+											<textarea rows="5" class="form-control" ng-model="comment.comment"
+											          placeholder="Place your comment here..."></textarea>
+											<button class="btn btn-default fa fa-save" ng-click="saveComment(item)"></button>
+
+										</form>
+										<div ng-repeat="comment in item.comments">{[ comment.comment ]}</div>
 									</div>
 									<img src="{{ url_for('static', filename='images/ajax-loader.gif') }}"
 									     ng-show="item.loadingPost" class="center-block"

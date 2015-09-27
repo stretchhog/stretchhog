@@ -7,9 +7,15 @@ blogApp.factory('entryFactory', function ($resource) {
 				'update': {method: 'PUT'}
 			});
 	})
+	.factory('commentFactory', function ($resource) {
+		return $resource('/blog/comment/:key',
+			{
+				key: '@key'
+			})
+	})
 	.controller('entryController', [
-		'$scope', '$controller', '$http', 'entryFactory', 'categoryFactory', 'tagFactory',
-		function ($scope, $controller, $http, entryFactory, categoryFactory, tagFactory) {
+		'$scope', '$controller', '$http', 'entryFactory', 'categoryFactory', 'tagFactory', 'commentFactory',
+		function ($scope, $controller, $http, entryFactory, categoryFactory, tagFactory, commentFactory) {
 			$controller('blog.baseController', {
 				$scope: $scope,
 				factory: entryFactory
@@ -76,6 +82,28 @@ blogApp.factory('entryFactory', function ($resource) {
 
 			$scope.closeItem = function (item) {
 				item.readMode = false;
+			};
+
+			$scope.initiateComment = function () {
+				$scope.comment = {
+					comment: '',
+					parentKey: ''
+				}
+			};
+
+			$scope.comments = [];
+
+			$scope.initiateComment();
+
+			$scope.saveComment = function (item) {
+				$scope.comment.parentKey = item.key;
+				commentFactory.save($scope.comment,
+					// success response
+					function (createdItem) {
+						// Add at the first position
+						item.comments.unshift(createdItem);
+						$scope.initiateComment();
+					});
 			};
 
 			$scope.categories = categoryFactory.query();

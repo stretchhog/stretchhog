@@ -123,8 +123,8 @@ def search(data):
 	return qry.fetch()
 
 
-def create_comment(key, form):
-	comment = Comment(parent=to_key(key),
+def create_comment(form):
+	comment = Comment(parent=to_key(form.parent.data),
 	                  user=users.get_current_user(),
 	                  comment=form.comment.data)
 	return comment.put()

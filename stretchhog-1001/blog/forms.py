@@ -1,5 +1,4 @@
 from google.appengine.ext.ndb.key import Key
-
 from blog.view import EntryView
 from wtforms.validators import DataRequired
 from flask.ext.wtf import Form
@@ -37,6 +36,7 @@ class EntryForm(Form):
 			form.tags.data = json['tags']
 		return form
 
+
 class CategoryForm(Form):
 	category = StringField(validators=[DataRequired()])
 
@@ -69,3 +69,11 @@ class TagForm(Form):
 
 class CommentForm(Form):
 	comment = TextAreaField(validators=[DataRequired('Please enter your comment.')])
+	parent = HiddenField(validators=[DataRequired()])
+
+	@staticmethod
+	def from_json(json, put_mode):
+		form = CommentForm()
+		form.parent.data = json['parentKey']
+		form.comment.data = json['comment']
+		return form
