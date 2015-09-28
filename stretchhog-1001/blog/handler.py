@@ -73,7 +73,8 @@ class EntryRUD(Resource):
 class EntryCL(Resource):
 	def get(self):
 		entries = service.get_all_entries()
-		view = [EntryView(entry).__dict__ for entry in entries]
+		sorted_entries = sorted(entries, key=lambda e: e.date_added, reverse=True)
+		view = [EntryView(entry).__dict__ for entry in sorted_entries]
 		return Response(json.dumps(view), 200, mimetype='application/json')
 
 	def post(self):

@@ -20,34 +20,53 @@
 								<p class="entry-summary">{[ item.summary ]}</p>
 
 								<p class="lead">
-									<button class="btn btn-default" ng-click="openItem(item)" title="Read more">Read more</button>
-									<button class="btn btn-default" ng-click="closeItem(item)">Close</button>
+									<button ng-hide="item.readMode == true" class="btn btn-default" ng-click="openItem(item)" title="Read more">Read
+										more <i
+												class="fa fa-chevron-down"></i></button>
+									<button ng-show="item.readMode == true" class="btn btn-default" ng-click="closeItem(item)">Close <i
+											class="fa fa-chevron-up"></i></button>
 								</p>
 
 								<div ng-show="item.readMode == true">
 									<div ng-bind-html="item.postRendered"></div>
 									<hr>
-									<h4>Comments</h4>
+									<h3>Comments</h3>
 
 									<div ng-show="item.comment_count == 0">No comments yet, be the first!</div>
-									<p>If you want an avatar, register at <a href="http://www.gravatar.com" target="_blank">gravatar</a></p>
+									<p>If you want an avatar, please register at <a href="http://www.gravatar.com" target="_blank">gravatar</a></p>
 
 									<div class="row">
 										<div class="col-sm-8">
 											<form name="commentForm" class="form-group" ng-show="message == ''" role="form">
 												<div class="form-group has-feedback">
-													<input type="text" class="form-control" required ng-model="comment.name"
-													       placeholder="Your name..."/>
+													<div class="input-group">
+														<span class="input-group-addon"><i class="fa fa-user"></i></span>
+														<input type="text" class="form-control" required ng-model="comment.name"
+														       placeholder="Your name..."/>
+													</div>
 												</div>
 												<div class="form-group has-feedback">
-													<input type="text" class="form-control" required ng-model="comment.email"
-													       placeholder="Your email address..."/>
+													<div class="input-group">
+														<span class="input-group-addon"><i class="fa fa-envelope"></i></span>
+														<input type="text" class="form-control" required ng-model="comment.email"
+														       placeholder="Your email address..."/>
+													</div>
 												</div>
 												<div class="form-group has-feedback">
+													<div class="input-group">
+														<span class="input-group-addon"><i class="fa fa-comment"></i></span>
 											<textarea rows="5" class="form-control" required ng-model="comment.comment"
 											          placeholder="Place your comment here..."></textarea>
-													<button class="btn btn-default fa fa-save" ng-click="saveComment(item)"
-													        ng-disabled="commentForm.$invalid"></button>
+													</div>
+												</div>
+												<div class="form-group">
+													<div class="btn-group">
+														<button class="btn btn-default fa fa-save" ng-click="saveComment(item)"
+														        ng-disabled="commentForm.$invalid"> Submit
+														</button>
+														<button class="btn btn-default fa fa-ban" ng-click="initiateComment(item)"> Cancel
+														</button>
+													</div>
 												</div>
 											</form>
 										</div>
@@ -70,9 +89,8 @@
 										<div ng-repeat="c in item.comments">
 											{% else %}
 											<div ng-repeat="c in item.comments | filter:commentFilter">
-												<div class="col-md-12"
-												     style="margin-bottom: 10px; border-bottom: 1px solid rgba(45, 46, 36, 0.25)">
-													{% endif %}
+												{% endif %}
+												<div class="col-md-12" style="margin-bottom: 10px; border-bottom: 1px solid rgba(45, 46, 36, 0.25)">
 													<div class="row" style="margin-bottom: 5px; margin-top: 5px">
 														<div class="img img-responsive col-md-2">
 															<img ng-src="{[c.image]}" style="border-radius: 5px">
@@ -106,7 +124,7 @@
 										<ul ng-hide="item.readMode == true" class="list-inline">
 											<li><a href="#"><i class="fa fa-calendar"></i> {[item.date_added | date: "d MMMM yyyy 'at' H:mm"]}</a>
 											</li>
-											<li><a href="#"><i class="fa fa-comment"></i> {[ item.comment_count ]} Comments</a></li>
+											<li><a href="#"><i class="fa fa-comments"></i> {[ item.comment_count ]} Comments</a></li>
 										</ul>
 									</div>
 								</div>

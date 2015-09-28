@@ -33,7 +33,8 @@ class EntryView:
 		self.category = CategoryView(entity.key.parent().get()).__dict__
 		self.tags = [TagView(tag.get()).__dict__ for tag in entity.tags]
 		self.date_added = entity.date_added.isoformat()
-		self.comments = [CommentView(comment).__dict__ for comment in self.get_comments(entity)]
+		sorted_comments = sorted(self.get_comments(entity), key=lambda c: c.date_added, reverse=True)
+		self.comments = [CommentView(comment).__dict__ for comment in sorted_comments]
 		self.comment_count = sum(comment['approved'] is True for comment in self.comments)
 
 

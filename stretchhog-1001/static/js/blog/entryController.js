@@ -81,6 +81,12 @@ blogApp.factory('entryFactory', function ($resource) {
 					item.readMode = true;
 					item.loadingPost = false;
 				}
+
+				$scope.items.forEach(function (i) {
+					if (item.key != i.key && i.readMode) {
+						i.readMode = false;
+					}
+				});
 			};
 
 			$scope.closeItem = function (item) {
