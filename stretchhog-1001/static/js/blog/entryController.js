@@ -92,12 +92,19 @@ blogApp.factory('entryFactory', function ($resource) {
 			$scope.initiateComment = function () {
 				$scope.comment = {
 					comment: '',
-					parentKey: ''
+					parentKey: '',
+					email: '',
+					name: ''
 				}
 			};
 
 			$scope.comments = [];
 			$scope.message = '';
+
+			$scope.resetMessage = function () {
+				$scope.message = '';
+				$scope.initiateComment();
+			};
 
 			$scope.initiateComment();
 

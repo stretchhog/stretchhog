@@ -70,12 +70,15 @@ class TagForm(Form):
 class CommentForm(Form):
 	comment = TextAreaField(validators=[DataRequired('Please enter your comment.')])
 	parent = HiddenField(validators=[DataRequired()])
+	email = StringField(validators=[DataRequired()])
+	name = StringField(validators=[DataRequired()])
 	approved = HiddenField()
 
 	@staticmethod
 	def from_json(json, put_mode):
 		form = CommentForm()
 		form.parent.data = json['parentKey']
+		form.email.data = json['email']
+		form.name.data = json['name']
 		form.comment.data = json['comment']
-		form.approved.data = json['approved']
 		return form

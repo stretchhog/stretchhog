@@ -118,7 +118,8 @@ def search(data):
 
 def create_comment(form):
 	comment = Comment(parent=to_key(form.parent.data),
-	                  user=users.get_current_user(),
+	                  email=form.email.data,
+	                  name=form.name.data,
 	                  comment=form.comment.data)
 	return comment.put()
 

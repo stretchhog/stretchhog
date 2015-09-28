@@ -22,7 +22,8 @@ class Entry(ndb.Model):
 
 
 class Comment(ndb.Model):
-	user = ndb.UserProperty()
+	email = ndb.StringProperty()
+	name = ndb.StringProperty()
 	comment = ndb.StringProperty()
 	date_added = ndb.DateTimeProperty(auto_now_add=True)
 	approved = ndb.BooleanProperty(default=False)

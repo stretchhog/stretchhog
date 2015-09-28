@@ -1,5 +1,4 @@
-import markdown2
-
+import urllib, hashlib
 from blog.models import Comment
 from main import markdown
 
@@ -33,7 +32,7 @@ class EntryView:
 		self.post = entity.post
 		self.category = CategoryView(entity.key.parent().get()).__dict__
 		self.tags = [TagView(tag.get()).__dict__ for tag in entity.tags]
-		self.date_added = entity.date_added.strftime('%Y, %d %B')
+		self.date_added = entity.date_added.isoformat()
 		self.comments = [CommentView(comment).__dict__ for comment in self.get_comments(entity)]
 		self.comment_count = sum(comment['approved'] is True for comment in self.comments)
 
@@ -48,6 +47,14 @@ class CommentView:
 		self.key = entity.key.urlsafe()
 		self.parentKey = entity.key.parent().urlsafe()
 		self.comment = entity.comment
-		self.user = entity.user.nickname()
-		self.date_added = entity.date_added.strftime('%a, %d %b %Y %H:%M')
+		self.date_added = entity.date_added.isoformat()
 		self.approved = entity.approved
+		self.name = entity.name
+
+		# Set your variables here
+		self.email = entity.email
+		size = 80
+		# construct the url
+		gravatar_url = "http://www.gravatar.com/avatar/" + hashlib.md5(self.email.lower()).hexdigest() + "?"
+		gravatar_url += urllib.urlencode({'d': 'mm', 's': str(size)})
+		self.image = gravatar_url

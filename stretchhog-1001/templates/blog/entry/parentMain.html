@@ -4,14 +4,12 @@
 
 	<img src="{{ url_for('static', filename='images/ajax-loader.gif') }}" ng-show="loading" class="center-block" title="Loading..."/>
 
-	<div class="row">
+	<div class="row" {% block items %}{% endblock %}>
 		<div class="col-md-12">
 			<div class="panel">
 				<div class="panel-body">
 					<!--/stories-->
-					<div class="row" {% block items %}{% endblock %}>
-						<br>
-
+					<div class="row">
 						<div class="col-md-2 col-sm-3 text-center">
 							<a class="story-img" href="#"><img src="//placehold.it/100" style="width:100px;height:100px" class="img-circle"></a>
 						</div>
@@ -32,43 +30,89 @@
 									<h4>Comments</h4>
 
 									<div ng-show="item.comment_count == 0">No comments yet, be the first!</div>
+									<p>If you want an avatar, register at <a href="http://www.gravatar.com" target="_blank">gravatar</a></p>
 
-									<form name="commentForm" class="form-group" ng-show="message == ''">
-											<textarea rows="5" class="form-control" ng-model="comment.comment"
+									<div class="row">
+										<div class="col-sm-8">
+											<form name="commentForm" class="form-group" ng-show="message == ''" role="form">
+												<div class="form-group has-feedback">
+													<input type="text" class="form-control" required ng-model="comment.name"
+													       placeholder="Your name..."/>
+												</div>
+												<div class="form-group has-feedback">
+													<input type="text" class="form-control" required ng-model="comment.email"
+													       placeholder="Your email address..."/>
+												</div>
+												<div class="form-group has-feedback">
+											<textarea rows="5" class="form-control" required ng-model="comment.comment"
 											          placeholder="Place your comment here..."></textarea>
-										<button class="btn btn-default fa fa-save" ng-click="saveComment(item)"></button>
-									</form>
+													<button class="btn btn-default fa fa-save" ng-click="saveComment(item)"
+													        ng-disabled="commentForm.$invalid"></button>
+												</div>
+											</form>
+										</div>
+										<div class="col-sm-4"></div>
+									</div>
 
-									<p ng-hide="message == ''">{[ message ]}</p>
-									{% if session.is_admin %}
-									<div ng-repeat="comment in item.comments">
-										<div>{[ comment.comment ]}</div>
-										<div>{[ comment.date_added ]}</div>
-										<div ng-show="comment.approved == false">
-											<button class="btn btn-default fa fa-thumbs-o-up" ng-click="approveComment(comment)"></button>
+									<div class="row">
+										<div class="col-sm-6 col-md-6" ng-hide="message==''">
+											<div class="alert alert-success">
+												<button class="close fa fa-close" ng-click="resetMessage()"></button>
+												<span class="glyphicon glyphicon-ok"></span> <strong>Success!</strong>
+												<hr class="message-inner-separator">
+												<p>{[ message ]}</p>
+											</div>
 										</div>
 									</div>
-									{% else %}
-									<div ng-repeat="comment in item.comments | filter:commentFilter">
-										<div>{[ comment.comment ]}</div>
-										<div>{[ comment.date_added ]}</div>
+
+									<div class="col-md-8" style="border-left: 1px solid rgba(45, 46, 36, 0.25)">
+										{% if session.is_admin %}
+										<div ng-repeat="c in item.comments">
+											{% else %}
+											<div ng-repeat="c in item.comments | filter:commentFilter">
+												<div class="col-md-12"
+												     style="margin-bottom: 10px; border-bottom: 1px solid rgba(45, 46, 36, 0.25)">
+													{% endif %}
+													<div class="row" style="margin-bottom: 5px; margin-top: 5px">
+														<div class="img img-responsive col-md-2">
+															<img ng-src="{[c.image]}" style="border-radius: 5px">
+														</div>
+														<div class="col-md-10">
+															<div class="row"><strong>{[ c.name ]}</strong></div>
+															<div class="row">{[ c.date_added | date: "d MMMM yyyy 'at' H:mm"]}</div>
+														</div>
+													</div>
+													<div class="row" style="margin-bottom: 5px">
+														<div class="col-md-12">
+															{[ c.comment ]}
+														</div>
+													</div>
+													{% if session.is_admin %}
+													<div ng-show="c.approved == false">
+														<button class="btn btn-default fa fa-thumbs-o-up" ng-click="approveComment(c)"></button>
+													</div>
+													{% endif %}
+												</div>
+											</div>
+										</div>
 									</div>
-									{% endif %}
 									<img src="{{ url_for('static', filename='images/ajax-loader.gif') }}" ng-show="item.loadingPost"
 									     class="center-block" title="Loading..."/>
 
 									<div ng-hide="item.readMode == true">
-										<div ng-repeat="tag in item.tags"><span class="pull-right label label-primary">{[ tag.tag ]}</span></div>
+										<div ng-repeat="tag in item.tags">
+											<span class="pull-right label label-primary" style="margin-right: 3px">{[ tag.tag ]}</span>
+										</div>
 										<ul ng-hide="item.readMode == true" class="list-inline">
-											<li><a href="#"><i class="fa fa-calendar"></i> {[item.date_added ]}</a></li>
+											<li><a href="#"><i class="fa fa-calendar"></i> {[item.date_added | date: "d MMMM yyyy 'at' H:mm"]}</a>
+											</li>
 											<li><a href="#"><i class="fa fa-comment"></i> {[ item.comment_count ]} Comments</a></li>
 										</ul>
 									</div>
 								</div>
-								<br><br>
 							</div>
 						</div>
-						<hr>
+						<div class="col-md-2 col-sm-3"></div>
 					</div>
 				</div>
 			</div><!--/col-12-->
