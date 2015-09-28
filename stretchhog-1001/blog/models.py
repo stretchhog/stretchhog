@@ -4,10 +4,12 @@ from wtforms.validators import DataRequired
 
 class Category(ndb.Model):
 	category = ndb.StringProperty()
+	date_added = ndb.DateTimeProperty(auto_now_add=True)
 
 
 class Tag(ndb.Model):
 	tag = ndb.StringProperty()
+	date_added = ndb.DateTimeProperty(auto_now_add=True)
 
 
 class Entry(ndb.Model):
@@ -23,3 +25,4 @@ class Comment(ndb.Model):
 	user = ndb.UserProperty()
 	comment = ndb.StringProperty()
 	date_added = ndb.DateTimeProperty(auto_now_add=True)
+	approved = ndb.BooleanProperty(default=False)

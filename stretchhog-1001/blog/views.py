@@ -35,7 +35,7 @@ class EntryView:
 		self.tags = [TagView(tag.get()).__dict__ for tag in entity.tags]
 		self.date_added = entity.date_added.strftime('%Y, %d %B')
 		self.comments = [CommentView(comment).__dict__ for comment in self.get_comments(entity)]
-		self.comment_count = len(self.comments)
+		self.comment_count = sum(comment['approved'] is True for comment in self.comments)
 
 
 class EntryPostView:
@@ -45,6 +45,9 @@ class EntryPostView:
 
 class CommentView:
 	def __init__(self, entity):
+		self.key = entity.key.urlsafe()
+		self.parentKey = entity.key.parent().urlsafe()
 		self.comment = entity.comment
 		self.user = entity.user.nickname()
 		self.date_added = entity.date_added.strftime('%a, %d %b %Y %H:%M')
+		self.approved = entity.approved

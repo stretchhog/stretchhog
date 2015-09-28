@@ -93,13 +93,6 @@ def create_tag(form):
 	return tag.put()
 
 
-def update_tag_form(form, key):
-	tag = get_by_urlsafe_key(key)
-	form.category.data = tag.key.parent().urlsafe()
-	form.tag.data = tag.tag
-	return form
-
-
 def update_tag(key, form):
 	tag = get_by_urlsafe_key(key)
 	tag.tag = form.tag.data
@@ -127,6 +120,12 @@ def create_comment(form):
 	comment = Comment(parent=to_key(form.parent.data),
 	                  user=users.get_current_user(),
 	                  comment=form.comment.data)
+	return comment.put()
+
+
+def update_comment(key, form):
+	comment = get_by_urlsafe_key(key)
+	comment.approved = True
 	return comment.put()
 
 

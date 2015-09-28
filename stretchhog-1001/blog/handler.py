@@ -1,10 +1,11 @@
+from google.appengine.ext.db import put
 from google.appengine.ext.ndb.key import Key
 import time
 from blog.forms import CategoryForm, TagForm, EntryForm, CommentForm
 from blog.models import Entry, Category, Comment
 from flask import make_response, render_template, request, Response
 from blog import service
-from blog.view import TagView, CategoryView, EntryView, CommentView, EntryPostView
+from blog.views import TagView, CategoryView, EntryView, CommentView, EntryPostView
 from flask.ext.restful import Resource
 from main import api
 from flask import Markup, json
@@ -139,12 +140,12 @@ class TagCL(Resource):
 		return post_response_for(get_form(TagForm, request), TagView, service.create_tag)
 
 
-class CommentC(Resource):
-	def get(self, key):
-		comments = service.get_all_comments_by_ancestor(Key(urlsafe=key), sort=[-Comment.date_added])
-		view = [CommentView(comment).__dict__ for comment in comments]
-		return view
+class CommentRUD(Resource):
+	def put(self, key):
+		return put_response_for(key, CommentView, get_form(CommentForm, request, put_mode=True), service.update_comment)
 
+
+class CommentC(Resource):
 	def post(self):
 		return post_response_for(get_form(CommentForm, request), CommentView, service.create_comment)
 
@@ -177,6 +178,7 @@ api.add_resource(TagRUD, '/blog/admin/tag/<string:key>', endpoint='tag_rud')
 api.add_resource(TagCL, '/blog/admin/tag', endpoint='tag_cl')
 api.add_resource(TagTemplate, '/blog/admin/tag/template', endpoint='tag_template')
 
+api.add_resource(CommentRUD, '/blog/comment/<string:key>', endpoint='comment_rud')
 api.add_resource(CommentC, '/blog/comment', endpoint='comment_c')
 
 api.add_resource(AIMain, '/artificial-intelligence', endpoint='ai_main')

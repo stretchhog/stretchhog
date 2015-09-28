@@ -2,85 +2,77 @@
 {% block body %}
 <div ng-controller="entryController">
 
-	<img src="{{ url_for('static', filename='images/ajax-loader.gif') }}"
-	     ng-show="loading" class="center-block" title="Loading..."/>
+	<img src="{{ url_for('static', filename='images/ajax-loader.gif') }}" ng-show="loading" class="center-block" title="Loading..."/>
 
 	<div class="row">
-
 		<div class="col-md-12">
-
 			<div class="panel">
 				<div class="panel-body">
-
-
 					<!--/stories-->
 					<div class="row" {% block items %}{% endblock %}>
 						<br>
 
 						<div class="col-md-2 col-sm-3 text-center">
-							<a class="story-img" href="#"><img src="//placehold.it/100" style="width:100px;height:100px"
-							                                   class="img-circle"></a>
+							<a class="story-img" href="#"><img src="//placehold.it/100" style="width:100px;height:100px" class="img-circle"></a>
 						</div>
 						<div class="col-md-10 col-sm-9">
 							<h3 class="entry-title">{[ item.title ]}</h3>
 
 							<div class="row">
-								<div class="col-xs-9">
-									<p class="entry-summary">{[ item.summary ]}</p>
+								<p class="entry-summary">{[ item.summary ]}</p>
 
-									<p class="lead">
-										<button class="btn btn-default" ng-click="openItem(item)" title="Read more">Read
-											more
-										</button>
-										<button class="btn btn-default" ng-click="closeItem(item)">Close</button>
-									</p>
+								<p class="lead">
+									<button class="btn btn-default" ng-click="openItem(item)" title="Read more">Read more</button>
+									<button class="btn btn-default" ng-click="closeItem(item)">Close</button>
+								</p>
 
-									<div ng-show="item.readMode == true" ng-bind-html="item.postRendered"></div>
-									<div ng-show="item.readMode == true">
-										<hr>
-										<h4>Comments</h4>
+								<div ng-show="item.readMode == true">
+									<div ng-bind-html="item.postRendered"></div>
+									<hr>
+									<h4>Comments</h4>
 
-										<div ng-show="item.comment_count == 0">No comments yet, be the first!</div>
+									<div ng-show="item.comment_count == 0">No comments yet, be the first!</div>
 
-										<form name="commentForm" class="form-group">
+									<form name="commentForm" class="form-group" ng-show="message == ''">
 											<textarea rows="5" class="form-control" ng-model="comment.comment"
 											          placeholder="Place your comment here..."></textarea>
-											<button class="btn btn-default fa fa-save" ng-click="saveComment(item)"></button>
+										<button class="btn btn-default fa fa-save" ng-click="saveComment(item)"></button>
+									</form>
 
-										</form>
-										<div ng-repeat="comment in item.comments">{[ comment.comment ]}</div>
+									<p ng-hide="message == ''">{[ message ]}</p>
+									{% if session.is_admin %}
+									<div ng-repeat="comment in item.comments">
+										<div>{[ comment.comment ]}</div>
+										<div>{[ comment.date_added ]}</div>
+										<div ng-show="comment.approved == false">
+											<button class="btn btn-default fa fa-thumbs-o-up" ng-click="approveComment(comment)"></button>
+										</div>
 									</div>
-									<img src="{{ url_for('static', filename='images/ajax-loader.gif') }}"
-									     ng-show="item.loadingPost" class="center-block"
-									     title="Loading..."/>
+									{% else %}
+									<div ng-repeat="comment in item.comments | filter:commentFilter">
+										<div>{[ comment.comment ]}</div>
+										<div>{[ comment.date_added ]}</div>
+									</div>
+									{% endif %}
+									<img src="{{ url_for('static', filename='images/ajax-loader.gif') }}" ng-show="item.loadingPost"
+									     class="center-block" title="Loading..."/>
 
-									<div ng-hide="item.readMode == true" ng-repeat="tag in item.tags">
-										<span class="pull-right label label-primary">{[ tag.tag ]}</span>
+									<div ng-hide="item.readMode == true">
+										<div ng-repeat="tag in item.tags"><span class="pull-right label label-primary">{[ tag.tag ]}</span></div>
+										<ul ng-hide="item.readMode == true" class="list-inline">
+											<li><a href="#"><i class="fa fa-calendar"></i> {[item.date_added ]}</a></li>
+											<li><a href="#"><i class="fa fa-comment"></i> {[ item.comment_count ]} Comments</a></li>
+										</ul>
 									</div>
-									<ul ng-hide="item.readMode == true" class="list-inline">
-										<li><a href="#"><i class="fa fa-calendar"></i> {[item.date_added ]}</a></li>
-										<li><a href="#"><i class="fa fa-comment"></i> {[ item.comment_count ]} Comments</a>
-										</li>
-									</ul>
 								</div>
-								<div class="col-xs-3"></div>
+								<br><br>
 							</div>
-							<br><br>
 						</div>
+						<hr>
 					</div>
-					<hr>
-
-					<!--/stories-->
-
-
-					<a href="/" class="btn btn-primary pull-right btnNext">More <i
-							class="glyphicon glyphicon-chevron-right"></i></a>
-
-
 				</div>
-			</div>
-
-		</div><!--/col-12-->
+			</div><!--/col-12-->
+		</div>
 	</div>
 </div>
 {% endblock %}

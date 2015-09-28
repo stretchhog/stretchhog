@@ -11,7 +11,10 @@ blogApp.factory('entryFactory', function ($resource) {
 		return $resource('/blog/comment/:key',
 			{
 				key: '@key'
-			})
+			},
+			{
+				'update': {method: 'PUT'}
+			});
 	})
 	.controller('entryController', [
 		'$scope', '$controller', '$http', 'entryFactory', 'categoryFactory', 'tagFactory', 'commentFactory',
@@ -84,6 +87,8 @@ blogApp.factory('entryFactory', function ($resource) {
 				item.readMode = false;
 			};
 
+			// ----------------- COMMENTS --------------------
+
 			$scope.initiateComment = function () {
 				$scope.comment = {
 					comment: '',
@@ -92,6 +97,7 @@ blogApp.factory('entryFactory', function ($resource) {
 			};
 
 			$scope.comments = [];
+			$scope.message = '';
 
 			$scope.initiateComment();
 
@@ -101,9 +107,17 @@ blogApp.factory('entryFactory', function ($resource) {
 					// success response
 					function (createdItem) {
 						// Add at the first position
-						item.comments.unshift(createdItem);
-						$scope.initiateComment();
+						$scope.message = "Thank you for placing a comment. It is placed under review and will be visible once it is approved."
 					});
+			};
+
+			$scope.commentFilter = function (comment) {
+				return comment.approved == true;
+			};
+
+			$scope.approveComment = function (comment) {
+				comment.approved = true;
+				commentFactory.update({key: comment.key}, comment);
 			};
 
 			$scope.categories = categoryFactory.query();

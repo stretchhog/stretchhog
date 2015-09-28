@@ -45,7 +45,7 @@ def before_request():
 		session['user_email'] = user.email()
 		session['is_admin'] = users.is_current_user_admin()
 	else:
-		session['logged_in'] = False
+		session.clear()
 
 
 class Intro(Resource):
