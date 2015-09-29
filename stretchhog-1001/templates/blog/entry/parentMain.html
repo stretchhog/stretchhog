@@ -13,6 +13,9 @@
 						<div class="col-md-2 col-sm-3 text-center">
 							<a class="story-img" href="#"><img src="//placehold.it/100" style="width:100px;height:100px" class="img-circle"></a>
 						</div>
+
+						<!--  SUMMARY -->
+
 						<div class="col-md-10 col-sm-9">
 							<h3 class="entry-title">{[ item.title ]}</h3>
 
@@ -27,6 +30,8 @@
 											class="fa fa-chevron-up"></i></button>
 								</p>
 
+								<!--  BLOG POST -->
+
 								<div ng-show="item.readMode == true">
 									<div ng-bind-html="item.postRendered"></div>
 									<hr>
@@ -37,6 +42,9 @@
 
 									<p>HTML tags are not allowed, though Markdown is supported. Misuse will result in getting the comment flagged as
 										spam.</p>
+
+
+									<!--  BLOG COMMENT FORM -->
 
 									<div class="row">
 										<div class="col-sm-8">
@@ -95,6 +103,8 @@
 										</div>
 									</div>
 
+									<!--  BLOG COMMENTS -->
+
 									<div class="col-md-8" style="border-left: 1px solid rgba(45, 46, 36, 0.25)">
 										{% if session.is_admin %}
 										<div ng-repeat="c in item.comments | filter:adminCommentFilter">
@@ -134,6 +144,8 @@
 									</div>
 									<img src="{{ url_for('static', filename='images/ajax-loader.gif') }}" ng-show="item.loadingPost"
 									     class="center-block" title="Loading..."/>
+
+									<!-- ENDING OF SUMMARY -->
 
 									<div ng-hide="item.readMode == true">
 										<div ng-repeat="tag in item.tags">

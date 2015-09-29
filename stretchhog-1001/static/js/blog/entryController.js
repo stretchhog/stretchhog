@@ -47,7 +47,8 @@ blogApp.factory('entryFactory', function ($resource) {
 					summary: '',
 					post: '',
 					category: '',
-					tags: []
+					tags: [],
+					preview: ''
 				}
 			};
 
@@ -91,6 +92,13 @@ blogApp.factory('entryFactory', function ($resource) {
 
 			$scope.closeItem = function (item) {
 				item.readMode = false;
+			};
+
+			$scope.updatePreview = function(item) {
+				$http.post('/blog/admin/entry/preview', { preview: item.post }).
+				then(function (response) {
+					item.preview = response.data.preview;
+				});
 			};
 
 			// ----------------- COMMENTS --------------------
@@ -150,6 +158,7 @@ blogApp.factory('entryFactory', function ($resource) {
 			$scope.comments = [];
 			$scope.categories = categoryFactory.query();
 			$scope.tags = tagFactory.query();
+			$scope.resetItem();
 			$scope.resetMessage();
 		}]);
 

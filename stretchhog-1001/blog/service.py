@@ -1,6 +1,9 @@
 from google.appengine.api import users
+from google.appengine.ext import ndb
 from google.appengine.ext.ndb.key import Key
 from blog.models import Category, Tag, Entry, Comment
+import re
+from unicodedata import normalize
 
 
 def get_by_urlsafe_key(key):
@@ -149,3 +152,31 @@ def get_all_comments_by_ancestor(ancestor, **kwargs):
 
 def count_comments_by_ancestor(ancestor):
 	return Comment.query(ancestor=ancestor).count()
+
+
+_punct_re = re.compile(r'[\t !"#$%&\'()*\-/<=>?@\[\\\]^_`{|},.]+')
+
+
+def slugify(text, delim=u'-'):
+	"""Generates an slightly worse ASCII-only slug."""
+	result = []
+	for word in _punct_re.split(text.lower()):
+		word = normalize('NFKD', word).encode('ascii', 'ignore')
+		if word:
+			result.append(word)
+	return unicode(delim.join(result))
+
+
+print slugify(u'Incremental binning for naive bayes classifier for incremental types of datasets in the web')
+
+
+def get_all_entries_by_year(year):
+	return __get_all(Entry.query(Entry.created.year == year))
+
+
+def get_all_entries_by_month(year, month):
+	return __get_all(Entry.query(ndb.AND(Entry.created.year == year, Entry.created.month == month)))
+
+
+def get_entry_by_slug(slug):
+	return __get_all(Entry.query(Entry.slug == slug))

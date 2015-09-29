@@ -21,6 +21,8 @@ ng-controller="entryController"
 
 	<select multiple class="form-control" name="category" ng-model="newItem.tags"
 	        ng-options="tag.key as tag.tag for tag in tags | filter:filterTags" required></select>
+	<button class="btn btn-default fa fa-refresh" ng-click="updatePreview(newItem)"> Update preview</button>
+	<div ng-bind-html="newItem.preview"></div>
 </td>
 {% endblock %}
 
@@ -40,5 +42,7 @@ ng-controller="entryController"
 		<textarea class="form-control" ng-show="item.editMode" name="post" type="text" ng-model="item.post"
 		          required></textarea>
 	</form>
+	<button class="btn btn-default fa fa-refresh" ng-click="updatePreview(item)"> Update preview</button>
+	<div ng-bind-html="item.preview"></div>
 </td>
 {% endblock %}

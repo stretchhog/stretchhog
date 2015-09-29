@@ -1,7 +1,7 @@
 from blog.forms import CategoryForm, TagForm, EntryForm, CommentForm
 from flask import make_response, render_template, request, Response
 from blog import service
-from blog.views import TagView, CategoryView, EntryView, CommentView, EntryPostView
+from blog.views import TagView, CategoryView, EntryView, CommentView, EntryAdminView, EntryPreviewView
 from flask.ext.restful import Resource
 from main import api
 from flask import Markup, json
@@ -69,9 +69,7 @@ class EntryRUD(Resource):
 class EntryCL(Resource):
 	def get(self):
 		entries = service.get_all_entries()
-		sorted_entries = sorted(entries, key=lambda e: e.date_added, reverse=True)
-		view = [EntryView(entry).__dict__ for entry in sorted_entries]
-		return Response(json.dumps(view), 200, mimetype='application/json')
+		return get_sorted_entries_response_by_date(entries)
 
 	def post(self):
 		post_response_for(get_form(EntryForm, request), EntryView, service.create_entry)
@@ -80,8 +78,40 @@ class EntryCL(Resource):
 class EntryPost(Resource):
 	def get(self, key):
 		entry = service.get_by_urlsafe_key(key)
-		view = EntryPostView(entry).__dict__
+		view = EntryAdminView(entry).__dict__
 		return Response(json.dumps(view), 200, mimetype='application/json')
+
+
+class EntryPreview(Resource):
+	def post(self):
+		view = EntryPreviewView(request.get_json()['preview']).__dict__
+		return Response(json.dumps(view), 200, mimetype='application/json')
+
+
+def get_sorted_entries_response_by_date(entries):
+	sorted_entries = sorted(entries, key=lambda e: e.created, reverse=True)
+	view = [EntryView(entry).__dict__ for entry in sorted_entries]
+	return Response(json.dumps(view), 200, mimetype='application/json')
+
+
+class EntryByYear(Resource):
+	def get(self, year):
+		entries = service.get_all_entries_by_year(year)
+		return get_sorted_entries_response_by_date(entries)
+
+
+class EntryByMonth(Resource):
+	def get(self, year, month):
+		entries = service.get_all_entries_by_month(year, month)
+		return get_sorted_entries_response_by_date(entries)
+
+
+class EntryBySlug(Resource):
+	def get(self, year, month, slug):
+		entry = service.get_entry_by_slug(slug)
+		entry.post = Markup(markdown.markdown(entry.post))
+		view = EntryView(entry).__dict__
+		return Response(view, 200, mimetype='application/json')
 
 
 class CategoryTemplate(Resource):
@@ -165,7 +195,12 @@ class FitnessMain(Resource):
 api.add_resource(EntryRUD, '/blog/admin/entry/<string:key>', endpoint='entry_rud')
 api.add_resource(EntryCL, '/blog/admin/entry', endpoint='entry_cl')
 api.add_resource(EntryTemplate, '/blog/admin/entry/template', endpoint='entry_template')
-api.add_resource(EntryPost, '/blog/admin/entry/post/<string:key>', endpoint='entry_post')
+
+api.add_resource(EntryPreview, '/blog/admin/entry/preview', endpoint='entry_preview')
+
+api.add_resource(EntryByYear, '/blog/<string:year>')
+api.add_resource(EntryByMonth, '/blog/<string:year>/<string:month>')
+api.add_resource(EntryBySlug, '/blog/<string:year>/<string:month>/<string:slug>')
 
 api.add_resource(CategoryRUD, '/blog/admin/category/<string:key>', endpoint='category_rud')
 api.add_resource(CategoryCL, '/blog/admin/category', endpoint='category_cl')

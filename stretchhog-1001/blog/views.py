@@ -1,4 +1,8 @@
-import urllib, hashlib
+import hashlib
+import urllib
+
+from google.appengine.ext import ndb
+
 from blog.models import Comment
 from main import markdown
 
@@ -23,7 +27,40 @@ class CategoryView:
 class EntryView:
 	@staticmethod
 	def get_comments(entity):
-		return service.get_all_comments_by_ancestor(entity.key, sort=[-Comment.date_added])
+		return service.get_all_comments_by_ancestor(entity.key, sort=[-Comment.created], filters=[Comment.approved is True])
+
+	def __init__(self, entity):
+		self.title = entity.title
+		self.summary = entity.summary
+		self.post = markdown(entity.post)
+		self.category = CategoryView(entity.key.parent().get()).__dict__
+		self.tags = [TagView(tag.get()).__dict__ for tag in entity.tags]
+		self.created = entity.created.isoformat()
+		self.comments = [CommentView(comment).__dict__ for comment in self.get_comments(entity)]
+		self.comment_count = len(self.comments)
+
+
+class EntrySummaryView:
+	@staticmethod
+	def get_comments(entity):
+		return service.get_all_comments_by_ancestor(entity.key, filter=[Comment.approved is True])
+
+	def __init__(self, entity):
+		self.title = entity.title
+		self.summary = entity.summary
+		self.slug = entity.slug
+		self.category = CategoryView(entity.key.parent().get()).__dict__
+		self.tags = [TagView(tag.get()).__dict__ for tag in entity.tags]
+		self.created = entity.created.isoformat()
+		self.comment_count = len(self.get_comments(entity))
+
+
+class EntryAdminView:
+	@staticmethod
+	def get_comments(entity):
+		return service.get_all_comments_by_ancestor(entity.key, sort=[-Comment.created],
+		                                            filter=[ndb.OR(ndb.AND(Comment.spam is False, Comment.approved is False),
+		                                                           Comment.approved is True)])
 
 	def __init__(self, entity):
 		self.key = entity.key.urlsafe()
@@ -32,15 +69,12 @@ class EntryView:
 		self.post = entity.post
 		self.category = CategoryView(entity.key.parent().get()).__dict__
 		self.tags = [TagView(tag.get()).__dict__ for tag in entity.tags]
-		self.date_added = entity.date_added.isoformat()
-		sorted_comments = sorted(self.get_comments(entity), key=lambda c: c.date_added, reverse=True)
-		self.comments = [CommentView(comment).__dict__ for comment in sorted_comments]
-		self.comment_count = sum(comment['approved'] is True for comment in self.comments)
+		self.comments = [CommentView(comment).__dict__ for comment in self.get_comments(entity)]
 
 
-class EntryPostView:
-	def __init__(self, entity):
-		self.post = markdown(entity.post)
+class EntryPreviewView:
+	def __init__(self, preview):
+		self.preview = markdown(preview)
 
 
 class CommentView:
@@ -48,15 +82,11 @@ class CommentView:
 		self.key = entity.key.urlsafe()
 		self.parentKey = entity.key.parent().urlsafe()
 		self.comment = markdown(entity.comment)
-		self.date_added = entity.date_added.isoformat()
+		self.created = entity.created.isoformat()
 		self.name = entity.name
 		self.approved = entity.approved
 		self.spam = entity.spam
 
-		# Set your variables here
-		self.email = entity.email
-		size = 80
-		# construct the url
-		gravatar_url = "http://www.gravatar.com/avatar/" + hashlib.md5(self.email.lower()).hexdigest() + "?"
-		gravatar_url += urllib.urlencode({'d': 'mm', 's': str(size)})
+		gravatar_url = "http://www.gravatar.com/avatar/" + hashlib.md5(entity.email.lower()).hexdigest() + "?"
+		gravatar_url += urllib.urlencode({'d': 'mm', 's': str(80)})
 		self.image = gravatar_url
