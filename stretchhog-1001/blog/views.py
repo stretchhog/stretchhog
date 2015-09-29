@@ -8,9 +8,6 @@ from main import markdown
 
 __author__ = 'tvancann'
 
-from blog import service
-
-
 class TagView:
 	def __init__(self, entity):
 		self.key = entity.key.urlsafe()
@@ -72,7 +69,7 @@ class EntryAdminView:
 		self.comments = [CommentView(comment).__dict__ for comment in self.get_comments(entity)]
 
 
-class EntryPreviewView:
+class MarkdownPreviewView:
 	def __init__(self, preview):
 		self.preview = markdown(preview)
 
