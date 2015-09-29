@@ -1,8 +1,4 @@
-from google.appengine.ext.db import put
-from google.appengine.ext.ndb.key import Key
-import time
 from blog.forms import CategoryForm, TagForm, EntryForm, CommentForm
-from blog.models import Entry, Category, Comment
 from flask import make_response, render_template, request, Response
 from blog import service
 from blog.views import TagView, CategoryView, EntryView, CommentView, EntryPostView

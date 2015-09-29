@@ -1,11 +1,13 @@
 from google.appengine.ext.ndb.key import Key
 from blog.views import EntryView
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired, ValidationError, Email
 from flask.ext.wtf import Form
 from wtforms import StringField, SelectField, SelectMultipleField, HiddenField, TextField, TextAreaField, BooleanField
 from blog.models import Tag
 from blog import service
 from wtforms.widgets import TextArea
+from wtforms_components import validators
+from HTMLParser import HTMLParser
 
 
 class EntryForm(Form):
@@ -67,10 +69,24 @@ class TagForm(Form):
 		return form
 
 
+class HTMLValidator(HTMLParser):
+	def __init__(self, message=None):
+		HTMLParser.__init__(self)
+		if not message:
+			message = u'HTML tags are not allowed'
+		self.message = message
+
+	def handle_starttag(self, tag, attrs):
+		raise ValidationError(self.message)
+
+	def __call__(self, form, field):
+		self.feed(field.data)
+
+
 class CommentForm(Form):
-	comment = TextAreaField(validators=[DataRequired('Please enter your comment.')])
+	comment = TextAreaField(validators=[DataRequired('Please enter your comment.'), HTMLValidator()])
 	parent = StringField(validators=[DataRequired()])
-	email = StringField(validators=[DataRequired()])
+	email = StringField(validators=[DataRequired(), Email()])
 	name = StringField(validators=[DataRequired()])
 	approved = BooleanField()
 	spam = BooleanField()
@@ -81,8 +97,10 @@ class CommentForm(Form):
 		form.parent.data = json['parentKey']
 		form.email.data = json['email']
 		form.name.data = json['name']
-		form.comment.data = json['comment']
 		if put_mode:
 			form.approved.data = json['approved']
 			form.spam.data = json['spam']
+			form.comment.data = 'dummy'
+		else:
+			form.comment.data = json['comment']
 		return form

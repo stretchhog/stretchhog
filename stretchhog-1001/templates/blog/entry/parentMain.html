@@ -35,6 +35,9 @@
 									<div ng-show="item.comment_count == 0">No comments yet, be the first!</div>
 									<p>If you want an avatar, please register at <a href="http://www.gravatar.com" target="_blank">gravatar</a></p>
 
+									<p>HTML tags are not allowed, though Markdown is supported. Misuse will result in getting the comment flagged as
+										spam.</p>
+
 									<div class="row">
 										<div class="col-sm-8">
 											<form name="commentForm" class="form-group" ng-show="messageGreen == '' && messageRed == ''" role="form">
@@ -79,7 +82,7 @@
 												<button class="close fa fa-close" ng-click="resetMessage()"></button>
 												<span class="glyphicon glyphicon-ok"></span> <strong>Failure!</strong>
 												<hr class="message-inner-separator">
-												<p>{[ message ]}</p>
+												<p>{[ messageRed ]}</p>
 											</div>
 										</div>
 										<div class="col-sm-6 col-md-6" ng-hide="messageGreen==''">
@@ -87,7 +90,7 @@
 												<button class="close fa fa-close" ng-click="resetMessage()"></button>
 												<span class="glyphicon glyphicon-ok"></span> <strong>Success!</strong>
 												<hr class="message-inner-separator">
-												<p>{[ message ]}</p>
+												<p>{[ messageGreen ]}</p>
 											</div>
 										</div>
 									</div>
@@ -110,7 +113,7 @@
 													</div>
 													<div class="row" style="margin-bottom: 5px">
 														<div class="col-md-12">
-															{[ c.comment ]}
+															<div ng-bind-html="c.comment"></div>
 														</div>
 													</div>
 													{% if session.is_admin %}

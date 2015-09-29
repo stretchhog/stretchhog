@@ -122,7 +122,7 @@ blogApp.factory('entryFactory', function ($resource) {
 						$scope.messageGreen = "Thank you for placing a comment. It is placed under review and will be visible once it is approved."
 					},
 					function () {
-						$scope.messageRed = "Something went wrong. Please satisfy the restrictions before placing a comment."
+						$scope.messageRed = "Something went wrong. Please fill in the form correctly."
 					});
 			};
 
@@ -151,6 +151,5 @@ blogApp.factory('entryFactory', function ($resource) {
 			$scope.categories = categoryFactory.query();
 			$scope.tags = tagFactory.query();
 			$scope.resetMessage();
-		}])
-;
+		}]);
 
