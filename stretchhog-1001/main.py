@@ -29,7 +29,7 @@ class HighlightRenderer(mistune.Renderer):
 		if not lang:
 			return '\n<pre><code>%s</code></pre>\n' % mistune.escape(code)
 		lexer = get_lexer_by_name(lang, stripall=True)
-		formatter = HtmlFormatter()
+		formatter = HtmlFormatter(linenos='table')
 		return highlight(code, lexer, formatter)
 
 
