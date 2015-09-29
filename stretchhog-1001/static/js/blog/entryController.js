@@ -104,11 +104,10 @@ blogApp.factory('entryFactory', function ($resource) {
 				}
 			};
 
-			$scope.comments = [];
-			$scope.message = '';
 
 			$scope.resetMessage = function () {
-				$scope.message = '';
+				$scope.messageGreen = '';
+				$scope.messageRed = '';
 				$scope.initiateComment();
 			};
 
@@ -118,9 +117,12 @@ blogApp.factory('entryFactory', function ($resource) {
 				$scope.comment.parentKey = item.key;
 				commentFactory.save($scope.comment,
 					// success response
-					function (createdItem) {
+					function () {
 						// Add at the first position
-						$scope.message = "Thank you for placing a comment. It is placed under review and will be visible once it is approved."
+						$scope.messageGreen = "Thank you for placing a comment. It is placed under review and will be visible once it is approved."
+					},
+					function () {
+						$scope.messageRed = "Something went wrong. Please satisfy the restrictions before placing a comment."
 					});
 			};
 
@@ -128,13 +130,27 @@ blogApp.factory('entryFactory', function ($resource) {
 				return comment.approved == true;
 			};
 
+			$scope.adminCommentFilter = function (comment) {
+				return (comment.spam == false && comment.approved == false)
+					|| comment.approved == true;
+			};
+
 			$scope.approveComment = function (comment) {
 				comment.approved = true;
+				comment.spam = false;
 				commentFactory.update({key: comment.key}, comment);
 			};
 
+			$scope.spamComment = function (comment) {
+				comment.spam = true;
+				comment.approved = false;
+				commentFactory.update({key: comment.key}, comment);
+			};
+
+			$scope.comments = [];
 			$scope.categories = categoryFactory.query();
 			$scope.tags = tagFactory.query();
+			$scope.resetMessage();
 		}])
 ;
 

@@ -49,8 +49,9 @@ class CommentView:
 		self.parentKey = entity.key.parent().urlsafe()
 		self.comment = entity.comment
 		self.date_added = entity.date_added.isoformat()
-		self.approved = entity.approved
 		self.name = entity.name
+		self.approved = entity.approved
+		self.spam = entity.spam
 
 		# Set your variables here
 		self.email = entity.email

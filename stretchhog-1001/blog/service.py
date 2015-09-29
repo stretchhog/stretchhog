@@ -126,7 +126,8 @@ def create_comment(form):
 
 def update_comment(key, form):
 	comment = get_by_urlsafe_key(key)
-	comment.approved = True
+	comment.approved = form.approved.data
+	comment.spam = form.spam.data
 	return comment.put()
 
 

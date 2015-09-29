@@ -37,7 +37,7 @@
 
 									<div class="row">
 										<div class="col-sm-8">
-											<form name="commentForm" class="form-group" ng-show="message == ''" role="form">
+											<form name="commentForm" class="form-group" ng-show="messageGreen == '' && messageRed == ''" role="form">
 												<div class="form-group has-feedback">
 													<div class="input-group">
 														<span class="input-group-addon"><i class="fa fa-user"></i></span>
@@ -74,7 +74,15 @@
 									</div>
 
 									<div class="row">
-										<div class="col-sm-6 col-md-6" ng-hide="message==''">
+										<div class="col-sm-6 col-md-6" ng-hide="messageRed==''">
+											<div class="alert alert-danger">
+												<button class="close fa fa-close" ng-click="resetMessage()"></button>
+												<span class="glyphicon glyphicon-ok"></span> <strong>Failure!</strong>
+												<hr class="message-inner-separator">
+												<p>{[ message ]}</p>
+											</div>
+										</div>
+										<div class="col-sm-6 col-md-6" ng-hide="messageGreen==''">
 											<div class="alert alert-success">
 												<button class="close fa fa-close" ng-click="resetMessage()"></button>
 												<span class="glyphicon glyphicon-ok"></span> <strong>Success!</strong>
@@ -86,7 +94,7 @@
 
 									<div class="col-md-8" style="border-left: 1px solid rgba(45, 46, 36, 0.25)">
 										{% if session.is_admin %}
-										<div ng-repeat="c in item.comments">
+										<div ng-repeat="c in item.comments | filter:adminCommentFilter">
 											{% else %}
 											<div ng-repeat="c in item.comments | filter:commentFilter">
 												{% endif %}
@@ -106,8 +114,15 @@
 														</div>
 													</div>
 													{% if session.is_admin %}
-													<div ng-show="c.approved == false">
-														<button class="btn btn-default fa fa-thumbs-o-up" ng-click="approveComment(c)"></button>
+													<div ng-show="c.approved == false && c.spam == false">
+														<div class="btn-group">
+															<button class="btn btn-default" ng-click="approveComment(c)"><i
+																	class=" fa fa-thumbs-o-up"></i> Approve
+															</button>
+															<button class="btn btn-default" ng-click="spamComment(c)">Spam <i
+																	class=" fa fa-thumbs-o-down"></i>
+															</button>
+														</div>
 													</div>
 													{% endif %}
 												</div>

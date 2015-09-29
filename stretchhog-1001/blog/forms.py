@@ -2,7 +2,7 @@ from google.appengine.ext.ndb.key import Key
 from blog.views import EntryView
 from wtforms.validators import DataRequired
 from flask.ext.wtf import Form
-from wtforms import StringField, SelectField, SelectMultipleField, HiddenField, TextField, TextAreaField
+from wtforms import StringField, SelectField, SelectMultipleField, HiddenField, TextField, TextAreaField, BooleanField
 from blog.models import Tag
 from blog import service
 from wtforms.widgets import TextArea
@@ -69,10 +69,11 @@ class TagForm(Form):
 
 class CommentForm(Form):
 	comment = TextAreaField(validators=[DataRequired('Please enter your comment.')])
-	parent = HiddenField(validators=[DataRequired()])
+	parent = StringField(validators=[DataRequired()])
 	email = StringField(validators=[DataRequired()])
 	name = StringField(validators=[DataRequired()])
-	approved = HiddenField()
+	approved = BooleanField()
+	spam = BooleanField()
 
 	@staticmethod
 	def from_json(json, put_mode):
@@ -81,4 +82,7 @@ class CommentForm(Form):
 		form.email.data = json['email']
 		form.name.data = json['name']
 		form.comment.data = json['comment']
+		if put_mode:
+			form.approved.data = json['approved']
+			form.spam.data = json['spam']
 		return form
