@@ -19,14 +19,14 @@ class ComicDelete(Resource):
 class ComicDetail(Resource):
 	def get(self, id):
 		comic = Comic.get_by_id(id)
-		return make_response(render_template('comics/detail.html', comic=comic))
+		return make_response(render_template('../client/partials/comics/detail.html', comic=comic))
 
 
 class ComicList(Resource):
 	def get(self):
 		all = Comic.query().order(Comic.number).fetch()
 		return make_response(
-			render_template("comics/list.html", title="Comics", comics=all, form=ComicCreateForm()))
+			render_template("../client/partials/comics/list.html", title="Comics", comics=all, form=ComicCreateForm()))
 
 	def post(self):
 		form = ComicCreateForm(data=request.get_json())

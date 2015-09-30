@@ -1,6 +1,6 @@
 import os
 from google.appengine.api import users
-from flask import Flask, session, render_template, make_response, redirect
+from flask import Flask, session, render_template, make_response, redirect, send_from_directory
 from flask.ext.restful import Api, Resource
 from flask.ext.triangle import Triangle
 import wtforms_json
@@ -50,12 +50,13 @@ def before_request():
 
 class Intro(Resource):
 	def get(self):
-		return make_response(render_template("intro.html"))
+		return make_response(render_template("static/templates/intro.html"))
 
 
 class Main(Resource):
 	def get(self):
-		return make_response(render_template("index.html"))
+		return send_from_directory('templates', 'index.html')
+
 
 
 class Login(Resource):

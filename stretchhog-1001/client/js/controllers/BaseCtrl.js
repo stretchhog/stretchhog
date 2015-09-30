@@ -1,4 +1,4 @@
-blogApp.controller('blog.crud.baseController', [
+app.controller('blog.crud.baseController', [
 	'$scope', 'factory',
 	function ($scope, factory) {
 		// override these variables

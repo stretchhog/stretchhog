@@ -1,4 +1,4 @@
-blogApp.controller('blog.public.commentController', [
+app.controller('blog.public.commentController', [
 	'$scope', '$http',
 	function ($scope, $http) {
 

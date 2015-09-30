@@ -31,17 +31,23 @@ handlers:
 #  script: admin.app
 #  login: admin
 
-- url: /static/css
-  static_dir: static/css
+- url: /partials
+  static_dir: client/partials
 
-- url: /static/js
-  static_dir: static/js
+- url: /css
+  static_dir: client/css
 
-- url: /static/fonts
-  static_dir: static/fonts
+- url: /js
+  static_dir: client/js
 
-- url: /static/images
-  static_dir: static/images
+- url: /dependencies
+  static_dir: client/dependencies
+
+- url: /fonts
+  static_dir: client/fonts
+
+- url: /images
+  static_dir: client/images
 
 - url: /.*
   script: main.app

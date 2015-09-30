@@ -1,4 +1,4 @@
-blogApp.factory('entryFactory', function ($resource) {
+app.factory('entryFactory', function ($resource) {
 		return $resource('/blog/admin/entry/:key',
 			{
 				key: '@key'

@@ -1,18 +1,9 @@
-blogApp.factory('categoryFactory', function ($resource) {
-		return $resource('/blog/admin/category/:key',
-			{
-				key: '@key'
-			},
-			{
-				'update': {method: 'PUT'}
-			});
-	})
-	.controller('categoryController', [
-		'$scope', '$controller', 'categoryFactory',
-		function ($scope, $controller, categoryFactory) {
+app.controller('CategoryCtrl', [
+		'$scope', '$controller', 'Category',
+		function ($scope, $controller, Category) {
 			$controller('blog.crud.baseController', {
 				$scope: $scope,
-				factory: categoryFactory
+				factory: Category
 			});
 
 			$scope.resetItem = function resetCategory() {

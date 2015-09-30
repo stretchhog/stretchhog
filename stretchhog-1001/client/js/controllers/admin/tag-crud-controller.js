@@ -1,13 +1,4 @@
-blogApp.factory('tagFactory', function ($resource) {
-	return $resource('/blog/admin/tag/:key',
-		{
-			key: '@key'
-		},
-		{
-			'update': {method: 'PUT'}
-		});
-})
-	.controller('tagController', [
+app.controller('tagController', [
 		'$scope', '$controller', 'tagFactory', 'categoryFactory',
 		function ($scope, $controller, tagFactory, categoryFactory) {
 			$controller('blog.crud.baseController', {

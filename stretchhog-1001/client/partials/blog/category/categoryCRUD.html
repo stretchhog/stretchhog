@@ -1,0 +1,69 @@
+<div class="input-group col-md-12 filter">
+    <span class="input-group-addon">
+        <i class="glyphicon glyphicon-search"></i>
+    </span>
+
+	<input class="form-control filter-input" type="text" ng-keydown="filterChanged()" ng-model="filterText"
+	       placeholder="filter...">
+
+    <span class="input-group-addon btn btn-default" ng-click="clearFilter()" ng-hide="filterText.length == 0">
+        <i class="glyphicon glyphicon-remove"></i>
+    </span>
+</div>
+<table class="table table-striped table-hover" ng-hide="loading">
+	<thead>
+	<tr>
+		<th width="100px">
+			<button class="btn btn-default fa fa-plus" ng-click="toggleAddMode()" ng-hide="addMode"></button>
+			<button class="btn btn-default fa fa-minus" ng-click="toggleAddMode()" ng-show="addMode"></button>
+		</th>
+		<th>Category</th>
+	</tr>
+	</thead>
+	<tbody>
+	<tr ng-show="addMode">
+		<td>
+			<div class="btn-group">
+				<button class="btn btn-default fa fa-save" ng-click="createItem()" ng-keydown="saveOnEnter($event) "
+				        ng-disabled="addForm.$invalid" name="Create"></button>
+				<button class="btn btn-default fa fa-times" ng-click="toggleAddMode()" name="Create"></button>
+			</div>
+		</td>
+		<form name="addForm" class="form-group">
+			<td>
+				<input class="form-control" name="tag" type="text" ng-model="newItem.category" required
+				       placeholder="new category...">
+			</td>
+		</form>
+	</tr>
+	<tr ng-repeat="item in items | filter:filterText">
+		<td>
+			<div class="btn-group" ng-show="item.editMode">
+				<button class="btn btn-default fa fa-save" ng-click="updateItem(item)"
+				        ng-disabled="editForm.$invalid"
+				        title="Save"></button>
+				<button class="btn btn-default fa fa-times" ng-click="toggleEditMode(item)"
+				        title="Cancel"></button>
+			</div>
+			<div class="btn-group" ng-show="item.editMode == null || item.editMode == false">
+				<button class="btn btn-default fa fa-edit" ng-click="toggleEditMode(item)"
+				        title="Edit"></button>
+				<button class="btn btn-default fa fa-trash" ng-click="deleteItem(item)" title="Delete"
+				        data-toggle="modal"></button>
+			</div>
+		</td>
+		<td>
+				<span ng-show="item.editMode == null || item.editMode == false">
+                    {{item.category}}
+                </span>
+			<!--Name edit mode-->
+			<form name="editForm">
+				<input ng-model="item.category" ng-show="item.editMode" required class="form-control">
+			</form>
+		</td>
+	</tr>
+
+	</tbody>
+</table>
+
+<img src="/images/ajax-loader.gif" ng-show="loading" class="center-block" title="Loading..."/>
