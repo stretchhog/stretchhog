@@ -6,6 +6,11 @@ app.config(function ($stateProvider, $urlRouterProvider) {
 		.state('category', {
 			url: '/admin/category',
 			templateUrl: '../partials/blog/category/categoryCRUD.html',
-			controller: 'CategoryCtrl'
+			controller: 'CategoryAdminCtrl'
+		})
+		.state('tag', {
+			url: '/admin/tag',
+			templateUrl: '../partials/blog/tag/tagCRUD.html',
+			controller: 'TagAdminCtrl'
 		})
 });
