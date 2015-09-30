@@ -1,3 +1,2 @@
-/**
- * Created by timva on 30-9-2015.
- */
+app.factory('AuthService', function () {});
+

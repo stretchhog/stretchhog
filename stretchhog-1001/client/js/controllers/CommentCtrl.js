@@ -1,6 +1,6 @@
-app.controller('blog.public.commentController', [
-	'$scope', '$http',
-	function ($scope, $http) {
+app.controller('CommentCtrl', [
+	'$scope', 'CommentService',
+	function ($scope, CommentService) {
 
 		$scope.initiateComment = function () {
 			$scope.comment = {
@@ -18,11 +18,11 @@ app.controller('blog.public.commentController', [
 			$scope.initiateComment();
 		};
 
-		$scope.saveComment = function (parentSlug) {
+		$scope.saveComment = function (parentKey) {
 			$scope.comment.parentKey = parentKey;
 
 			$http({
-				method: 'GET',
+				method: 'POST',
 				url: '/comment/'
 			}).then(function successCallback(response) {
 				// this callback will be called asynchronously

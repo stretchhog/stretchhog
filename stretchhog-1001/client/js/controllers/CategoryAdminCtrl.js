@@ -1,7 +1,7 @@
-app.controller('CategoryCtrl', [
+app.controller('CategoryAdminCtrl', [
 		'$scope', '$controller', 'Category',
 		function ($scope, $controller, Category) {
-			$controller('blog.crud.baseController', {
+			$controller('BaseAdminCtrl', {
 				$scope: $scope,
 				factory: Category
 			});

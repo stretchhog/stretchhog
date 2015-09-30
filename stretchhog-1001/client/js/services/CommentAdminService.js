@@ -1,0 +1,2 @@
+app.factory('CommentAdminService', function () {});
+

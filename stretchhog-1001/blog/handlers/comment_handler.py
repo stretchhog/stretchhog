@@ -1,3 +1,5 @@
+from flask import Response
+
 from blog.services.comment_service import service
 from flask.ext.restful import Resource, request
 from blog.forms import CommentForm
@@ -30,5 +32,22 @@ class CommentCL(Resource):
 		return handler.post_response_for(request)
 
 
-api.add_resource(CommentRUD, '/blog/admin/comment/<string:key>', endpoint='comment_rud')
-api.add_resource(CommentCL, '/blog/admin/comment', endpoint='comment_cl')
+class CommentApprove(Resource):
+	@staticmethod
+	def put(self, key):
+		service.approve_comment(key)
+		return Response(status=204)
+
+
+class CommentSpam(Resource):
+	@staticmethod
+	def put(self, key):
+		service.spam_comment(key)
+		return Response(status=204)
+
+
+api.add_resource(CommentRUD, '/blog-api/comment/<string:key>', endpoint='comment_rud')
+api.add_resource(CommentCL, '/blog-api/comment', endpoint='comment_cl')
+
+api.add_resource(CommentApprove, '/blog-api/comment/<string:key>', endpoint='comment_approve')
+api.add_resource(CommentSpam, '/blog-api/spam/<string:key>', endpoint='comment_spam')

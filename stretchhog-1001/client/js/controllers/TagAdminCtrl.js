@@ -1,9 +1,9 @@
-app.controller('tagController', [
-		'$scope', '$controller', 'tagFactory', 'categoryFactory',
-		function ($scope, $controller, tagFactory, categoryFactory) {
-			$controller('blog.crud.baseController', {
+app.controller('TagAdminCtrl', [
+		'$scope', '$controller', 'Tag', 'Category',
+		function ($scope, $controller, Tag, Category) {
+			$controller('BaseAdminCtrl', {
 				$scope: $scope,
-				factory: tagFactory
+				factory: Tag
 			});
 
 			$scope.resetItem = function resetTag() {
@@ -26,9 +26,9 @@ app.controller('tagController', [
 
 				item.category = item.category.key;
 				// Only update if there are changes
-				tagFactory.update({key: item.key}, item);
+				Tag.update({key: item.key}, item);
 			};
 
-			$scope.categories = categoryFactory.query()
+			$scope.categories = Category.query()
 		}]);
 
