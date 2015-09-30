@@ -4,9 +4,9 @@ import urllib
 from google.appengine.ext import ndb
 
 from blog.models import Comment
+from blog.services.comment_service import service as comment_service
 from main import markdown
 
-__author__ = 'tvancann'
 
 class TagView:
 	def __init__(self, entity):
@@ -24,7 +24,7 @@ class CategoryView:
 class EntryView:
 	@staticmethod
 	def get_comments(entity):
-		return service.get_all_comments_by_ancestor(entity.key, sort=[-Comment.created], filters=[Comment.approved is True])
+		return comment_service.get_all_comments_by_ancestor(entity.key, sort=[-Comment.created], filters=[Comment.approved is True])
 
 	def __init__(self, entity):
 		self.title = entity.title
@@ -33,14 +33,14 @@ class EntryView:
 		self.category = CategoryView(entity.key.parent().get()).__dict__
 		self.tags = [TagView(tag.get()).__dict__ for tag in entity.tags]
 		self.created = entity.created.isoformat()
-		self.comments = [CommentView(comment).__dict__ for comment in self.get_comments(entity)]
-		self.comment_count = len(self.comments)
+		# self.comments = [CommentView(comment).__dict__ for comment in self.get_comments(entity)]
+		# self.comment_count = len(self.comments)
 
 
 class EntrySummaryView:
 	@staticmethod
-	def get_comments(entity):
-		return service.get_all_comments_by_ancestor(entity.key, filter=[Comment.approved is True])
+	def get_comments_count(entity):
+		return comment_service.count_comments_by_ancestor(entity.key)
 
 	def __init__(self, entity):
 		self.title = entity.title
@@ -49,24 +49,25 @@ class EntrySummaryView:
 		self.category = CategoryView(entity.key.parent().get()).__dict__
 		self.tags = [TagView(tag.get()).__dict__ for tag in entity.tags]
 		self.created = entity.created.isoformat()
-		self.comment_count = len(self.get_comments(entity))
+		# self.comment_count = self.get_comments_count(entity)
 
 
 class EntryAdminView:
 	@staticmethod
 	def get_comments(entity):
-		return service.get_all_comments_by_ancestor(entity.key, sort=[-Comment.created],
-		                                            filter=[ndb.OR(ndb.AND(Comment.spam is False, Comment.approved is False),
-		                                                           Comment.approved is True)])
+		return comment_service.get_all_comments_by_ancestor(entity.key, sort=[-Comment.created],
+		                                                    filter=[ndb.OR(ndb.AND(Comment.spam, Comment.approved),
+		                                                                   Comment.approved)])
 
 	def __init__(self, entity):
 		self.key = entity.key.urlsafe()
 		self.title = entity.title
 		self.summary = entity.summary
 		self.post = entity.post
+		self.slug = entity.slug
 		self.category = CategoryView(entity.key.parent().get()).__dict__
 		self.tags = [TagView(tag.get()).__dict__ for tag in entity.tags]
-		self.comments = [CommentView(comment).__dict__ for comment in self.get_comments(entity)]
+		# self.comments = [CommentView(comment).__dict__ for comment in self.get_comments(entity)]
 
 
 class MarkdownPreviewView:

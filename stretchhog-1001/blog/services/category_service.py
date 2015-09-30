@@ -14,8 +14,8 @@ class CategoryService(Service):
 
 	def update(self, key, form):
 		category = Service.get_by_urlsafe_key(key)
-		form.category.data = category.category
-		return form
+		category.category = form.category.data
+		return category.put()
 
 	def get(self, key):
 		return Service.get_by_urlsafe_key(key)

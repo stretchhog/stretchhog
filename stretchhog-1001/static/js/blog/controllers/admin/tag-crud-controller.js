@@ -30,6 +30,14 @@ blogApp.factory('tagFactory', function ($resource) {
 				item.category = item.serverCategory;
 			};
 
+			$scope.updateItem = function (item) {
+				item.editMode = false;
+
+				item.category = item.category.key;
+				// Only update if there are changes
+				tagFactory.update({key: item.key}, item);
+			};
+
 			$scope.categories = categoryFactory.query()
 		}]);
 

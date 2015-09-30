@@ -1,8 +1,8 @@
 from google.appengine.ext import ndb
 from google.appengine.ext.ndb.key import Key
-
 from blog.models import Entry
 from service import Service
+import datetime
 
 
 class EntryService(Service):
@@ -15,11 +15,14 @@ class EntryService(Service):
 		entry.summary = form.summary.data
 		entry.post = form.post.data
 		entry.tags = [Key(urlsafe=tag) for tag in form.tags.data]
+		entry.slug = Service.slugify(entry.title)
 		return entry.put()
 
 	def update(self, key, form):
 		entry = Service.get_by_urlsafe_key(key)
-		entry.title = form.title.data
+		if entry.title is not form.title.data:
+			entry.slug = Service.slugify(entry.title)
+			entry.title = form.title.data
 		entry.summary = form.summary.data
 		entry.post = form.post.data
 		entry.tags = [Key(urlsafe=tag) for tag in form.tags.data]
@@ -40,16 +43,18 @@ class EntryService(Service):
 		return Service.get_all(Entry.query(ancestor=ancestor), **kwargs)
 
 	@staticmethod
-	def get_all_entries_by_year(year):
-		return Service.get_all(Entry.query(Entry.created.year == year))
+	def get_all_entries_by_year(year, **kwargs):
+		return Service.get_all(Entry.query(ndb.AND(Entry.created > datetime.datetime(year, 1, 1, 0, 0),
+		                                           Entry.created < datetime.datetime(year + 1, 1, 1, 0, 0))), **kwargs)
 
 	@staticmethod
-	def get_all_entries_by_month(year, month):
-		return Service.get_all(Entry.query(ndb.AND(Entry.created.year == year, Entry.created.month == month)))
+	def get_all_entries_by_month(year, month, **kwargs):
+		return Service.get_all(Entry.query(ndb.AND(Entry.created > datetime.datetime(year, month, 1, 1, 0, 0),
+		                                           Entry.created < datetime.datetime(year, month + 1, 1, 0, 0))), **kwargs)
 
 	@staticmethod
 	def get_entry_by_slug(slug):
-		return Service.get_all(Entry.query(Entry.slug == slug))
+		return Service.get_all(Entry.query(Entry.slug == slug))[0]
 
 
 service = EntryService()

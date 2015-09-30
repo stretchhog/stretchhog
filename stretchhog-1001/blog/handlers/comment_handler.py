@@ -1,11 +1,9 @@
-from requests import request
-
-from comment_service import service
-from flask.ext.restful import Resource
-from forms import CommentForm
-from handler import Handler
+from blog.services.comment_service import service
+from flask.ext.restful import Resource, request
+from blog.forms import CommentForm
+from blog.handlers.handler import Handler
 from main import api
-from views import CommentView
+from blog.views import CommentView
 
 
 class CommentHandler(Handler):

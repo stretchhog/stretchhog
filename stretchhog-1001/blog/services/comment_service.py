@@ -46,7 +46,7 @@ class CommentService(Service):
 
 	@staticmethod
 	def count_comments_by_ancestor(ancestor):
-		return Comment.query(ancestor=ancestor).count()
+		return Comment.query(ancestor=ancestor).filter(Comment.approved == True).count()
 
 
 service = CommentService()

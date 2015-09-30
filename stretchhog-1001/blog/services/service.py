@@ -4,11 +4,10 @@ from unicodedata import normalize
 
 from google.appengine.ext.ndb.key import Key
 
+_punct_re = re.compile(r'[\t !"#$%&\'()*\-/<=>?@\[\\\]^_`{|},.]+')
+
 
 class Service(object):
-	def __init__(self):
-		self._punct_re = re.compile(r'[\t !"#$%&\'()*\-/<=>?@\[\\\]^_`{|},.]+')
-
 	@abstractmethod
 	def create(self, form):
 		pass
@@ -44,10 +43,11 @@ class Service(object):
 				qry.order(s)
 		return qry.fetch()
 
-	def slugify(self, text, delim=u'-'):
+	@staticmethod
+	def slugify(text, delim=u'-'):
 		"""Generates an slightly worse ASCII-only slug."""
 		result = []
-		for word in self._punct_re.split(text.lower()):
+		for word in _punct_re.split(text.lower()):
 			word = normalize('NFKD', word).encode('ascii', 'ignore')
 			if word:
 				result.append(word)

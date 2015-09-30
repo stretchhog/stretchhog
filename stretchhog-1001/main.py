@@ -73,6 +73,7 @@ api.add_resource(Intro, '/intro', endpoint='intro')
 api.add_resource(Login, '/login', endpoint='login')
 api.add_resource(Logout, '/logout', endpoint='logout')
 
+from blog.handlers import handler, category_handler, comment_handler, entry_handler, tag_handler
 
 @app.after_request
 def after_request(response):
