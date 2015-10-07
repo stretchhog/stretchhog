@@ -1,5 +1,4 @@
 import json
-
 from flask import Response, request
 from blog.services.entry_service import service
 from flask.ext.restful import Resource
@@ -46,16 +45,16 @@ class EntryCL(Resource):
 		return handler.post_response_for(request)
 
 
-class EntrySummary(Resource):
+class EntryByCategory(Resource):
 	@staticmethod
-	def get():
-		entries = service.get_all_entries(sort=[-Entry.created])
-		view = [EntrySummaryView(entry).__dict__ for entry in entries]
+	def get(category):
+		entries = service.get_all_entries(filters=[Entry.slug == category], sort=[-Entry.created])
+		view = [EntrySummaryView(e).__dict__ for e in entries]
 		return Response(json.dumps(view), 200, mimetype='application/json')
 
 
 def get_sorted_entries_response_by_date(entries):
-	view = [EntryView(entry).__dict__ for entry in entries]
+	view = [EntryView(e).__dict__ for e in entries]
 	return Response(json.dumps(view), 200, mimetype='application/json')
 
 
@@ -83,7 +82,7 @@ entry = '/entry'
 api.add_resource(EntryRUD, root_blog_api + entry + '/<string:key>', endpoint='entry_rud')
 api.add_resource(EntryCL, root_blog_api + entry, endpoint='entry_cl')
 
-api.add_resource(EntrySummary, root_blog_api + entry + '/summary', endpoint='entry_summary')
+api.add_resource(EntryByCategory, root_blog_api + entry + '/category/<string:category>', endpoint='entry_category')
 api.add_resource(EntryByYear, root_blog_api + entry + '/year/<int:year>', endpoint='entry_year')
 api.add_resource(EntryByMonth, root_blog_api + entry + '/month/<int:year>/<int:month>', endpoint='entry_month')
 api.add_resource(EntryBySlug, root_blog_api + entry + '/slug/<string:slug>', endpoint='entry_slug')

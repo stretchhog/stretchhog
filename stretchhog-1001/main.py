@@ -2,21 +2,17 @@ import os
 from google.appengine.api import users
 from flask import Flask, session, render_template, make_response, redirect, send_from_directory
 from flask.ext.restful import Api, Resource
-from flask.ext.triangle import Triangle
-import wtforms_json
 from flask_jsglue import JSGlue
 import mistune
 from pygments import highlight
 from pygments.lexers import get_lexer_by_name
 from pygments.formatters import HtmlFormatter
 
-wtforms_json.init()
 
 base_dir = os.path.abspath(os.path.dirname(__file__))
 
 app = Flask(__name__)
 JSGlue(app)
-Triangle(app)
 app.config['DEBUG'] = True
 app.config['WTF_CSRF_ENABLED'] = False
 app.config['SECRET_KEY'] = 'you-will-never-guess'
@@ -56,7 +52,6 @@ class Intro(Resource):
 class Main(Resource):
 	def get(self):
 		return send_from_directory('templates', 'index.html')
-
 
 
 class Login(Resource):

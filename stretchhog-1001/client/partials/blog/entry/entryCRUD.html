@@ -1,48 +1,88 @@
-{% extends "blog/parentCRUD.html" %}
+<div class="input-group col-md-12 filter">
+    <span class="input-group-addon">
+        <i class="glyphicon glyphicon-search"></i>
+    </span>
 
-{% block controller %}
-ng-controller="entryController"
-{% endblock %}
+	<input class="form-control filter-input" type="text" ng-keydown="filterChanged()" ng-model="filterText"
+	       placeholder="filter...">
 
-{% block columns %}
-<th>Entry</th>
-{% endblock %}
-
-{% block addForm %}
-<td>
-	<input class="form-control" name="title" type="text" ng-model="newItem.title" required
-	       placeholder="new title..."/>
+    <span class="input-group-addon btn btn-default" ng-click="clearFilter()" ng-hide="filterText.length == 0">
+        <i class="glyphicon glyphicon-remove"></i>
+    </span>
+</div>
+<table class="table table-striped table-hover" ng-hide="loading">
+	<thead>
+	<tr>
+		<th width="100px">
+			<button class="btn btn-default fa fa-plus" ng-click="toggleAddMode()" ng-hide="addMode"></button>
+			<button class="btn btn-default fa fa-minus" ng-click="toggleAddMode()" ng-show="addMode"></button>
+		</th>
+		<th>Entry</th>
+	</tr>
+	</thead>
+	<tbody>
+	<tr ng-show="addMode">
+		<td>
+			<div class="btn-group">
+				<button class="btn btn-default fa fa-save" ng-click="createItem()" ng-keydown="saveOnEnter($event) "
+				        ng-disabled="addForm.$invalid" name="Create"></button>
+				<button class="btn btn-default fa fa-times" ng-click="toggleAddMode()" name="Create"></button>
+			</div>
+		</td>
+		<form name="addForm" class="form-group">
+			<td>
+				<input class="form-control" name="title" type="text" ng-model="newItem.title" required
+				       placeholder="new title..."/>
 	<textarea class="form-control" name="summary" type="text" ng-model="newItem.summary" required
 	          placeholder="new summary..."></textarea>
 	<textarea class="form-control" name="post" type="text" ng-model="newItem.post" required
 	          placeholder="new post..."></textarea>
-	<select class="form-control" name="category" ng-model="newItem.category"
-	        ng-options="category.key as category.category for category in categories" required></select>
+				<select class="form-control" name="category" ng-model="newItem.category"
+				        ng-options="category.key as category.category for category in categories" required></select>
 
-	<select multiple class="form-control" name="category" ng-model="newItem.tags"
-	        ng-options="tag.key as tag.tag for tag in tags | filter:filterTags" required></select>
-	<button class="btn btn-default fa fa-refresh" ng-click="updatePreview(newItem)"> Update preview</button>
-	<div ng-bind-html="newItem.preview"></div>
-</td>
-{% endblock %}
+				<select multiple class="form-control" name="category" ng-model="newItem.tags"
+				        ng-options="tag.key as tag.tag for tag in tags | filter:filterTags" required></select>
+				<button class="btn btn-default fa fa-refresh" ng-click="updatePreview(newItem)"> Update preview</button>
+				<div ng-bind-html="newItem.preview"></div>
+			</td>
+		</form>
+	</tr>
+	<tr ng-repeat="item in items | filter:filterText">
+		<td>
+			<div class="btn-group" ng-show="item.editMode">
+				<button class="btn btn-default fa fa-save" ng-click="updateItem(item)"
+				        ng-disabled="editForm.$invalid"
+				        title="Save"></button>
+				<button class="btn btn-default fa fa-times" ng-click="toggleEditMode(item)"
+				        title="Cancel"></button>
+			</div>
+			<div class="btn-group" ng-show="item.editMode == null || item.editMode == false">
+				<button class="btn btn-default fa fa-edit" ng-click="toggleEditMode(item)"
+				        title="Edit"></button>
+				<button class="btn btn-default fa fa-trash" ng-click="deleteItem(item)" title="Delete"
+				        data-toggle="modal"></button>
+			</div>
+		</td>
+		<td>
+			<span ng-show="item.editMode == null || item.editMode == false">{{item.title}}</span>
+			<div ng-repeat="tag in item.tags" class="pull-right label label-primary">{{tag.tag}}</div>
 
-{% block editForm %}
-<td>
-				<span ng-show="item.editMode == null || item.editMode == false">
-                    {[item.title]}
-                </span>
-
-	<div ng-repeat="tag in item.tags" class="pull-right label label-primary">{[tag.tag]}</div>
-
-	<!--Name edit mode-->
-	<form name="editForm">
-		<input class="form-control" ng-show="item.editMode" name="title" type="text" ng-model="item.title" required/>
-		<textarea class="form-control" ng-show="item.editMode" name="summary" type="text" ng-model="item.summary"
+			<!--Name edit mode-->
+			<form name="editForm">
+				<input class="form-control" ng-show="item.editMode" name="title" type="text" ng-model="item.title"
+				       required/>
+		<textarea class="form-control" ng-show="item.editMode" name="summary" ng-model="item.summary"
 		          required></textarea>
-		<textarea class="form-control" ng-show="item.editMode" name="post" type="text" ng-model="item.post"
+		<textarea class="form-control" ng-show="item.editMode" name="post" ng-model="item.post"
 		          required></textarea>
-	</form>
-	<button class="btn btn-default fa fa-refresh" ng-click="updatePreview(item)"> Update preview</button>
-	<div ng-bind-html="item.preview"></div>
-</td>
-{% endblock %}
+			</form>
+			<button ng-show="item.editMode" class="btn btn-default fa fa-refresh" ng-click="updatePreview(item)"> Update preview</button>
+			<div ng-bind-html="item.preview"></div>
+		</td>
+	</tr>
+
+	</tbody>
+</table>
+
+<img src="/images/ajax-loader.gif" ng-show="loading" class="center-block" title="Loading..."/>
+

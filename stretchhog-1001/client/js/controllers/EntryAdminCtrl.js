@@ -1,6 +1,6 @@
 app.controller('EntryAdminCtrl', [
-		'$scope', '$controller', '$http', 'Entry', 'Category', 'Tag', 'Comment',
-		function ($scope, $controller, $http, Entry, Category, Tag, Comment) {
+		'$scope', '$controller', '$http', 'Entry', 'Category', 'Tag',
+		function ($scope, $controller, $http, Entry, Category, Tag) {
 			$controller('BaseAdminCtrl', {
 				$scope: $scope,
 				factory: Entry

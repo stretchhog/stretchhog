@@ -26,6 +26,10 @@
 	<script type="text/javascript" src="/js/controllers/CommentAdminCtrl.js"></script>
 
 	<script type="text/javascript" src="/js/controllers/CommentCtrl.js"></script>
+	<script type="text/javascript" src="/js/controllers/EntryCtrl.js"></script>
+	<script type="text/javascript" src="/js/controllers/MonthArchiveCtrl.js"></script>
+	<script type="text/javascript" src="/js/controllers/YearArchiveCtrl.js"></script>
+	<script type="text/javascript" src="/js/controllers/CategoryArchiveCtrl.js"></script>
 
 	<script type="text/javascript" src="/js/factories/Category.js"></script>
 	<script type="text/javascript" src="/js/factories/Entry.js"></script>
@@ -59,7 +63,7 @@
 					<a href="#">Artificial Intelligence</a>
 				</li>
 				<li class="icon-music">
-					<a href="#">Music</a>
+					<a href="#/music">Music</a>
 				</li>
 				<li class="icon-health">
 					<a href="#">Fitness & Health</a>
@@ -88,9 +92,9 @@
 							Add
 						</a>
 						<ul class="dropdown-menu entry-list">
-							<li><a ui-sref="category">Category</a></li>
-							<li><a ui-sref="tag">Tag</a></li>
-							<li><a href="#">Entry</a></li>
+							<li><a ui-sref="admin-category">Category</a></li>
+							<li><a ui-sref="admin-tag">Tag</a></li>
+							<li><a ui-sref="admin-entry">Entry</a></li>
 						</ul>
 					</li>
 

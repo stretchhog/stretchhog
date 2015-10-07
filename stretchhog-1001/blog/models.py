@@ -1,9 +1,9 @@
 from google.appengine.ext import ndb
-from wtforms.validators import DataRequired
 
 
 class Category(ndb.Model):
 	category = ndb.StringProperty()
+	slug = ndb.StringProperty()
 	created = ndb.DateTimeProperty(auto_now_add=True)
 
 
@@ -20,6 +20,10 @@ class Entry(ndb.Model):
 	user = ndb.UserProperty()
 	created = ndb.DateTimeProperty(auto_now_add=True)
 	slug = ndb.StringProperty()
+	# stats
+	views = ndb.IntegerProperty(default=0)
+	likes = ndb.IntegerProperty(default=0)
+	shares = ndb.IntegerProperty(default=0)
 
 
 class Comment(ndb.Model):

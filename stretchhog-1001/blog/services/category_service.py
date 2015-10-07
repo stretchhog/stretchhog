@@ -1,5 +1,4 @@
 from google.appengine.ext.ndb.key import Key
-
 from blog.models import Category, Tag
 from blog.services.service import Service
 
@@ -9,12 +8,16 @@ class CategoryService(Service):
 		super(CategoryService, self).__init__()
 
 	def create(self, form):
-		category = Category(category=form.category.data)
+		category = Category(
+			category=form.category.data,
+			slug=Service.slugify(form.category.data))
+
 		return category.put()
 
 	def update(self, key, form):
 		category = Service.get_by_urlsafe_key(key)
 		category.category = form.category.data
+		category.slug = Service.slugify(form.category.data)
 		return category.put()
 
 	def get(self, key):

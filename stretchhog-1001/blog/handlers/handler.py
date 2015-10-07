@@ -49,7 +49,7 @@ class Handler(object):
 
 class MarkdownPreview(Resource):
 	@staticmethod
-	def post(self):
+	def post():
 		view = MarkdownPreviewView(request.get_json()['preview']).__dict__
 		return Response(json.dumps(view), 200, mimetype='application/json')
 
