@@ -49,12 +49,11 @@ class EntryByCategory(Resource):
 	@staticmethod
 	def get(category):
 		entries = service.get_all_entries(filters=[Entry.slug == category], sort=[-Entry.created])
-		view = [EntrySummaryView(e).__dict__ for e in entries]
-		return Response(json.dumps(view), 200, mimetype='application/json')
+		return get_sorted_entries_response_by_date(entries)
 
 
 def get_sorted_entries_response_by_date(entries):
-	view = [EntryView(e).__dict__ for e in entries]
+	view = [EntrySummaryView(e).__dict__ for e in entries]
 	return Response(json.dumps(view), 200, mimetype='application/json')
 
 
@@ -72,7 +71,7 @@ class EntryByMonth(Resource):
 
 
 class EntryBySlug(Resource):
-	def get(self, slug):
+	def get(self, year, month, slug):
 		entry = service.get_entry_by_slug(slug)
 		view = EntryView(entry).__dict__
 		return Response(json.dumps(view), 200, mimetype='application/json')
@@ -85,4 +84,4 @@ api.add_resource(EntryCL, root_blog_api + entry, endpoint='entry_cl')
 api.add_resource(EntryByCategory, root_blog_api + entry + '/category/<string:category>', endpoint='entry_category')
 api.add_resource(EntryByYear, root_blog_api + entry + '/year/<int:year>', endpoint='entry_year')
 api.add_resource(EntryByMonth, root_blog_api + entry + '/month/<int:year>/<int:month>', endpoint='entry_month')
-api.add_resource(EntryBySlug, root_blog_api + entry + '/slug/<string:slug>', endpoint='entry_slug')
+api.add_resource(EntryBySlug, root_blog_api + entry + '/slug/<int:year>/<int:month>/<string:slug>', endpoint='entry_slug')

@@ -20,7 +20,7 @@ app.config(function ($stateProvider, $urlRouterProvider) {
 		})
 
 		. state('entry', {
-			url: '/:year/:month/:entry-slug',
+			url: '/:year/:month/:entrySlug',
 			templateUrl: '../partials/blog/entry/by_slug.html',
 			controller: 'EntryCtrl'
 		})
@@ -29,14 +29,15 @@ app.config(function ($stateProvider, $urlRouterProvider) {
 			templateUrl: '../partials/blog/entry/by_category.html',
 			controller: 'CategoryArchiveCtrl'
 		})
-		. state('month-archive', {
+		.state('month-archive', {
 			url: '/:year/:month',
 			templateUrl: '../partials/blog/entry/by_month.html',
 			controller: 'MonthArchiveCtrl'
 		})
-		. state('year-archive', {
+		.state('year-archive', {
 			url: '/:year',
 			templateUrl: '../partials/blog/entry/by_year.html',
 			controller: 'YearArchiveCtrl'
-		})
+		});
+		$urlRouterProvider.otherwise('/')
 });
