@@ -1,13 +1,11 @@
 import json
-
 from blog.services.category_service import service
 from flask import request, Response
-
 from flask.ext.restful import Resource
 from blog.forms import CategoryForm
 from blog.handlers.handler import Handler, root_blog_api
 from main import api
-from blog.views import CategoryView
+from blog.views import CategoryView, CategorySummaryView
 
 
 class CategoryHandler(Handler):
@@ -43,6 +41,16 @@ class CategoryCL(Resource):
 	def post():
 		return handler.post_response_for(request)
 
+
+class Categories(Resource):
+	@staticmethod
+	def get():
+		categories = service.get_all_categories()
+		view = [CategorySummaryView(cat).__dict__ for cat in categories]
+		return Response(json.dumps(view), 200, mimetype='application/json')
+
+
 api.add_resource(CategoryRUD, root_blog_api + '/category/<string:key>', endpoint='category_rud')
 api.add_resource(CategoryCL, root_blog_api + '/category', endpoint='category_cl')
 
+api.add_resource(Categories, root_blog_api + '/categories', endpoint='categories')

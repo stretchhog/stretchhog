@@ -39,7 +39,7 @@ app.config(function ($stateProvider, $urlRouterProvider) {
 				},
 				'sidebar@category-archive': {
 					templateUrl: '../partials/blog/sidebar.html',
-					//controller: 'SidebarCtrl'
+					controller: 'SidebarCtrl'
 				},
 				'by_category@category-archive': {
 					templateUrl: '../partials/blog/category/by_category.html',

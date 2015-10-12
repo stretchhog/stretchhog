@@ -10,14 +10,8 @@
 <div class="widget widget-categories">
 	<h4>Categories <span class="head-line"></span></h4>
 	<ul>
-		<li>
-			<a href="#">Music</a>
-		</li>
-		<li>
-			<a href="#">Artificial Intelligence</a>
-		</li>
-		<li>
-			<a href="#">Fitness and Health</a>
+		<li ng-repeat="cat in categories">
+			<a href="#/{{cat.slug}}">{{cat.category}}</a>
 		</li>
 	</ul>
 </div>

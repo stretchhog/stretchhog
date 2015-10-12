@@ -19,6 +19,13 @@ class CategoryView:
 	def __init__(self, entity):
 		self.key = entity.key.urlsafe()
 		self.category = entity.category
+		self.slug = entity.slug
+
+
+class CategorySummaryView:
+	def __init__(self, entity):
+		self.category = entity.category
+		self.slug = entity.slug
 
 
 class EntryView:
