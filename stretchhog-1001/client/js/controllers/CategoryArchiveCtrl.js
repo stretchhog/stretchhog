@@ -5,4 +5,5 @@ app.controller('CategoryArchiveCtrl', [
 		EntryService.getByCategory($stateParams.categorySlug).then(function (data) {
 			$scope.items = data;
 		});
+
 	}]);

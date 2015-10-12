@@ -1,7 +1,6 @@
 from abc import abstractmethod
 import re
 from unicodedata import normalize
-
 from google.appengine.ext.ndb.key import Key
 
 _punct_re = re.compile(r'[\t !"#$%&\'()*\-/<=>?@\[\\\]^_`{|},.]+')
@@ -45,10 +44,13 @@ class Service(object):
 
 	@staticmethod
 	def slugify(text, delim=u'-'):
-		"""Generates an slightly worse ASCII-only slug."""
 		result = []
 		for word in _punct_re.split(text.lower()):
 			word = normalize('NFKD', word).encode('ascii', 'ignore')
 			if word:
 				result.append(word)
 		return unicode(delim.join(result))
+
+	@staticmethod
+	def get_by_slug(model, slug):
+		return model.query(model.slug == slug).get()

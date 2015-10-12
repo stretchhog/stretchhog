@@ -5,7 +5,7 @@ from flask.ext.restful import Resource
 from blog.forms import EntryForm
 from blog.handlers.handler import Handler, root_blog_api
 from main import api
-from blog.models import Entry
+from blog.models import Entry, Category
 from blog.views import EntryView, EntryAdminView, EntrySummaryView
 
 
@@ -48,7 +48,11 @@ class EntryCL(Resource):
 class EntryByCategory(Resource):
 	@staticmethod
 	def get(category):
-		entries = service.get_all_entries(filters=[Entry.slug == category], sort=[-Entry.created])
+		category_entity = service.get_by_slug(Category, category)
+		if category_entity is not None:
+			entries = service.get_all_entries_by_ancestor(category_entity.key, sort=[-Entry.created])
+		else:
+			entries = []
 		return get_sorted_entries_response_by_date(entries)
 
 

@@ -1,8 +1,12 @@
 var app = angular.module('app', ['ngResource', 'ngSanitize', 'ui.router']);
 
 app.config(function ($stateProvider, $urlRouterProvider) {
-
+	$urlRouterProvider.otherwise('/');
 	$stateProvider
+		.state('home', {
+			url: '/',
+			templateUrl: '../partials/home.html'
+		})
 		.state('admin-category', {
 			url: '/admin/category',
 			templateUrl: '../partials/blog/category/categoryCRUD.html',
@@ -24,10 +28,24 @@ app.config(function ($stateProvider, $urlRouterProvider) {
 			templateUrl: '../partials/blog/entry/by_slug.html',
 			controller: 'EntryCtrl'
 		})
+
 		.state('category-archive', {
 			url: '/:categorySlug',
-			templateUrl: '../partials/blog/entry/by_category.html',
-			controller: 'CategoryArchiveCtrl'
+			views: {
+
+				// the main template will be placed here (relatively named)
+				'': {
+					templateUrl: '../partials/blog/archive.html'
+				},
+				'sidebar@category-archive': {
+					templateUrl: '../partials/blog/sidebar.html',
+					//controller: 'SidebarCtrl'
+				},
+				'by_category@category-archive': {
+					templateUrl: '../partials/blog/category/by_category.html',
+					controller: 'CategoryArchiveCtrl'
+				}
+			}
 		})
 		.state('month-archive', {
 			url: '/:year/:month',
@@ -39,5 +57,4 @@ app.config(function ($stateProvider, $urlRouterProvider) {
 			templateUrl: '../partials/blog/entry/by_year.html',
 			controller: 'YearArchiveCtrl'
 		});
-		$urlRouterProvider.otherwise('/')
 });
