@@ -112,6 +112,14 @@ app.config(function ($stateProvider, $urlRouterProvider) {
 				'content@month-archive': {
 					templateUrl: '../partials/blog/archive_content.html',
 					controller: 'MonthArchiveCtrl'
+				},
+				'banner-name@month-archive': {
+					templateUrl: '../partials/blog/banners/month.html',
+					controller: 'MonthBannerCtrl'
+				},
+				'banner-breadcrumbs@month-archive': {
+					templateUrl: '../partials/blog/breadcrumbs/month.html',
+					controller: 'MonthBannerCtrl'
 				}
 			}
 		})
@@ -129,6 +137,14 @@ app.config(function ($stateProvider, $urlRouterProvider) {
 				'content@year-archive': {
 					templateUrl: '../partials/blog/archive_content.html',
 					controller: 'YearArchiveCtrl'
+				},
+				'banner-name@year-archive': {
+					templateUrl: '../partials/blog/banners/year.html',
+					controller: 'YearBannerCtrl'
+				},
+				'banner-breadcrumbs@year-archive': {
+					templateUrl: '../partials/blog/breadcrumbs/year.html',
+					controller: 'YearBannerCtrl'
 				}
 			}
 		})
