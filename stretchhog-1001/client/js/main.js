@@ -60,7 +60,7 @@ app.config(function ($stateProvider, $urlRouterProvider) {
 		})
 
 		.state('entry', {
-			url: '/:year/:month/:entrySlug',
+			url: '/entry/:year/:month/:entrySlug',
 			templateUrl: '../partials/blog/archive.html',
 			views: {
 				'': {
@@ -79,7 +79,7 @@ app.config(function ($stateProvider, $urlRouterProvider) {
 
 
 		.state('month-archive', {
-			url: '/:year/:month',
+			url: '/month/:year/:month',
 			views: {
 				'': {
 					templateUrl: '../partials/blog/archive.html'
@@ -96,7 +96,7 @@ app.config(function ($stateProvider, $urlRouterProvider) {
 		})
 
 		.state('year-archive', {
-			url: '/:year',
+			url: '/year/:year',
 			views: {
 				'': {
 					templateUrl: '../partials/blog/archive.html'
@@ -108,6 +108,23 @@ app.config(function ($stateProvider, $urlRouterProvider) {
 				'content@year-archive': {
 					templateUrl: '../partials/blog/archive_content.html',
 					controller: 'YearArchiveCtrl'
+				}
+			}
+		})
+
+		.state('tag-archive', {
+			url: '/tag/:tagSlug',
+			views: {
+				'': {
+					templateUrl: '../partials/blog/archive.html'
+				},
+				'sidebar@tag-archive': {
+					templateUrl: '../partials/blog/sidebar.html',
+					controller: 'SidebarCtrl'
+				},
+				'content@tag-archive': {
+					templateUrl: '../partials/blog/archive_content.html',
+					controller: 'TagArchiveCtrl'
 				}
 			}
 		})

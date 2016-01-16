@@ -2,7 +2,7 @@ import json
 
 from blog.forms import EntryForm
 from blog.handlers.handler import Handler, root_blog_api
-from blog.models import Entry, Category
+from blog.models import Entry, Category, Tag
 from blog.services.entry_service import service
 from blog.views import EntryView, EntryAdminView, EntrySummaryView
 from flask import Response, request
@@ -57,6 +57,17 @@ class EntryByCategory(Resource):
 		return get_sorted_entries_response_by_date(entries)
 
 
+class EntryByTag(Resource):
+	@staticmethod
+	def get(tag):
+		tag_entity = service.get_by_slug(Tag, tag)
+		if tag_entity is not None:
+			entries = service.get_all_entries_by_repeated_property(Entry.tags, tag_entity, sort=[-Entry.created])
+		else:
+			entries = []
+		return get_sorted_entries_response_by_date(entries)
+
+
 def get_sorted_entries_response_by_date(entries):
 	view = [EntrySummaryView(e).__dict__ for e in entries]
 	return Response(json.dumps(view), 200, mimetype='application/json')
@@ -95,5 +106,7 @@ api.add_resource(EntryCL, root_blog_api + entry, endpoint='entry_cl')
 api.add_resource(EntryByCategory, root_blog_api + entry + '/category/<string:category>', endpoint='entry_category')
 api.add_resource(EntryByYear, root_blog_api + entry + '/year/<int:year>', endpoint='entry_year')
 api.add_resource(EntryByMonth, root_blog_api + entry + '/month/<int:year>/<int:month>', endpoint='entry_month')
-api.add_resource(EntryBySlug, root_blog_api + entry + '/slug/<int:year>/<int:month>/<string:slug>', endpoint='entry_slug')
+api.add_resource(EntryBySlug, root_blog_api + entry + '/slug/<int:year>/<int:month>/<string:slug>',
+                 endpoint='entry_slug')
 api.add_resource(EntryList, root_blog_api + entry + '/list', endpoint='entry_list')
+api.add_resource(EntryByTag, root_blog_api + entry + '/tag/<string:tag>', endpoint='entry_tag')

@@ -57,6 +57,20 @@ app.factory('EntryService', function ($http) {
 		})
 	};
 
+	service.getByTag = function (tagSlug) {
+		return $http({
+			method: 'GET',
+			url: '/blog-api/entry/tag/' + tagSlug
+		}).then(function successCallback(response) {
+			return response.data;
+			// this callback will be called asynchronously
+			// when the response is available
+		}, function errorCallback(response) {
+			// called asynchronously if an error occurs
+			// or server returns response with an error status.
+		})
+	};
+
 	service.getAll = function () {
 		return $http({
 			method: 'GET',

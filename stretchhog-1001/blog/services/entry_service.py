@@ -56,5 +56,8 @@ class EntryService(Service):
 	def get_entry_by_slug(slug):
 		return Service.get_all(Entry.query(Entry.slug == slug))[0]
 
+	@staticmethod
+	def get_all_entries_by_repeated_property(property, search, **kwargs):
+		return Service.get_all(Entry.query(property == search.key), **kwargs)
 
 service = EntryService()

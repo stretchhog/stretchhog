@@ -54,3 +54,4 @@ class Service(object):
 	@staticmethod
 	def get_by_slug(model, slug):
 		return model.query(model.slug == slug).get()
+
