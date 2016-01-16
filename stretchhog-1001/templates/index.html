@@ -29,27 +29,10 @@
 	<!-- Controllers -->
 	<script type="text/javascript" src="/js/script.js"></script>
 	<script type="text/javascript" src="/js/main.js"></script>
-	<script type="text/javascript" src="/js/controllers/BaseAdminCtrl.js"></script>
-	<script type="text/javascript" src="/js/controllers/CategoryAdminCtrl.js"></script>
-	<script type="text/javascript" src="/js/controllers/TagAdminCtrl.js"></script>
-	<script type="text/javascript" src="/js/controllers/EntryAdminCtrl.js"></script>
-	<script type="text/javascript" src="/js/controllers/CommentAdminCtrl.js"></script>
-
-	<script type="text/javascript" src="/js/controllers/CommentCtrl.js"></script>
-	<script type="text/javascript" src="/js/controllers/EntryCtrl.js"></script>
-	<script type="text/javascript" src="/js/controllers/MonthArchiveCtrl.js"></script>
-	<script type="text/javascript" src="/js/controllers/YearArchiveCtrl.js"></script>
-	<script type="text/javascript" src="/js/controllers/CategoryArchiveCtrl.js"></script>
-	<script type="text/javascript" src="/js/controllers/AllArchiveCtrl.js"></script>
-	<script type="text/javascript" src="/js/controllers/TagArchiveCtrl.js"></script>
-	<script type="text/javascript" src="/js/controllers/SidebarCtrl.js"></script>
-
-
-	<script type="text/javascript" src="/js/controllers/banners/CategoryBannerCtrl.js"></script>
-	<script type="text/javascript" src="/js/controllers/banners/TagBannerCtrl.js"></script>
-	<script type="text/javascript" src="/js/controllers/banners/EntryBannerCtrl.js"></script>
-	<script type="text/javascript" src="/js/controllers/banners/MonthBannerCtrl.js"></script>
-	<script type="text/javascript" src="/js/controllers/banners/YearBannerCtrl.js"></script>
+	<script type="text/javascript" src="/js/controllers/CrudControllers.js"></script>
+	<script type="text/javascript" src="/js/controllers/ArchiveControllers.js"></script>
+	<script type="text/javascript" src="/js/controllers/BannerControllers.js"></script>
+	<script type="text/javascript" src="/js/controllers/AuthControllers.js"></script>
 
 	<!-- Factories -->
 	<script type="text/javascript" src="/js/factories/Category.js"></script>
@@ -67,6 +50,14 @@
 
 	<script type="text/javascript" async
 	        src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+	<script type="text/x-mathjax-config">
+		MathJax.Hub.Config({
+			tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+		});
+
+
+
+	</script>
 </head>
 <body ng-app="app">
 <!-- Container -->
@@ -166,11 +157,7 @@
 	</header>
 	<!-- End Header -->
 
-
-	<!-- Start Content -->
 	<ui-view></ui-view>
-	<!-- End Content -->
-
 
 	<!-- Start Footer -->
 	<footer>
@@ -239,7 +226,8 @@
 								<span>28 February 2014</span>
 							</li>
 							<li>
-								<p><a href="#">@GrayGrids </a> Lorem ipsum dolor et, consectetur adipiscing eli.An Fusce
+								<p><a href="#">@GrayGrids </a> Lorem ipsum dolor et, consectetur adipiscing eli.An
+									Fusce
 									eleifend aliquet nis application.</p>
 								<span>26 February 2014</span>
 							</li>
@@ -317,7 +305,8 @@
 						<!--<h4><img src="images/footer-margo.png" class="img-responsive" alt="Footer Logo"/></h4>-->
 
 						<p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium
-							voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati
+							voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint
+							occaecati
 							cupiditate non provident</p>
 						<ul>
 							<li><span>Phone Number:</span> +01 234 567 890</li>
@@ -360,11 +349,6 @@
 <!-- Go To Top Link -->
 <a href="#" class="back-to-top"><i class="fa fa-angle-up"></i></a>
 
-<script type="text/x-mathjax-config">
-MathJax.Hub.Config({
-  tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
-});
-</script>
 </body>
 
 </html>

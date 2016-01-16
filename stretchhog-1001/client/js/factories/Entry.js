@@ -1,5 +1,5 @@
 app.factory('Entry', function ($resource) {
-	return $resource('/blog-api/entry/:key',
+	return $resource('/blog-api/admin/entry/:key',
 			{
 				key: '@key'
 			},

@@ -5,7 +5,12 @@ from flask import Response, request
 from flask.ext.restful import Resource
 from main import api
 
-root_blog_api = '/blog-api'
+blog_api_root = '/blog-api'
+admin_blog_root = blog_api_root + '/admin'
+
+tag = '/tag'
+category = '/category'
+entry = '/entry'
 
 
 class Handler(object):
@@ -59,4 +64,4 @@ class MarkdownPreview(Resource):
 		return Response(json.dumps(view), 200, mimetype='application/json')
 
 
-api.add_resource(MarkdownPreview, root_blog_api + '/markdown/preview', endpoint='markdown_preview')
+api.add_resource(MarkdownPreview, blog_api_root + '/markdown/preview', endpoint='markdown_preview')

@@ -9,27 +9,13 @@ handlers:
   static_files: favicon.ico
   upload: favicon\.ico
 
-
-#- url: /music/.*
-#  script: music.app
-#
 - url: /comics/.*
   script: main.app
   login: admin
 
-#- url: /blog/admin/.*
-#  script: main.app
-#  login: admin
-#
-#- url: /ai/.*
-#  script: ai.app
-#
-#- url: /fitness/.*
-#  script: fitness.app
-#
-#- url: /admin/.*
-#  script: admin.app
-#  login: admin
+- url: /admin/.*
+  script: main.app
+  login: admin
 
 - url: /partials
   static_dir: client/partials

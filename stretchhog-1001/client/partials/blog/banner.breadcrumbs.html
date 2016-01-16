@@ -1,0 +1,7 @@
+<ul class="breadcrumbs" xmlns="http://www.w3.org/1999/html">
+	<li ng-repeat="crumb in breadcrumbs">
+		<a ng-if="crumb.sref" ui-sref="{{crumb.sref}}">{{crumb.name}}</a>
+		<a ng-if="crumb.href" ui-sref="{{crumb.href}}">{{crumb.name}}</a>
+		<span ng-if="!crumb.sref && !crumb.href">{{crumb.name}}</span>
+	</li>
+</ul>

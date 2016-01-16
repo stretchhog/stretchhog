@@ -1,6 +1,7 @@
 from google.appengine.ext import ndb
 
 
+
 class Category(ndb.Model):
 	category = ndb.StringProperty()
 	slug = ndb.StringProperty()

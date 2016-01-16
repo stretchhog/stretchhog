@@ -1,7 +1,7 @@
 import json
 
 from blog.forms import CategoryForm
-from blog.handlers.handler import Handler, root_blog_api
+from blog.handlers.handler import Handler, blog_api_root, admin_blog_root, category
 from blog.services.category_service import service
 from blog.views import CategoryView, CategorySummaryView
 from blog.models import Category
@@ -58,9 +58,8 @@ class CategoryBySlug(Resource):
 		return handler.get_response_for(key=cat.key)
 
 
-category = '/category'
-api.add_resource(CategoryRUD, root_blog_api + category + '/<string:key>', endpoint='category_rud')
-api.add_resource(CategoryCL, root_blog_api + category + '/', endpoint='category_cl')
+api.add_resource(CategoryRUD, admin_blog_root + category + '/<string:key>', endpoint='category_rud')
+api.add_resource(CategoryCL, admin_blog_root + category, endpoint='category_cl')
 
-api.add_resource(Categories, root_blog_api + category + '/list', endpoint='category_list')
-api.add_resource(CategoryBySlug, root_blog_api + category + '/slug/<string:slug>', endpoint='category_slug')
+api.add_resource(Categories, blog_api_root + category + '/list', endpoint='category_list')
+api.add_resource(CategoryBySlug, blog_api_root + category + '/slug/<string:slug>', endpoint='category_slug')

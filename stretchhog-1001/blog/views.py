@@ -41,6 +41,7 @@ class EntryView:
 		self.category = CategoryView(entity.key.parent().get()).__dict__
 		self.tags = [TagView(tag.get()).__dict__ for tag in entity.tags]
 		self.created = entity.created.isoformat()
+		self.user = entity.user
 		self.comment_count = 4
 		# self.comments = [CommentView(comment).__dict__ for comment in self.get_comments(entity)]
 		# self.comment_count = len(self.comments)
@@ -64,6 +65,7 @@ class EntrySummaryView:
 		self.category = CategoryView(entity.key.parent().get()).__dict__
 		self.tags = [TagView(tag.get()).__dict__ for tag in entity.tags]
 		self.created = entity.created.isoformat()
+		self.user = entity.user
 		self.comment_count = 4
 		# self.comment_count = self.get_comments_count(entity)
 

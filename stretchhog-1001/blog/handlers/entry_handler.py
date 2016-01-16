@@ -1,7 +1,7 @@
 import json
 
 from blog.forms import EntryForm
-from blog.handlers.handler import Handler, root_blog_api
+from blog.handlers.handler import Handler, blog_api_root, admin_blog_root
 from blog.models import Entry, Category, Tag
 from blog.services.entry_service import service
 from blog.views import EntryView, EntryAdminView, EntrySummaryView, EntryBannerView
@@ -105,15 +105,14 @@ class EntryList(Resource):
 
 
 entry = '/entry'
-api.add_resource(EntryRUD, root_blog_api + entry + '/<string:key>', endpoint='entry_rud')
-api.add_resource(EntryCL, root_blog_api + entry, endpoint='entry_cl')
+api.add_resource(EntryRUD, admin_blog_root + entry + '/<string:key>', endpoint='entry_rud')
+api.add_resource(EntryCL, admin_blog_root + entry, endpoint='entry_cl')
 
-api.add_resource(EntryByCategory, root_blog_api + entry + '/category/<string:category>', endpoint='entry_category')
-api.add_resource(EntryByYear, root_blog_api + entry + '/year/<int:year>', endpoint='entry_year')
-api.add_resource(EntryByMonth, root_blog_api + entry + '/month/<int:year>/<int:month>', endpoint='entry_month')
-api.add_resource(EntryBySlug, root_blog_api + entry + '/slug/<int:year>/<int:month>/<string:slug>',
-                 endpoint='entry_slug')
-api.add_resource(EntryList, root_blog_api + entry + '/list', endpoint='entry_list')
-api.add_resource(EntryByTag, root_blog_api + entry + '/tag/<string:tag>', endpoint='entry_tag')
+api.add_resource(EntryByCategory, blog_api_root + entry + '/category/<string:category>', endpoint='entry_category')
+api.add_resource(EntryByYear, blog_api_root + entry + '/year/<int:year>', endpoint='entry_year')
+api.add_resource(EntryByMonth, blog_api_root + entry + '/month/<int:year>/<int:month>', endpoint='entry_month')
+api.add_resource(EntryBySlug, blog_api_root + entry + '/slug/<int:year>/<int:month>/<string:slug>', endpoint='entry_slug')
+api.add_resource(EntryList, blog_api_root + entry + '/list', endpoint='entry_list')
+api.add_resource(EntryByTag, blog_api_root + entry + '/tag/<string:tag>', endpoint='entry_tag')
 
-api.add_resource(EntryBannerInfo, root_blog_api + entry + '/banner/<int:year>/<int:month>/<string:slug>')
+api.add_resource(EntryBannerInfo, blog_api_root + entry + '/banner/<int:year>/<int:month>/<string:slug>')

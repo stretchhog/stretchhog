@@ -12,18 +12,7 @@
 						<!--<img alt="" src="images/blog-02.jpg">-->
 					</a>
 				</div>
-				<div class="item">
-					<a class="lightbox" title="This is an image title" href="images/blog-03.jpg" data-lightbox-gallery="gallery1">
-						<div class="thumb-overlay"><i class="fa fa-arrows-alt"></i></div>
-						<!--<img alt="" src="images/blog-03.jpg">-->
-					</a>
-				</div>
-				<div class="item">
-					<a class="lightbox" title="This is an image title" href="images/blog-04.jpg" data-lightbox-gallery="gallery1">
-						<div class="thumb-overlay"><i class="fa fa-arrows-alt"></i></div>
-						<!--<img alt="" src="images/blog-04.jpg">-->
-					</a>
-				</div>
+				<!-- Multiple divs possible-->
 			</div>
 		</div>
 		<!-- End Single Post (Gallery) -->
@@ -33,8 +22,8 @@
 			<div class="post-type"><i class="fa fa-picture-o"></i></div>
 			<h2>{{item.title}}</h2>
 			<ul class="post-meta">
-				<li>By <a href="#">GrayGrids</a></li>
-				<li>{{item.created}}</li>
+				<li>By <a href="#">{{item.user}}</a></li>
+				<li>{{item.created|date:'yyyy-MM-dd'}}</li>
 				<li><a href="#">4 Comments</a></li>
 			</ul>
 			<div ng-bind-html="item.post"></div>

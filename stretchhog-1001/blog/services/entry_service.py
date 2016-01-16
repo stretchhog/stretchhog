@@ -1,3 +1,4 @@
+from google.appengine.api import users
 from google.appengine.ext import ndb
 from google.appengine.ext.ndb.key import Key
 from blog.models import Entry
@@ -16,6 +17,7 @@ class EntryService(Service):
 		entry.post = form.post.data
 		entry.tags = [Key(urlsafe=tag) for tag in form.tags.data]
 		entry.slug = Service.slugify(entry.title)
+		# entry.user = users.get_current_user()
 		return entry.put()
 
 	def update(self, key, form):

@@ -58,11 +58,12 @@
 			</div>
 		</td>
 		<td>
-			<span ng-show="item.editMode == null || item.editMode == false"> {{item.tag}} </span>
-
-			<form name="editForm" class="form-group ">
-				<input class="form-control" ng-model="item.tag" required ng-show="commentController.item.editMode"
-				       ng-keydown="updateOnEnter(item, $event)"/>
+				<span ng-show="item.editMode == null || item.editMode == false">
+                    {{item.tag}}
+                </span>
+			<!--Name edit mode-->
+			<form name="editForm">
+				<input ng-model="item.tag" ng-show="item.editMode" required class="form-control">
 			</form>
 
 		</td>

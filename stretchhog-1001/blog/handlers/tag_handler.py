@@ -4,7 +4,7 @@ from flask import Response, request
 
 from flask.ext.restful import Resource
 from blog.forms import TagForm
-from handler import Handler, root_blog_api
+from handler import Handler, blog_api_root, admin_blog_root, tag
 from main import api
 from blog.services.tag_service import service
 from blog.views import TagView
@@ -51,8 +51,7 @@ class TagBySlug(Resource):
 		cat = service.get_by_slug(Tag, slug)
 		return handler.get_response_for(key=cat.key)
 
-tag = '/tag'
-api.add_resource(TagRUD, root_blog_api + tag + '/<string:key>', endpoint='tag_rud')
-api.add_resource(TagCL, root_blog_api + tag + '/', endpoint='tag_cl')
+api.add_resource(TagRUD, admin_blog_root + tag + '/<string:key>', endpoint='tag_rud')
+api.add_resource(TagCL, admin_blog_root + tag, endpoint='tag_cl')
 
-api.add_resource(TagBySlug, root_blog_api + tag + '/slug/<string:slug>', endpoint='tag_slug')
+api.add_resource(TagBySlug, blog_api_root + tag + '/slug/<string:slug>', endpoint='tag_slug')
