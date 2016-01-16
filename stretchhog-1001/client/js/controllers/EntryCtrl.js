@@ -1,8 +1,8 @@
 app.controller('EntryCtrl', [
-	'$scope', 'EntryService', '$stateParams',
-	function ($scope, EntryService, $stateParams) {
+	'$scope', 'SlugService', '$stateParams',
+	function ($scope, SlugService, $stateParams) {
 
-		EntryService.getBySlug($stateParams.year, $stateParams.month, $stateParams.entrySlug).then(function (data) {
+		SlugService.getEntryBySlug($stateParams.year, $stateParams.month, $stateParams.entrySlug).then(function (data) {
 			$scope.item = data;
 		});
 	}]);

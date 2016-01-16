@@ -1,0 +1,7 @@
+<ul class="breadcrumbs">
+	<li><a ui-sref="home">Home</a></li>
+	<li><a ui-sref="blog">Blog</a></li>
+	<li><a href="#/year/{{item.created|date:'yyyy'}}">{{item.created|date:'yyyy'}}</a></li>
+	<li><a href="#/month/{{item.created|date:'yyyy'}}/{{item.created|date:'MM'}}">{{item.created|date:'MM'}}</a></li>
+	<li>{{item.title}}</li>
+</ul>

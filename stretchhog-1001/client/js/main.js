@@ -37,6 +37,12 @@ app.config(function ($stateProvider, $urlRouterProvider) {
 				'content@blog': {
 					templateUrl: '../partials/blog/archive_content.html',
 					controller: 'AllArchiveCtrl'
+				},
+				'banner-name@blog': {
+					templateUrl: '../partials/blog/banners/blog.html'
+				},
+				'banner-breadcrumbs@blog': {
+					templateUrl: '../partials/blog/breadcrumbs/blog.html'
 				}
 			}
 		})
@@ -55,6 +61,14 @@ app.config(function ($stateProvider, $urlRouterProvider) {
 				'content@category-archive': {
 					templateUrl: '../partials/blog/archive_content.html',
 					controller: 'CategoryArchiveCtrl'
+				},
+				'banner-name@category-archive': {
+					templateUrl: '../partials/blog/banners/category.html',
+					controller: 'CategoryBannerCtrl'
+				},
+				'banner-breadcrumbs@category-archive': {
+					templateUrl: '../partials/blog/breadcrumbs/category.html',
+					controller: 'CategoryBannerCtrl'
 				}
 			}
 		})
@@ -73,10 +87,17 @@ app.config(function ($stateProvider, $urlRouterProvider) {
 				'content@entry': {
 					templateUrl: '../partials/blog/entry/by_slug.html',
 					controller: 'EntryCtrl'
+				},
+				'banner-name@entry': {
+					templateUrl: '../partials/blog/banners/entry.html',
+					controller: 'EntryBannerCtrl'
+				},
+				'banner-breadcrumbs@entry': {
+					templateUrl: '../partials/blog/breadcrumbs/entry.html',
+					controller: 'EntryBannerCtrl'
 				}
 			}
 		})
-
 
 		.state('month-archive', {
 			url: '/month/:year/:month',
@@ -125,7 +146,17 @@ app.config(function ($stateProvider, $urlRouterProvider) {
 				'content@tag-archive': {
 					templateUrl: '../partials/blog/archive_content.html',
 					controller: 'TagArchiveCtrl'
+				},
+				'banner-name@tag-archive': {
+					templateUrl: '../partials/blog/banners/tag.html',
+					controller: 'TagBannerCtrl'
+				},
+				'banner-breadcrumbs@tag-archive': {
+					templateUrl: '../partials/blog/breadcrumbs/tag.html',
+					controller: 'TagBannerCtrl'
 				}
+
+
 			}
 		})
 });

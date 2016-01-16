@@ -4,10 +4,10 @@ from blog.forms import CategoryForm
 from blog.handlers.handler import Handler, root_blog_api
 from blog.services.category_service import service
 from blog.views import CategoryView, CategorySummaryView
+from blog.models import Category
 from flask import request, Response
 from flask.ext.restful import Resource
 from main import api
-from models import Category
 
 
 class CategoryHandler(Handler):

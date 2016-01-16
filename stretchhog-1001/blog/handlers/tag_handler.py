@@ -8,6 +8,7 @@ from handler import Handler, root_blog_api
 from main import api
 from blog.services.tag_service import service
 from blog.views import TagView
+from blog.models import Tag
 
 
 class TagHandler(Handler):
@@ -45,5 +46,13 @@ class TagCL(Resource):
 		return handler.post_response_for(request)
 
 
-api.add_resource(TagRUD, root_blog_api + '/tag/<string:key>', endpoint='tag_rud')
-api.add_resource(TagCL, root_blog_api + '/tag', endpoint='tag_cl')
+class TagBySlug(Resource):
+	def get(self, slug):
+		cat = service.get_by_slug(Tag, slug)
+		return handler.get_response_for(key=cat.key)
+
+tag = '/tag'
+api.add_resource(TagRUD, root_blog_api + tag + '/<string:key>', endpoint='tag_rud')
+api.add_resource(TagCL, root_blog_api + tag + '/', endpoint='tag_cl')
+
+api.add_resource(TagBySlug, root_blog_api + tag + '/slug/<string:slug>', endpoint='tag_slug')

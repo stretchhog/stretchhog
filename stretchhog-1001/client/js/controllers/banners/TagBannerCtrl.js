@@ -1,8 +1,8 @@
-app.controller('CategoryBannerCtrl', [
+app.controller('TagBannerCtrl', [
 	'$scope', 'SlugService', '$stateParams',
 	function ($scope, SlugService, $stateParams) {
 
-		SlugService.getCategoryBySlug($stateParams.categorySlug).then(function (data) {
+		SlugService.getTagBySlug($stateParams.tagSlug).then(function (data) {
 			$scope.item = data;
 		});
 	}]);

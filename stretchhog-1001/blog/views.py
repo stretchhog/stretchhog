@@ -46,6 +46,12 @@ class EntryView:
 		# self.comment_count = len(self.comments)
 
 
+class EntryBannerView:
+	def __init__(self, entity):
+		self.title = entity.title
+		self.created = entity.created.isoformat()
+
+
 class EntrySummaryView:
 	@staticmethod
 	def get_comments_count(entity):
