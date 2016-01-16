@@ -21,7 +21,7 @@ handler = TagHandler(service, TagForm, TagView)
 class TagRUD(Resource):
 	@staticmethod
 	def get(key):
-		return handler.get_response_for(key)
+		return handler.get_response_for(urlsafe=key)
 
 	@staticmethod
 	def delete(key):

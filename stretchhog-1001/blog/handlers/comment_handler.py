@@ -19,7 +19,7 @@ handler = CommentHandler(service, CommentForm, CommentView)
 class CommentRUD(Resource):
 	@staticmethod
 	def get(self, key):
-		return handler.get_response_for(key)
+		return handler.get_response_for(urlsafe=key)
 
 	@staticmethod
 	def delete(self, key):

@@ -5,7 +5,7 @@ app.factory('SidebarService', function ($http) {
 	service.getCategories = function () {
 		return $http({
 			method: 'GET',
-			url: '/blog-api/categories'
+			url: '/blog-api/category/list'
 		}).then(function successCallback(response) {
 			return response.data;
 			// this callback will be called asynchronously

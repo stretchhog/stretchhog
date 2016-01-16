@@ -21,9 +21,7 @@ handler = EntryHandler(service, EntryForm, EntryAdminView)
 class EntryRUD(Resource):
 	@staticmethod
 	def get(key):
-		entry = service.get_by_urlsafe_key(key)
-		view = EntryView(entry).__dict__
-		return Response(view, 200, mimetype='application/json')
+		return handler.get_response_for(urlsafe=key)
 
 	@staticmethod
 	def put(key):
@@ -88,7 +86,7 @@ class EntryByMonth(Resource):
 
 class EntryBySlug(Resource):
 	def get(self, year, month, slug):
-		entry = service.get_entry_by_slug(slug)
+		entry = service.get_by_slug(Entry, slug)
 		view = EntryView(entry).__dict__
 		return Response(json.dumps(view), 200, mimetype='application/json')
 
@@ -106,7 +104,6 @@ api.add_resource(EntryCL, root_blog_api + entry, endpoint='entry_cl')
 api.add_resource(EntryByCategory, root_blog_api + entry + '/category/<string:category>', endpoint='entry_category')
 api.add_resource(EntryByYear, root_blog_api + entry + '/year/<int:year>', endpoint='entry_year')
 api.add_resource(EntryByMonth, root_blog_api + entry + '/month/<int:year>/<int:month>', endpoint='entry_month')
-api.add_resource(EntryBySlug, root_blog_api + entry + '/slug/<int:year>/<int:month>/<string:slug>',
-                 endpoint='entry_slug')
+api.add_resource(EntryBySlug, root_blog_api + entry + '/slug/<int:year>/<int:month>/<string:slug>', endpoint='entry_slug')
 api.add_resource(EntryList, root_blog_api + entry + '/list', endpoint='entry_list')
 api.add_resource(EntryByTag, root_blog_api + entry + '/tag/<string:tag>', endpoint='entry_tag')

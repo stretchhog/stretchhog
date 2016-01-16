@@ -1,9 +1,9 @@
 import json
 
+from blog.views import MarkdownPreviewView
 from flask import Response, request
 from flask.ext.restful import Resource
 from main import api
-from blog.views import MarkdownPreviewView
 
 root_blog_api = '/blog-api'
 
@@ -14,8 +14,13 @@ class Handler(object):
 		self.form = form
 		self.view = view
 
-	def get_response_for(self, key):
-		entity = self.service.get_by_urlsafe_key(key)
+	def get_response_for(self, urlsafe=None, key=None):
+		if key:
+			entity = key.get()
+		elif urlsafe:
+			entity = self.service.get_by_urlsafe_key(urlsafe)
+		else:
+			raise Exception('key not given')
 		view = self.view(entity).__dict__
 		return Response(json.dumps(view), 200, mimetype='application/json')
 
