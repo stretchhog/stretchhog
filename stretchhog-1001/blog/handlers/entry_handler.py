@@ -1,12 +1,13 @@
 import json
-from flask import Response, request
-from blog.services.entry_service import service
-from flask.ext.restful import Resource
+
 from blog.forms import EntryForm
 from blog.handlers.handler import Handler, root_blog_api
-from main import api
 from blog.models import Entry, Category
+from blog.services.entry_service import service
 from blog.views import EntryView, EntryAdminView, EntrySummaryView
+from flask import Response, request
+from flask.ext.restful import Resource
+from main import api
 
 
 class EntryHandler(Handler):
@@ -81,6 +82,12 @@ class EntryBySlug(Resource):
 		return Response(json.dumps(view), 200, mimetype='application/json')
 
 
+class EntryList(Resource):
+	def get(self):
+		entries = service.get_all_entries()
+		return get_sorted_entries_response_by_date(entries)
+
+
 entry = '/entry'
 api.add_resource(EntryRUD, root_blog_api + entry + '/<string:key>', endpoint='entry_rud')
 api.add_resource(EntryCL, root_blog_api + entry, endpoint='entry_cl')
@@ -89,3 +96,4 @@ api.add_resource(EntryByCategory, root_blog_api + entry + '/category/<string:cat
 api.add_resource(EntryByYear, root_blog_api + entry + '/year/<int:year>', endpoint='entry_year')
 api.add_resource(EntryByMonth, root_blog_api + entry + '/month/<int:year>/<int:month>', endpoint='entry_month')
 api.add_resource(EntryBySlug, root_blog_api + entry + '/slug/<int:year>/<int:month>/<string:slug>', endpoint='entry_slug')
+api.add_resource(EntryList, root_blog_api + entry + '/list', endpoint='entry_list')

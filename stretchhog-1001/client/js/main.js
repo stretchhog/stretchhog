@@ -23,17 +23,28 @@ app.config(function ($stateProvider, $urlRouterProvider) {
 			controller: 'EntryAdminCtrl'
 		})
 
-		. state('entry', {
-			url: '/:year/:month/:entrySlug',
-			templateUrl: '../partials/blog/entry/by_slug.html',
-			controller: 'EntryCtrl'
+		.state('blog', {
+			url: '/blog',
+			templateUrl: '../partials/blog/archive.html',
+			views: {
+				'': {
+					templateUrl: '../partials/blog/archive.html'
+				},
+				'sidebar@blog': {
+					templateUrl: '../partials/blog/sidebar.html',
+					controller: 'SidebarCtrl'
+				},
+				'content@blog': {
+					templateUrl: '../partials/blog/archive_content.html',
+					controller: 'AllArchiveCtrl'
+				}
+			}
 		})
 
 		.state('category-archive', {
-			url: '/:categorySlug',
+			url: '/category/:categorySlug',
+			templateUrl: '../partials/blog/archive_content.html',
 			views: {
-
-				// the main template will be placed here (relatively named)
 				'': {
 					templateUrl: '../partials/blog/archive.html'
 				},
@@ -41,20 +52,63 @@ app.config(function ($stateProvider, $urlRouterProvider) {
 					templateUrl: '../partials/blog/sidebar.html',
 					controller: 'SidebarCtrl'
 				},
-				'by_category@category-archive': {
-					templateUrl: '../partials/blog/category/by_category.html',
+				'content@category-archive': {
+					templateUrl: '../partials/blog/archive_content.html',
 					controller: 'CategoryArchiveCtrl'
 				}
 			}
 		})
+
+		.state('entry', {
+			url: '/:year/:month/:entrySlug',
+			templateUrl: '../partials/blog/archive.html',
+			views: {
+				'': {
+					templateUrl: '../partials/blog/archive.html',
+				},
+				'sidebar@entry': {
+					templateUrl: '../partials/blog/sidebar.html',
+					controller: 'SidebarCtrl'
+				},
+				'content@entry': {
+					templateUrl: '../partials/blog/entry/by_slug.html',
+					controller: 'EntryCtrl'
+				}
+			}
+		})
+
+
 		.state('month-archive', {
 			url: '/:year/:month',
-			templateUrl: '../partials/blog/entry/by_month.html',
-			controller: 'MonthArchiveCtrl'
+			views: {
+				'': {
+					templateUrl: '../partials/blog/archive.html'
+				},
+				'sidebar@month-archive': {
+					templateUrl: '../partials/blog/sidebar.html',
+					controller: 'SidebarCtrl'
+				},
+				'content@month-archive': {
+					templateUrl: '../partials/blog/archive_content.html',
+					controller: 'MonthArchiveCtrl'
+				}
+			}
 		})
+
 		.state('year-archive', {
 			url: '/:year',
-			templateUrl: '../partials/blog/entry/by_year.html',
-			controller: 'YearArchiveCtrl'
-		});
+			views: {
+				'': {
+					templateUrl: '../partials/blog/archive.html'
+				},
+				'sidebar@year-archive': {
+					templateUrl: '../partials/blog/sidebar.html',
+					controller: 'SidebarCtrl'
+				},
+				'content@year-archive': {
+					templateUrl: '../partials/blog/archive_content.html',
+					controller: 'YearArchiveCtrl'
+				}
+			}
+		})
 });

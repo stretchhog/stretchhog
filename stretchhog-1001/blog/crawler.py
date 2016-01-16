@@ -1,5 +1,5 @@
-from string import lower
 from google.appengine.api import urlfetch
+
 from bs4 import BeautifulSoup
 
 

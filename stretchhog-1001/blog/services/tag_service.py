@@ -11,12 +11,14 @@ class TagService(Service):
 	def create(self, form):
 		tag = Tag(
 			parent=Service.to_key(form.category.data),
-			tag=form.tag.data)
+			tag=form.tag.data,
+			slug=Service.slugify(form.tag.data))
 		return tag.put()
 
 	def update(self, key, form):
 		tag = Service.get_by_urlsafe_key(key)
 		tag.tag = form.tag.data
+		tag.slug = Service.slugify(form.tag.data)
 		return tag.put()
 
 	def get(self, key):

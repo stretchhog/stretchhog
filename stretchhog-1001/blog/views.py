@@ -12,6 +12,7 @@ class TagView:
 	def __init__(self, entity):
 		self.key = entity.key.urlsafe()
 		self.tag = entity.tag
+		self.slug = entity.slug
 		self.category = CategoryView(entity.key.parent().get()).__dict__
 
 

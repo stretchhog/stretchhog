@@ -9,6 +9,7 @@ class Category(ndb.Model):
 
 class Tag(ndb.Model):
 	tag = ndb.StringProperty()
+	slug = ndb.StringProperty()
 	created = ndb.DateTimeProperty(auto_now_add=True)
 
 
